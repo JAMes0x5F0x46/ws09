@@ -18,7 +18,6 @@ public class InstanceImporter {
 	public static Map<Integer,Set<Integer>> importTspFile(String path) throws IllegalArgumentException {
 		
 		logger.info("Importing instance file: "+path);
-		System.out.println("Importing instance file: "+path);
 		
 		InputStream is = ClassLoader.getSystemResourceAsStream(path);
 		
@@ -39,17 +38,17 @@ public class InstanceImporter {
 					
 					logger.debug(line);
 					
-					split = line.split(":+,");
+					split = line.split("[:,#]");
 					
 					tools = new HashSet<Integer>();
 					
-					logger.debug("Job: "+Integer.getInteger(split[0]));
+					logger.debug("Job: "+Integer.valueOf(split[0]));
 					
-					for(int i=1; i<split.length-1;i++) {						
-						tools.add(Integer.getInteger(split[i]));
-						logger.debug("Tool "+i+": "+Integer.getInteger(split[i]));
+					for(int i=1; i<split.length;i++) {						
+						tools.add(Integer.valueOf(split[i]));
+						logger.debug("Tool "+i+": "+Integer.valueOf(split[i]));
 					}
-					schedule.put(Integer.getInteger(split[0]), tools);
+					schedule.put(Integer.valueOf(split[0]), tools);
 				}
 				
 				logger.debug("Instance size: "+schedule.size());
