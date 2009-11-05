@@ -5,6 +5,9 @@ import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 
 /**
  * @author Johannes REITER
@@ -12,15 +15,20 @@ import java.util.Set;
  */
 public class ToolSwitching {
 
+	// Define a static logger variable so that it references the
+	   // Logger instance named "MyApp".
+	static Logger logger = Logger.getLogger(ToolSwitching.class);
+	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
-	private static String DIR = "matrices"+ File.separator;
+	//private static String DIR = "matrices"+ File.separator;
 	
 	private ToolSwitching() {
 		
 		System.out.println("Started algorithm...");
+		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR+"matrix_10j_10to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile("matrix_10j_10to_NSS_0.txt");
 		
 	}
 
@@ -28,10 +36,11 @@ public class ToolSwitching {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		// Set up a simple configuration that logs on the console.
+	    BasicConfigurator.configure();
 		
 		new ToolSwitching();
-
 	}
 
 }
