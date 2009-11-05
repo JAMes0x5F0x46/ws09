@@ -1,15 +1,16 @@
-/**
- * 
- */
+
 package at.ac.ads.tuwien;
+
 
 /**
  * @author Johannes REITER
  *
  */
 public class ToolSwitching {
-	
+
 	private ToolSwitching() {
+		
+		System.out.println("Started algorithm...");
 		
 	}
 
