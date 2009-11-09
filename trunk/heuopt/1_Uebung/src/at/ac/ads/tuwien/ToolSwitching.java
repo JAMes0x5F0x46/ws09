@@ -2,7 +2,10 @@
 package at.ac.ads.tuwien;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.BasicConfigurator;
@@ -19,21 +22,35 @@ public class ToolSwitching {
 	   // Logger instance named "MyApp".
 	static Logger logger = Logger.getLogger(ToolSwitching.class);
 	
+	static int runs;
+	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
 	private int[][] similarities = null;
 	private int[][] differences = null;
 	
-	//private static String DIR = "matrices"+ File.separator;
+	private static String DIR = "matrices"+ File.separator;
 	
 	private ToolSwitching() {
 		
-		//TODO properties
-		logger.info("Read properties...");
+		try {
+			logger.info("Read properties...");
+			Properties properties = new Properties();
+			FileInputStream stream = new FileInputStream("param.properties");
+		
+			properties.load(stream);
+		
+			stream.close();
+			runs = Integer.valueOf(properties.getProperty("runs"));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile("matrix_10j_10to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
 		
 		logger.info("Compute cost graph.");
 		computeCostGraph();
