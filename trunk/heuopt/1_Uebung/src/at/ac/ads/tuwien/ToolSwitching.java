@@ -21,15 +21,90 @@ public class ToolSwitching {
 	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
+	private int[][] similarities = null;
+	private int[][] differences = null;
+	
 	//private static String DIR = "matrices"+ File.separator;
 	
 	private ToolSwitching() {
 		
-		System.out.println("Started algorithm...");
+		//TODO properties
+		logger.info("Read properties...");
+		
 		logger.info("Started algorithm...");
 		
 		schedule = InstanceImporter.importTspFile("matrix_10j_10to_NSS_0.txt");
 		
+		logger.info("Compute cost graph.");
+		computeCostGraph();
+		
+		/*
+		// check similarities
+		for(int i=0; i<schedule.size(); i++) {
+			
+			System.out.print(i+": ");
+			for(int j=0; j<schedule.size(); j++) {
+				System.out.print(similarities[i][j]+" ");
+			}
+			System.out.println("");
+		}	
+		System.out.println("");
+		
+		// ckeck differences
+		for(int i=0; i<schedule.size(); i++) {
+			
+			System.out.print(i+": ");
+			for(int j=0; j<schedule.size(); j++) {
+				System.out.print(differences[i][j]+" ");
+			}
+			System.out.println("");
+		}
+		*/
+		
+		//TODO for
+		
+		//TODO greedy heuristic
+		
+		//TODO optimierungsalgorithmus
+		
+	}
+
+	private void computeCostGraph() {
+
+		similarities = new int[schedule.size()][schedule.size()];
+		differences = new int[schedule.size()][schedule.size()];
+		
+		for(int i=0; i<schedule.size(); i++) {
+			
+			for(int j=i; j<schedule.size(); j++) {
+				
+				if(i == j) {
+					similarities[i][j] = 0;
+					differences[i][j] = Integer.MAX_VALUE;
+					
+				} else {
+					
+					for(int tool : schedule.get(i)) {
+						
+						if(schedule.get(j).contains(tool)) {
+							similarities[i][j]++;
+							similarities[j][i]++;
+						} else {
+							differences[i][j]++;
+							differences[j][i]++;
+						}
+					}
+					
+					for(int tool : schedule.get(j)) {
+						
+						if(!(schedule.get(i).contains(tool))) {
+							differences[i][j]++;
+							differences[j][i]++;
+						}
+					}
+				}	
+			}
+		}
 	}
 
 	/**
