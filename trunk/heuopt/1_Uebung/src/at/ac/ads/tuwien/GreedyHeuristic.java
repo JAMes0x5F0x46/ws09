@@ -7,45 +7,65 @@ import java.util.Set;
 public class GreedyHeuristic {
 	
 	private Map<Integer,Set<Integer>> schedule = null;
+	private Set<Integer> magazine = null;
 	
+	public GreedyHeuristic(Map<Integer,Set<Integer>> schedule) {
+		
+		magazine = new HashSet<Integer>();
+		this.schedule = schedule;
+	}
 
-	public Solution createInitialSolution(int[][] differences, 
-			int[][] similarities, int startjob) {
+	public Solution createInitialSolution(int startJob) {
 		
-		Solution sol = new Solution(startjob);
+		Solution sol = new Solution(startJob);
+		// initialize magazine
+		magazine.clear();
 		
-		Set<Integer> jobs = new HashSet<Integer>();
-		for(int i=0; i<differences[0].length; i++) {
-			if(i!=startjob)
-				jobs.add(i);
+		magazine.addAll(schedule.get(startJob));
+		
+		
+		Set<Integer> openJobs = new HashSet<Integer>();
+		for(int i=0; i<schedule.size(); i++) {
+			if(i != startJob)
+				openJobs.add(i);
 		}
 		
-		int lastJob = startjob;
+		int lastJob = startJob;
 		
-		while(sol.getList().size() < differences[0].length) {
+		while(sol.getList().size() < schedule.size()) {
 			
-			lastJob = chooseNextJob(jobs,lastJob,differences,similarities);
+			lastJob = chooseNextJob(openJobs,lastJob);
 			
 			// TODO compute costs
 			sol.addCosts(0);
 			sol.getList().add(lastJob);
 			
-			jobs.remove(lastJob);
+			openJobs.remove(lastJob);
 		}
 		
 		return sol;
 	}
 	
-	private int chooseNextJob(Set<Integer> jobs, int lastJob, int[][] differences, 
-			int[][] similarities) {
+	private int chooseNextJob(Set<Integer> openJobs, int lastJob) {
 		
-		// TODO choosing
-		for(int job : jobs) {
-			
-		}
+		int bestValue = Integer.MAX_VALUE;
+		int bestJob = -1;
+		int diff;
 		
-		
-		return 0;
-	}
+		for(int job : openJobs) {
 
+			diff = 0;
+			for(int tool : schedule.get(job)) {
+				if(!(magazine.contains(tool)))
+					diff++;
+			}
+			
+			if(bestValue > diff) {
+				bestValue = diff;
+				bestJob = job;
+			}
+		}
+				
+		return bestJob;
+	}
 }

@@ -20,9 +20,10 @@ public class ToolSwitching {
 
 	// Define a static logger variable so that it references the
 	   // Logger instance named "MyApp".
-	static Logger logger = Logger.getLogger(ToolSwitching.class);
+	private static Logger logger = Logger.getLogger(ToolSwitching.class);
 	
-	static int runs;
+	private static int RUNS;
+	private static int MAGAZINE_SIZE;
 	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
@@ -41,9 +42,11 @@ public class ToolSwitching {
 			properties.load(stream);
 		
 			stream.close();
-			runs = Integer.valueOf(properties.getProperty("runs"));
+			RUNS = Integer.valueOf(properties.getProperty("runs"));
+			MAGAZINE_SIZE = Integer.valueOf(properties.getProperty("magazineSize"));
 			
 		} catch (IOException e) {
+			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -78,11 +81,17 @@ public class ToolSwitching {
 		}
 		*/
 		
-		//TODO for
+		Solution bestSolution = null;
 		
-		//TODO greedy heuristic
+		for(int i=0; i < RUNS; i++) {
+			
+			//TODO greedy heuristic
+			
+			//TODO optimierungsalgorithmus
+			
+		}
 		
-		//TODO optimierungsalgorithmus
+		
 		
 	}
 
@@ -133,6 +142,10 @@ public class ToolSwitching {
 	    BasicConfigurator.configure();
 		
 		new ToolSwitching();
+	}
+
+	public static int getMAGAZINE_SIZE() {
+		return MAGAZINE_SIZE;
 	}
 
 }
