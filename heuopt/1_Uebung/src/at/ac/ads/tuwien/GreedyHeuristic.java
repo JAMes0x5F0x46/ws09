@@ -4,7 +4,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 public class GreedyHeuristic {
+	
+	private static Logger logger = Logger.getLogger(GreedyHeuristic.class);
 	
 	private Map<Integer,Set<Integer>> schedule = null;
 	private Set<Integer> magazine = null;
@@ -23,6 +27,7 @@ public class GreedyHeuristic {
 		
 		magazine.addAll(schedule.get(startJob));
 		
+		logger.debug("magazine: "+magazine.toString());
 		
 		Set<Integer> openJobs = new HashSet<Integer>();
 		for(int i=0; i<schedule.size(); i++) {
@@ -31,13 +36,32 @@ public class GreedyHeuristic {
 		}
 		
 		int lastJob = startJob;
+		int costs;
 		
 		while(sol.getList().size() < schedule.size()) {
 			
 			lastJob = chooseNextJob(openJobs,lastJob);
 			
-			// TODO compute costs
-			sol.addCosts(0);
+			costs = 0;
+			for(int tool : schedule.get(lastJob)) {
+				
+				if(!(magazine.contains(tool))) {
+					
+					for(int toolToRemove : magazine) {
+						if(!(schedule.get(lastJob).contains(toolToRemove))) {
+							
+							magazine.remove(toolToRemove);
+							magazine.add(tool);
+							costs++;
+							break;
+						}
+					}
+				}
+			}
+			
+			logger.debug("next job: "+lastJob+" magazine: "+magazine.toString());
+			
+			sol.addCosts(costs);
 			sol.getList().add(lastJob);
 			
 			openJobs.remove(lastJob);

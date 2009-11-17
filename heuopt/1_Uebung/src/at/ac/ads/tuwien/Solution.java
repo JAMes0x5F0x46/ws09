@@ -15,6 +15,12 @@ public class Solution {
 		this.list.add(startjob);
 		this.costs = 0;
 	}
+	
+	@Override
+	public String toString() {
+		
+		return this.costs+": "+this.list.toString();
+	}
 
 	public List<Integer> getList() {
 		return list;
