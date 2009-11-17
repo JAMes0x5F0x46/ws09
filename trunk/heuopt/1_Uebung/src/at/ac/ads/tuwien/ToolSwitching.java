@@ -82,11 +82,13 @@ public class ToolSwitching {
 		*/
 		
 		Solution bestSolution = null;
+		GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
 		
 		for(int i=0; i < RUNS; i++) {
 			
-			//TODO greedy heuristic
+			bestSolution = gh.createInitialSolution(0);
 			
+			logger.info(bestSolution.toString());
 			//TODO optimierungsalgorithmus
 			
 		}
