@@ -207,7 +207,12 @@ public class ToolSwitching {
 					int removeTool = -1;
 					for(int toolToRemove : possibleTools) {
 						
-						if(latestJob < toolUsedInJobs(toolToRemove).tailSet(nextJob).first()) {
+						if(toolUsedInJobs(toolToRemove).tailSet(nextJob).size() == 0) {
+						
+							removeTool = toolToRemove;
+							break;
+							
+						} if(latestJob < toolUsedInJobs(toolToRemove).tailSet(nextJob).first()) {
 							
 							latestJob = toolUsedInJobs(toolToRemove).tailSet(nextJob).first();
 							removeTool = toolToRemove;
