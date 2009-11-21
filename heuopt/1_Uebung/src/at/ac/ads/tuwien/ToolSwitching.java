@@ -87,6 +87,10 @@ public class ToolSwitching {
 		Solution bestSolution = null;
 		GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
 		
+		// try fixed sequence
+		Solution fixedSequence = minSwitchesFixedSequence();
+		logger.info(fixedSequence.toString());
+		
 		for(int i=0; i < RUNS; i++) {
 			
 			bestSolution = gh.createInitialSolution(0);
@@ -138,19 +142,26 @@ public class ToolSwitching {
 		}
 	}
 	
-	private Solution minSwitchesFixedSequenz() {
+	private Solution minSwitchesFixedSequence() {
 		
 		Set<Integer> magazine = new HashSet<Integer>();
 		
 			// initialize magazine
-		for(int i=0; i < schedule.size(); i++) {
+		magazine.addAll(schedule.get(0));
+		for(int i=1; i < schedule.size(); i++) {
 			
-			
-			
+			for(int tool : schedule.get(i)) {
+				
+				if(magazine.size() >= MAGAZINE_SIZE) {
+					i=schedule.size();
+					break;
+				}
+				
+				magazine.add(tool);
+			}
 		}
 		Solution sol = new Solution(0);
-		
-		
+				
 		for(int i=1; i < schedule.size(); i++) {
 			
 			sol.addJob(i, fillMagazine(magazine,i));
@@ -165,11 +176,13 @@ public class ToolSwitching {
 		int costs = 0;
 		Set<Integer> possibleTools = new HashSet<Integer>();	
 		for(int tool : schedule.get(nextJob)) {
-				
+			
+				// is tool already in the magazine?
 			if(!(magazine.contains(tool))) {
 				
 				possibleTools.clear();
 				
+					// find possible tools to remove
 				for(int toolToRemove : magazine) {
 					
 					if(isToolUsed(toolToRemove,nextJob)) {
@@ -178,11 +191,15 @@ public class ToolSwitching {
 						possibleTools.add(toolToRemove);
 					}
 				}
+					// just one tool can be remove => remove it
 				if(possibleTools.size() == 1) {
 					magazine.removeAll(possibleTools);
 					magazine.add(tool);
+					// error, if no tool can be removed
 				} else if(possibleTools.size() == 0) {
 					logger.error("At least one tool has to be removeable! ");
+					// more tools are possible for removing
+					// find the tool which is used at latest again
 				} else {
 					
 						// check which of the possible tools is used next time as latest
