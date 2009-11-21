@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -140,35 +142,68 @@ public class ToolSwitching {
 		
 		Set<Integer> magazine = new HashSet<Integer>();
 		
+			// initialize magazine
+		for(int i=0; i < schedule.size(); i++) {
+			
+			
+			
+		}
 		Solution sol = new Solution(0);
 		
 		
 		for(int i=1; i < schedule.size(); i++) {
 			
+			sol.addJob(i, fillMagazine(magazine,i));
+			logger.debug("Added job: "+i+" magazine: "+magazine.toString());
 		}
 		
-		return null;
+		return sol;
 	}
 	
 	private int fillMagazine(Set<Integer> magazine, int nextJob) {
 		
+		int costs = 0;
+		Set<Integer> possibleTools = new HashSet<Integer>();	
 		for(int tool : schedule.get(nextJob)) {
-			magazine.contains(tool);
+				
+			if(!(magazine.contains(tool))) {
+				
+				possibleTools.clear();
+				
+				for(int toolToRemove : magazine) {
+					
+					if(isToolUsed(toolToRemove,nextJob)) {
+						continue;
+					} else {
+						possibleTools.add(toolToRemove);
+					}
+				}
+				if(possibleTools.size() == 1) {
+					magazine.removeAll(possibleTools);
+					magazine.add(tool);
+				} else if(possibleTools.size() == 0) {
+					logger.error("At least one tool has to be removeable! ");
+				} else {
+					
+						// check which of the possible tools is used next time as latest
+					int latestJob = -1;
+					int removeTool = -1;
+					for(int toolToRemove : possibleTools) {
+						
+						if(latestJob < toolUsedInJobs(toolToRemove).tailSet(nextJob).first()) {
+							
+							latestJob = toolUsedInJobs(toolToRemove).tailSet(nextJob).first();
+							removeTool = toolToRemove;
+						}
+					}
+					magazine.remove(removeTool);
+					magazine.add(tool);
+				}			
+				costs++;
+			}
 		}
-		
-		// vielleicht ein Set mit allen Tools, in welchen Jobs diese gebraucht werden
-		// 
-		
-		if(true) {
-			
-		}
-		
-		for(int i=nextJob; i < schedule.size(); i++) {
-			
-		}
-		
-			// costs
-		return -1;
+
+		return costs;
 	}
 	
 	public boolean isToolUsed(int tool, int job){
@@ -184,9 +219,9 @@ public class ToolSwitching {
 		return isToolUsed;
 	}
 	
-	public Set<Integer> toolUsedInJobs (int tool){
+	public SortedSet<Integer> toolUsedInJobs (int tool){
 		
-		Set<Integer> jobs = new HashSet<Integer>();
+		SortedSet<Integer> jobs = new TreeSet<Integer>();
 		
 		for (int i=0; i < schedule.size(); i++){
 			if (isToolUsed(tool, i)){
