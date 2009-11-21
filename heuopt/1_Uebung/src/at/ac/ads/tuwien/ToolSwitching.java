@@ -4,7 +4,9 @@ package at.ac.ads.tuwien;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -56,7 +58,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		//matrix_10j_10to_NSS_0
@@ -90,7 +92,11 @@ public class ToolSwitching {
 		GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
 		
 		// try fixed sequence
-		Solution fixedSequence = minSwitchesFixedSequence();
+		List<Integer> testSequence = new ArrayList<Integer>();
+		SortedSet<Integer> sorted = new TreeSet<Integer>();
+		sorted.addAll(schedule.keySet());
+		testSequence.addAll(sorted);
+		Solution fixedSequence = minSwitchesFixedSequence(testSequence);
 		logger.info(fixedSequence.toString());
 		
 		for(int i=0; i < RUNS; i++) {
@@ -144,15 +150,20 @@ public class ToolSwitching {
 		}
 	}
 	
-	private Solution minSwitchesFixedSequence() {
+	private Solution minSwitchesFixedSequence(List<Integer> sequence) {
 		
+		if(sequence.size() != schedule.size()) {
+			logger.error("The given sequence is not correct. ");
+			return null;
+		}
+					
 		Set<Integer> magazine = new HashSet<Integer>();
 		
 			// initialize magazine
-		magazine.addAll(schedule.get(0));
+		magazine.addAll(schedule.get(sequence.get(0)));
 		for(int i=1; i < schedule.size(); i++) {
 			
-			for(int tool : schedule.get(i)) {
+			for(int tool : schedule.get(sequence.get(i))) {
 				
 				if(magazine.size() >= MAGAZINE_SIZE) {
 					i=schedule.size();
@@ -164,21 +175,23 @@ public class ToolSwitching {
 		}
 		
 		logger.debug("Initial magazine: "+magazine.toString());
-		Solution sol = new Solution(0);
+		Solution sol = new Solution(sequence.get(0));
 				
 		for(int i=1; i < schedule.size(); i++) {
 			
-			sol.addJob(i, fillMagazine(magazine,i));
+			sol.addJob(sequence.get(i), fillMagazine(magazine,sequence,i));
 			logger.debug("Added job: "+i+" magazine: "+magazine.toString()+" costs: "+sol.getCosts());
 		}
 		
 		return sol;
 	}
 	
-	private int fillMagazine(Set<Integer> magazine, int nextJob) {
+	private int fillMagazine(Set<Integer> magazine, List<Integer> sequence, int positionNextJob) {
 		
 		int costs = 0;
-		Set<Integer> possibleTools = new HashSet<Integer>();	
+		Set<Integer> possibleTools = new HashSet<Integer>();
+		int nextJob = sequence.get(positionNextJob);
+		
 		for(int tool : schedule.get(nextJob)) {
 			
 				// is tool already in the magazine?
@@ -207,10 +220,11 @@ public class ToolSwitching {
 				} else {
 					
 						// check which of the possible tools is used next time as latest
-					int latestJob = -1;
+					int latestNeed = -1;
 					int removeTool = -1;
+					int firstNeed;
 					for(int toolToRemove : possibleTools) {
-						
+						/*
 						if(toolUsedInJobs(toolToRemove).tailSet(nextJob).size() == 0) {
 						
 							removeTool = toolToRemove;
@@ -219,6 +233,20 @@ public class ToolSwitching {
 						} if(latestJob < toolUsedInJobs(toolToRemove).tailSet(nextJob).first()) {
 							
 							latestJob = toolUsedInJobs(toolToRemove).tailSet(nextJob).first();
+							removeTool = toolToRemove;
+						}*/
+						
+						firstNeed = firstNeedInSequence(sequence,toolUsedInJobs(toolToRemove),positionNextJob);
+
+							// tool is not used any more and will be removed
+						if(firstNeed == -1) {
+							
+							removeTool = toolToRemove;
+							break;
+							
+						} if(latestNeed < firstNeed) {
+							
+							latestNeed = firstNeed;
 							removeTool = toolToRemove;
 						}
 					}
@@ -232,7 +260,36 @@ public class ToolSwitching {
 		return costs;
 	}
 	
-	public boolean isToolUsed(int tool, int job){
+	/**
+	 * Returns -1 if no job runs after the offset specified in the sequence
+	 * 
+	 * @param sequence
+	 * @param jobs
+	 * @param offset
+	 * @return
+	 */
+	private int firstNeedInSequence(List<Integer> sequence, Set<Integer> jobs, int offset) {
+		
+		int firstPosition=sequence.size();
+		int firstJob=-1;
+		List<Integer> subSequence = sequence.subList(offset, sequence.size());
+		//logger.debug(offset+": "+subSequence.toString()+" jobs: "+jobs.toString());
+		int index;
+		for(int job : jobs) {
+			
+			index = subSequence.indexOf(job);
+			if(index != -1 && index < firstPosition) {
+				firstPosition = index;
+				firstJob = job;
+			}
+		}
+		if(firstPosition == sequence.size())
+			firstJob = -1;
+		//logger.debug("first need at "+sequence.indexOf(firstJob)+" of "+firstJob);
+		return sequence.indexOf(firstJob);		
+	}
+	
+	private boolean isToolUsed(int tool, int job) {
 		boolean isToolUsed=false;
 		
 		for (int i=0; i < schedule.get(job).size(); i++){
@@ -245,7 +302,7 @@ public class ToolSwitching {
 		return isToolUsed;
 	}
 	
-	public SortedSet<Integer> toolUsedInJobs (int tool){
+	private SortedSet<Integer> toolUsedInJobs (int tool){
 		
 		SortedSet<Integer> jobs = new TreeSet<Integer>();
 		
