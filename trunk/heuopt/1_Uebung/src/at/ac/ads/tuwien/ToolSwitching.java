@@ -170,6 +170,32 @@ public class ToolSwitching {
 			// costs
 		return -1;
 	}
+	
+	public boolean isToolUsed(int tool, int job){
+		boolean isToolUsed=false;
+		
+		for (int i=0; i < schedule.get(job).size(); i++){
+			if (schedule.get(job).contains(tool)){
+				isToolUsed=true;
+				break;
+			}
+		}
+		
+		return isToolUsed;
+	}
+	
+	public Set<Integer> toolUsedInJobs (int tool){
+		
+		Set<Integer> jobs = new HashSet<Integer>();
+		
+		for (int i=0; i < schedule.size(); i++){
+			if (isToolUsed(tool, i)){
+				jobs.add(i);
+			}
+		}
+		
+		return jobs;
+	}
 
 	/**
 	 * @param args
