@@ -78,11 +78,9 @@ public class GreedyHeuristic {
 					}
 				}
 			}
-			
+			sol.addJob(lastJob, costs);			
 			logger.debug("next job: "+lastJob+" magazine: "+magazine.toString()+" costs: "+sol.getCosts());
-			
-			sol.addJob(lastJob, costs);
-			
+						
 			openJobs.remove(lastJob);
 		}
 		
