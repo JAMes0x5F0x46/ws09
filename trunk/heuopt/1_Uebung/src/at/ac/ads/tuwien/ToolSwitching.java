@@ -160,6 +160,8 @@ public class ToolSwitching {
 				magazine.add(tool);
 			}
 		}
+		
+		logger.debug("Initial magazine: "+magazine.toString());
 		Solution sol = new Solution(0);
 				
 		for(int i=1; i < schedule.size(); i++) {
