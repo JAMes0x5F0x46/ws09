@@ -21,13 +21,7 @@ public class GreedyHeuristic {
 
 	public Solution createInitialSolution(int startJob) {
 		
-		Solution sol = new Solution(startJob);
-		// initialize magazine
-		magazine.clear();
-		
-		magazine.addAll(schedule.get(startJob));
-		
-		logger.debug("magazine: "+magazine.toString());
+		Solution sol = new Solution(startJob);		
 		
 		Set<Integer> openJobs = new HashSet<Integer>();
 		for(int i=0; i<schedule.size(); i++) {
@@ -35,7 +29,33 @@ public class GreedyHeuristic {
 				openJobs.add(i);
 		}
 		
+		// initialize magazine
+		magazine.clear();
+		
+		magazine.addAll(schedule.get(startJob));
 		int lastJob = startJob;
+		while(magazine.size() < ToolSwitching.getMAGAZINE_SIZE()) {
+			
+			lastJob = chooseNextJob(openJobs,lastJob);
+			for(int tool : schedule.get(lastJob)) {
+				
+				if(magazine.size() >= ToolSwitching.getMAGAZINE_SIZE()) {
+					break;
+				}
+				
+				magazine.add(tool);
+			}
+			openJobs.remove(lastJob);
+		}
+		openJobs.clear();
+		for(int i=0; i<schedule.size(); i++) {
+			if(i != startJob)
+				openJobs.add(i);
+		}
+		
+		logger.debug("magazine: "+magazine.toString());
+		
+		lastJob = startJob;
 		int costs;
 		
 		while(sol.getList().size() < schedule.size()) {
@@ -48,7 +68,7 @@ public class GreedyHeuristic {
 				if(!(magazine.contains(tool))) {
 					
 					for(int toolToRemove : magazine) {
-						if(!(schedule.get(lastJob).contains(toolToRemove))) {
+					;	if(!(schedule.get(lastJob).contains(toolToRemove))) {
 							
 							magazine.remove(toolToRemove);
 							magazine.add(tool);
@@ -59,7 +79,7 @@ public class GreedyHeuristic {
 				}
 			}
 			
-			logger.debug("next job: "+lastJob+" magazine: "+magazine.toString());
+			logger.debug("next job: "+lastJob+" magazine: "+magazine.toString()+" costs: "+sol.getCosts());
 			
 			sol.addJob(lastJob, costs);
 			

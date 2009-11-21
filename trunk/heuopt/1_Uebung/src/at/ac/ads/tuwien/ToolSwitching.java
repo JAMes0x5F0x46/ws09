@@ -167,7 +167,7 @@ public class ToolSwitching {
 		for(int i=1; i < schedule.size(); i++) {
 			
 			sol.addJob(i, fillMagazine(magazine,i));
-			logger.debug("Added job: "+i+" magazine: "+magazine.toString());
+			logger.debug("Added job: "+i+" magazine: "+magazine.toString()+" costs: "+sol.getCosts());
 		}
 		
 		return sol;
