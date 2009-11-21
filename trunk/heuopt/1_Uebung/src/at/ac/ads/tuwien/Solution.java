@@ -2,10 +2,12 @@ package at.ac.ads.tuwien;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Solution {
 	
 	private List<Integer> list = null;
+	private List<Set<Integer>> magazineConfiguration = null;
 	
 	private int costs = 0;
 
@@ -20,6 +22,7 @@ public class Solution {
 
 		this.list = new ArrayList<Integer>();
 		this.costs = 0;
+		this.magazineConfiguration = new ArrayList<Set<Integer>>();
 	}
 	
 	@Override
@@ -31,6 +34,13 @@ public class Solution {
 	public void addJob(int nextJob, int costs) {
 		
 		this.list.add(nextJob);
+		this.costs += costs;
+	}
+	
+	public void addJob(int nextJob, int costs,Set<Integer> magazine) {
+		
+		this.list.add(nextJob);
+		this.magazineConfiguration.add(magazine);
 		this.costs += costs;
 	}
 
@@ -52,5 +62,13 @@ public class Solution {
 	
 	public void addCosts(int costs) {
 		this.costs += costs;
+	}
+
+	public List<Set<Integer>> getMagazineConfiguration() {
+		return magazineConfiguration;
+	}
+
+	public void setMagazineConfiguration(List<Set<Integer>> magazineConfiguration) {
+		this.magazineConfiguration = magazineConfiguration;
 	}
 }
