@@ -1,10 +1,11 @@
 package at.ac.ads.tuwien;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Solution {
+public class Solution implements Cloneable{
 	
 	private List<Integer> list = null;
 	private List<Set<Integer>> magazineConfiguration = null;
@@ -70,5 +71,22 @@ public class Solution {
 
 	public void setMagazineConfiguration(List<Set<Integer>> magazineConfiguration) {
 		this.magazineConfiguration = magazineConfiguration;
+	}
+	
+	@Override
+	public Solution clone(){
+		Solution sol = new Solution();
+		for (int i=0; i<this.getList().size(); i++){
+			sol.getList().add(this.getList().get(i));
+			Set<Integer> magazin = new HashSet<Integer>();
+			if (this.getMagazineConfiguration()!=null){
+				for (int mag : this.getMagazineConfiguration().get(i)){
+					magazin.add(mag);
+				}
+			}
+			sol.getMagazineConfiguration().add(magazin);
+		}
+		sol.setCosts(this.getCosts());
+		return sol;
 	}
 }
