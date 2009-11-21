@@ -16,10 +16,22 @@ public class Solution {
 		this.costs = 0;
 	}
 	
+	public Solution() {
+
+		this.list = new ArrayList<Integer>();
+		this.costs = 0;
+	}
+	
 	@Override
 	public String toString() {
 		
 		return this.costs+": "+this.list.toString();
+	}
+	
+	public void addJob(int nextJob, int costs) {
+		
+		this.list.add(nextJob);
+		this.costs += costs;
 	}
 
 	public List<Integer> getList() {

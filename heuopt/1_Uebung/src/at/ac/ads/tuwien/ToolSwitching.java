@@ -4,6 +4,7 @@ package at.ac.ads.tuwien;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -133,6 +134,41 @@ public class ToolSwitching {
 				}	
 			}
 		}
+	}
+	
+	private Solution minSwitchesFixedSequenz() {
+		
+		Set<Integer> magazine = new HashSet<Integer>();
+		
+		Solution sol = new Solution(0);
+		
+		
+		for(int i=1; i < schedule.size(); i++) {
+			
+		}
+		
+		return null;
+	}
+	
+	private int fillMagazine(Set<Integer> magazine, int nextJob) {
+		
+		for(int tool : schedule.get(nextJob)) {
+			magazine.contains(tool);
+		}
+		
+		// vielleicht ein Set mit allen Tools, in welchen Jobs diese gebraucht werden
+		// 
+		
+		if(true) {
+			
+		}
+		
+		for(int i=nextJob; i < schedule.size(); i++) {
+			
+		}
+		
+			// costs
+		return -1;
 	}
 
 	/**

@@ -61,8 +61,7 @@ public class GreedyHeuristic {
 			
 			logger.debug("next job: "+lastJob+" magazine: "+magazine.toString());
 			
-			sol.addCosts(costs);
-			sol.getList().add(lastJob);
+			sol.addJob(lastJob, costs);
 			
 			openJobs.remove(lastJob);
 		}
