@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class GreedyHeuristic {
@@ -17,6 +18,8 @@ public class GreedyHeuristic {
 		
 		magazine = new HashSet<Integer>();
 		this.schedule = schedule;
+		
+		logger.setLevel(Level.INFO);
 	}
 
 	public Solution createInitialSolution(int startJob) {
