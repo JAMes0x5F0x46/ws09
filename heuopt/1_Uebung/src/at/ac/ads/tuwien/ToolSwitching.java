@@ -5,15 +5,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 
@@ -29,6 +28,7 @@ public class ToolSwitching {
 	
 	private static int RUNS;
 	private static int MAGAZINE_SIZE;
+	private static int NUMBER_OF_TOOLS;
 	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
@@ -108,20 +108,23 @@ public class ToolSwitching {
 			Solution fixedSequence = heu.minSwitchesFixedSequence(testSequence);
 			
 			logger.info(fixedSequence.toString());
+			
 		}else if (HEURISTIC.equals("local")){
 		
 			Solution bestSolution = null;
 			GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
 			Heuristic heu = new Heuristic(this.schedule);
 			
+			Random random = new Random();
+			
 			for(int i=0; i < RUNS; i++) {
 				
-				bestSolution = gh.createInitialSolution(0);
+				bestSolution = gh.createInitialSolution(random.nextInt(schedule.size()));
+				logger.info((i+1)+".run initial solution: "+bestSolution.toString());
 					
 				bestSolution = heu.getSolution(bestSolution);
 				
 				logger.info(bestSolution.toString());
-				//TODO optimierungsalgorithmus
 				
 			}
 		}else{
@@ -184,8 +187,9 @@ public class ToolSwitching {
 		return MAGAZINE_SIZE;
 	}
 	
-	private void printUsage(){
-		System.err.println("Usage: TollSwitching <heuristic> <step> [neighborhood]");
+	private void printUsage() {
+		
+		System.err.println("Usage: ToolSwitching <heuristic> <step> [neighborhood]");
 		System.exit(1);
 	}
 
@@ -228,6 +232,14 @@ public class ToolSwitching {
 	 */
 	public static String getNEIGHBORHOOD() {
 		return NEIGHBORHOOD;
+	}
+
+	public static void setNUMBER_OF_TOOLS(int nUMBER_OF_TOOLS) {
+		NUMBER_OF_TOOLS = nUMBER_OF_TOOLS;
+	}
+
+	public static int getNUMBER_OF_TOOLS() {
+		return NUMBER_OF_TOOLS;
 	}
 	
 }

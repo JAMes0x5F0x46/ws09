@@ -1,5 +1,6 @@
 package at.ac.ads.tuwien;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.apache.log4j.Logger;
 public class Heuristic {
 	
 	private Map<Integer,Set<Integer>> schedule = null;
+	private List<Set<Integer>> toolUsage = null;
 	
 	private static Logger logger = Logger.getLogger(Heuristic.class);
 	
@@ -19,8 +21,26 @@ public class Heuristic {
 	 * @param schedule
 	 */
 	public Heuristic(Map<Integer, Set<Integer>> schedule) {
-		super();
+		
 		this.schedule = schedule;
+		this.toolUsage = new ArrayList<Set<Integer>>(ToolSwitching.getNUMBER_OF_TOOLS());
+		
+		// initialize the tool usage of the different jobs
+		Set<Integer> usage = null;
+		for(int i=0; i < schedule.size(); i++) {
+			
+			usage = new HashSet<Integer>();
+			this.toolUsage.add(usage);
+		}
+		for(int i=0; i < schedule.size(); i++) {
+			
+			for(int tool : schedule.get(i)) {
+				
+				this.toolUsage.get(tool).add(i);
+			}
+		}
+		
+		logger.debug(toolUsage.toString());
 	}
 
 
@@ -41,6 +61,7 @@ public class Heuristic {
 					logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
 				}
 				curSolution = minSwitchesFixedSequence(curSolution.getList());
+				
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution;
 				}
