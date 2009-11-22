@@ -30,6 +30,7 @@ public class ToolSwitching {
 	private static int RUNS;
 	private static int MAGAZINE_SIZE;
 	private static int NUMBER_OF_TOOLS;
+	private static int NEIGHBORHOOD_SIZE;
 	
 	private Map<Integer,Set<Integer>> schedule = null;
 	
@@ -45,6 +46,8 @@ public class ToolSwitching {
 	private static String STEP;
 	
 	private ToolSwitching(String[] args) {
+		
+		float relativeNeighborhoodSize = 0f;
 		
 		try {
 			
@@ -63,6 +66,7 @@ public class ToolSwitching {
 			stream.close();
 			RUNS = Integer.valueOf(properties.getProperty("runs"));
 			MAGAZINE_SIZE = Integer.valueOf(properties.getProperty("magazineSize"));
+			relativeNeighborhoodSize = Float.valueOf(properties.getProperty("neighborhoodSize"));
 			
 		} catch (IOException e) {
 
@@ -71,10 +75,13 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_40j_60to_NSS_0.txt");
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		
+		// set the size of the neighborhood for the GVNS
+		NEIGHBORHOOD_SIZE = (int) (schedule.size() * relativeNeighborhoodSize);
+		logger.debug("Neighborhood size for the GVNS: "+NEIGHBORHOOD_SIZE);
 		
 		logger.info("Compute cost graph.");
 		computeCostGraph();
@@ -280,6 +287,14 @@ public class ToolSwitching {
 
 	public static int getNUMBER_OF_TOOLS() {
 		return NUMBER_OF_TOOLS;
+	}
+
+	public static void setNEIGHBORHOOD_SIZE(int nEIGHBORHOOD_SIZE) {
+		NEIGHBORHOOD_SIZE = nEIGHBORHOOD_SIZE;
+	}
+
+	public static int getNEIGHBORHOOD_SIZE() {
+		return NEIGHBORHOOD_SIZE;
 	}
 	
 }
