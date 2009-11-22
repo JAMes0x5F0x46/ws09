@@ -33,8 +33,7 @@ public class GreedyHeuristic {
 		}
 		
 		// initialize magazine
-		magazine.clear();
-		
+		magazine.clear();		
 		magazine.addAll(schedule.get(startJob));
 		int lastJob = startJob;
 		while(magazine.size() < ToolSwitching.getMAGAZINE_SIZE()) {

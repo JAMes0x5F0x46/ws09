@@ -1,8 +1,6 @@
 \documentclass[a4paper,10pt]{article}
 
-\usepackage{amsfonts}
 \usepackage{ngerman}
-
 
 %opening
 \title{Heuristische Optimierungsverfahren \\ \bigskip \textbf{1.Programmier\"{u}bung}}
@@ -15,48 +13,16 @@
 
 \section{Tool Switching Problem}
 Gegeben ist eine Menge von Jobs, die zu ihrer Abarbeitung jeweils einen gewissen Satz von Tools ben\"{o}tigt.
-Da nicht alle Tools gemeinsam in das Magazin der Maschine passen (max. Anzahl entspricht der Magazingr"se), ist
+Da nicht alle Tools gemeinsam in das Magazin der Maschine passen (max. Anzahl entspricht der Magazingr\"{o}"se), ist
 nun eine m\"{o}glichst g\"{u}nstige Reihenfolge der Jobs gesucht, in der die Anzahl der Tool Switches minimiert wurde.
+Die L\"{o}sung zu einer Test-Instanz eines Tool Switching Problems ist nun eine Permutation in der alle Jobs abgearbeitet
+werden und eine dazu passende Sequenz von Magazin-Konfigurationen.
 
-\begin{equation}
-min \sum_{e \in E \setminus \delta^{+}(0)} w_e * x_e 
-\end{equation}
+\subsection{Tool-Konfiguration f\"{u}r eine vorgegebene Reihenfolge}
+Gesucht ist hier eine möglichst optimale Magazin-Konfiguration f\"{u}r eine vorgegebene Reihenfolge f\"{u}r die Abarbeitung der Jobs. In diesem Spezialfall kann man nun ausnutzen, dass der Algorithmus genau wei"s wann ein Tool das n\"{a}chste Mal ben\"{o}tigt wird und somit zu der vorgegebenen Reihenfolge die optimale Tool-Konfiguration erzeugen kann.
 
-Die Variable $f_e$ beschreibt nun  den Fluss auf der Kante $e$. Mit der Formel (2)
-stellen wir sicher, dass genau $k$ Knoten angeschlossen werden.
-\begin{equation}
-s.t.  \sum_{e \in \delta^{+}(0)} f_e - \sum_{e \in \delta^{-}(0)} f_e + \sum_{e \in \delta^{-}(0)} f_{e+|E|} - \sum_{e \in \delta^{+}(0)} f_{e+|E|} = k
-\end{equation}
-Die folgende Formel (3) besagt, dass falls in dem Knoten $v$ ein Fluss $f_e$ eingeht, 
-auch ein Fluss verringert um den Wert 1 ausgehen muss. Wird ein Knoten in dieser Loesung
-des k-MSTs nicht angeschlossen, hat dieser keinen eingehenden Fluss und darf somit auch
-keinen ausgehenden haben.
-\begin{eqnarray}
-\sum_{e \in \delta^{-}(v)} f_e - \sum_{e \in \delta^{+}(v)} f_e + \sum_{e \in \delta^{+}(v)} f_{e+|E|} - \sum_{e \in \delta^{-}(v)} f_{e+|E|} = \nonumber \\ min(1,\sum_{e \in \delta^{-}(v)}f_e + \sum_{e \in \delta^{+}(v)} f_{e+|E|}) \qquad  \forall v \not = 0, v \ \in V 
-\end{eqnarray}
-Es wird sichergestellt, dass falls ein Fluss $f_e$ auf einer Kante $e$ auftritt, diese
-Kante $e$ auch durch $x_e$ ausgewaehlt werden muss. 
-\begin{equation}
-f_e \leq k * x_e \qquad \forall e \in E 
-\end{equation}
-Ein k-MST mit $k$ Knoten hat genau $k-1$ ausgewaehlte Kanten.
-\begin{equation}
-\sum_{e \in E\setminus \delta^{+}(0)} x_e = k-1 
-\end{equation}
-Mit der Formel (6) wird sichergestellt, dass der k-MST auch ohne dem
-artificial root node ein zusammenhaengender Graph ist.
-\begin{equation}
-\sum_{e \in \delta^{+}(0)} x_e = 1 
-\end{equation}
-\begin{equation}
-0 \leq f_e \leq k \qquad \forall e \in E
-\end{equation}
-\begin{equation}
-0 \leq f_{e+|E|} \leq k \qquad \forall e \in E
-\end{equation}
-\begin{equation}
-x_e \in (0,1) \qquad \forall e \in E
-\end{equation}
+\subsection{Konstruktionsheuristik}
+Unsere Konstruktionsheuristik w\"{a}hlt am Beginn zuf\"{a}llig den ersten Job aus. Die weiteren Jobs werden so gew\"{a}hlt, dass möglichst wenig Kosten entstehen. D.h. der Algorithmus sieht sich alle noch offenen Jobs an und vergleicht die ben\"{o}tigten Tools mit der aktuellen Magazin-Konfiguration.
 
 \subsection*{Results}
 
