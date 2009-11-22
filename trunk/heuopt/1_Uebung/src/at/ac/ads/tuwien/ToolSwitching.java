@@ -37,9 +37,19 @@ public class ToolSwitching {
 	
 	private static String DIR = "matrices"+ File.separator;
 	
-	private ToolSwitching() {
+	private static String HEURISTIC;
+	private static String NEIGHBORHOOD;
+	
+	private ToolSwitching(String[] args) {
 		
 		try {
+			
+			if ((args.length < 1) || (args.length>2)){
+				printUsage();
+			}
+			
+			initParameter(args);
+			
 			logger.info("Read properties...");
 			Properties properties = new Properties();
 			FileInputStream stream = new FileInputStream("param.properties");
@@ -58,7 +68,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_40j_30to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
 		
 		logger.info("Compute cost graph.");
 		computeCostGraph();
@@ -86,26 +96,35 @@ public class ToolSwitching {
 		}
 		*/
 		
-		Solution bestSolution = null;
-		GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
-		Heuristic heu = new Heuristic(this.schedule);
-		// try fixed sequence
-		List<Integer> testSequence = new ArrayList<Integer>();
-		SortedSet<Integer> sorted = new TreeSet<Integer>();
-		sorted.addAll(schedule.keySet());
-		testSequence.addAll(sorted);
-		Solution fixedSequence = heu.minSwitchesFixedSequence(testSequence);
-		logger.info(fixedSequence.toString());
+		if(HEURISTIC.equals("fixed")){
+			Heuristic heu = new Heuristic(this.schedule);
+			
+			List<Integer> testSequence = new ArrayList<Integer>();
+			SortedSet<Integer> sorted = new TreeSet<Integer>();
+			sorted.addAll(schedule.keySet());
+			testSequence.addAll(sorted);
+			
+			Solution fixedSequence = heu.minSwitchesFixedSequence(testSequence);
+			
+			logger.info(fixedSequence.toString());
+		}else if (HEURISTIC.equals("local")){
 		
-		for(int i=0; i < RUNS; i++) {
+			Solution bestSolution = null;
+			GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
+			Heuristic heu = new Heuristic(this.schedule);
 			
-			bestSolution = gh.createInitialSolution(0);
-			
-			heu.getSolution(bestSolution);
-			
-			logger.info(bestSolution.toString());
-			//TODO optimierungsalgorithmus
-			
+			for(int i=0; i < RUNS; i++) {
+				
+				bestSolution = gh.createInitialSolution(0);
+					
+				heu.getSolution(bestSolution);
+				
+				logger.info(bestSolution.toString());
+				//TODO optimierungsalgorithmus
+				
+			}
+		}else{
+			logger.error("wrong heuristic: " + HEURISTIC);
 		}
 		
 		
@@ -156,15 +175,44 @@ public class ToolSwitching {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		// Set up a simple configuration that logs on the console.
-//	    BasicConfigurator.configure();
-		
-		new ToolSwitching();
+				
+		new ToolSwitching(args);
 	}
 
 	public static int getMAGAZINE_SIZE() {
 		return MAGAZINE_SIZE;
 	}
+	
+	private void printUsage(){
+		System.err.println("Usage: TollSwitching <heuristic> [neighborhood]");
+		System.exit(1);
+	}
 
+	private void initParameter(String[] args){
+		
+		if (args[0]!=null && args[0].length()!=0){
+			HEURISTIC=args[0];
+		}else{
+			System.err.println("heuristic is missing");
+			printUsage();
+		}
+		
+		if (HEURISTIC.equals("local")){
+			if (args.length==2 && args[1]!=null && args[1].length()!=0){
+				NEIGHBORHOOD = args[1];
+			}else{
+				System.err.println("neighborhood is missing");
+				printUsage();
+			}
+		}
+		
+	}
+	
+	/**
+	 * @return the nEIGHBORHOOD
+	 */
+	public static String getNEIGHBORHOOD() {
+		return NEIGHBORHOOD;
+	}
+	
 }
