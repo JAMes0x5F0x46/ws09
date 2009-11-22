@@ -48,13 +48,19 @@ public class Heuristic {
 		}
 	}
 
+	public Solution getVNDSolution (Solution solution){
+		Solution bestSolution = solution;
+		Solution curSolution = solution;
+		
+		return bestSolution;
+	}
 
 	/**
 	 * return the best solution of local search
 	 * @param solution initial solution
 	 * @return best Solution of local search
 	 */
-	public Solution getSolution (Solution solution){
+	public Solution getLocalSolution (Solution solution){
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
 		boolean run = true;
