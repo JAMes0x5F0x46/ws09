@@ -257,7 +257,7 @@ public class Heuristic {
 				//if current solution is better then best solution : best Solution = current solution
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution;
-					//next improvement: stop if we found a better solution
+					//next improvement: stop if we found any better solution
 					if (ToolSwitching.getSTEP().equals("next")){
 						return bestSolution;
 					}
