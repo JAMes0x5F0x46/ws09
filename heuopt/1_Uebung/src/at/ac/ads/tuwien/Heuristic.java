@@ -91,10 +91,25 @@ public class Heuristic {
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
 		boolean run = true;
-		String curNeighborhood = "switch";
+		String curNeighborhood = "split";
 		
 		while (run){
-			if (curNeighborhood.equals("switch")){
+			if (curNeighborhood.equals("split")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionSplit(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomSplit(bestSolution);
+				}
+				
+				if (curSolution.getCosts() < bestSolution.getCosts()){
+					//if current solution is better then best solution : best Solution = current solution
+					bestSolution = curSolution;
+				}else{
+					//if we found no better solution, we go to the next neighborhood
+					curNeighborhood="switch";
+				}
+				
+			}else if (curNeighborhood.equals("switch")){
 				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
 					curSolution = getSolutionSwitch(bestSolution);
 				}else if (ToolSwitching.getSTEP().equals("random")){
@@ -118,7 +133,7 @@ public class Heuristic {
 				
 				if (curSolution.getCosts() < bestSolution.getCosts()){
 					//if we found a better solution, we go to the first neighborhood
-					curNeighborhood="switch";
+					curNeighborhood="split";
 					bestSolution = curSolution;
 				}else{
 					//if we found no better solution, we stop 
@@ -156,6 +171,12 @@ public class Heuristic {
 				}else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomMove(bestSolution);
 				}
+			}else if (ToolSwitching.getNEIGHBORHOOD().equals("split")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionSplit(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomSplit(bestSolution);
+				}
 			}else{
 				logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
 				break;
@@ -173,6 +194,48 @@ public class Heuristic {
 		return bestSolution;
 	}
 	
+	
+	/**
+	 * return the best solution (best improvement) or the first best solution (next improvement)
+	 * of the neighborhood
+	 * @param solution
+	 * @return
+	 */
+	private Solution getSolutionSplit (Solution solution){
+		
+		Solution curSolution = solution;
+		Solution bestSolution = solution;
+		
+		for (int i=0; i<schedule.size(); i++){
+			//generate new Solution (switch two jobs)
+			curSolution = minSwitchesFixedSequence(splitJobs(curSolution.getList(), i));
+			
+			//if current solution is better then best solution : best Solution = current solution
+			if (bestSolution.getCosts()>curSolution.getCosts()){
+				bestSolution = curSolution;
+				//next improvement: stop if we found a better solution
+				if (ToolSwitching.getSTEP().equals("next")){
+					return bestSolution;
+				}
+			}
+			curSolution = solution;
+		}
+		
+		return bestSolution;
+	}
+	
+	public List<Integer> splitJobs(List<Integer> jobs, int i){
+		List<Integer> retJobs = new ArrayList<Integer>();
+		
+		for (int job : jobs.subList(i, jobs.size())){
+			retJobs.add(job);
+		}
+		for (int job : jobs.subList(0, i)){
+			retJobs.add(job);
+		}
+		
+		return retJobs;
+	}
 
 	/**
 	 * return the best solution (best improvement) or the first best solution (next improvement)
@@ -290,6 +353,26 @@ public class Heuristic {
 	}
 	
 	/**
+	 * generate random solution from the split-neighborhood
+	 * @param solution
+	 * @return
+	 */
+	private Solution getSolutionRandomSplit(Solution solution){
+		
+		Solution curSolution = solution.clone();
+		
+		Random ran = new Random();
+		
+		//genereat random index i
+		int i = ran.nextInt(schedule.size());
+		
+		//generate new solution (switch two jobs)
+		curSolution.setList(splitJobs(curSolution.getList(), i));
+		
+		return curSolution;
+	}
+	
+	/**
 	 * swap job with index i with job with index j
 	 * @param jobs
 	 * @param i
@@ -330,6 +413,8 @@ public class Heuristic {
 		
 		return retJobs;
 	}
+	
+	
 	
 	public Solution minSwitchesFixedSequence(List<Integer> sequence) {
 		
