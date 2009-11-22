@@ -74,7 +74,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_40j_60to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		

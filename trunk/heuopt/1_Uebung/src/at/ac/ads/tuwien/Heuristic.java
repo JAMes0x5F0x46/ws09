@@ -136,6 +136,21 @@ public class Heuristic {
 					curNeighborhood="split";
 					bestSolution = curSolution;
 				}else{
+					//if we found no better solution, we go to the next neighborhood
+					curNeighborhood="rotate";
+				}
+			}else if (curNeighborhood.equals("rotate")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionRotate(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomRotate(bestSolution);
+				}
+				
+				if (curSolution.getCosts() < bestSolution.getCosts()){
+					//if we found a better solution, we go to the first neighborhood
+					curNeighborhood="split";
+					bestSolution = curSolution;
+				}else{
 					//if we found no better solution, we stop 
 					run=false;
 				}
@@ -176,6 +191,12 @@ public class Heuristic {
 					curSolution = getSolutionSplit(bestSolution);
 				}else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomSplit(bestSolution);
+				}
+			}else if (ToolSwitching.getNEIGHBORHOOD().equals("rotate")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionRotate(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomRotate(bestSolution);
 				}
 			}else{
 				logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
@@ -235,6 +256,87 @@ public class Heuristic {
 		}
 		
 		return retJobs;
+	}
+	
+	/**
+	 * return the best solution (best improvement) or the first best solution (next improvement)
+	 * of the neighborhood
+	 * @param solution
+	 * @return
+	 */
+	private Solution getSolutionRotate(Solution solution){
+		
+		Solution curSolution = solution;
+		Solution bestSolution = solution;
+		
+		for (int i=0; i<schedule.size(); i++){
+			for (int j=i+1; j<schedule.size(); j++){
+				
+				//generate new Solution (switch two jobs)
+				curSolution = minSwitchesFixedSequence(rotateJobs(curSolution.getList(), i, j));
+				
+				//if current solution is better then best solution : best Solution = current solution
+				if (bestSolution.getCosts()>curSolution.getCosts()){
+					bestSolution = curSolution;
+					//next improvement: stop if we found any better solution
+					if (ToolSwitching.getSTEP().equals("next")){
+						return bestSolution;
+					}
+				}
+				curSolution = solution;
+			}
+		}
+		
+		return bestSolution;
+	}
+	
+	public List<Integer> rotateJobs(List<Integer> jobs, int i, int j){
+		List<Integer> retJobs = new ArrayList<Integer>();
+		
+		Random rand = new Random();
+		int s = rand.nextInt(j-i) + i;
+		
+		for (int job : jobs.subList(0, i)){
+			retJobs.add(job);
+		}
+		for (int job : jobs.subList(s , j)){
+			retJobs.add(job);
+		}
+		for (int job : jobs.subList(i , s)){
+			retJobs.add(job);
+		}
+		for (int job : jobs.subList(j , jobs.size())){
+			retJobs.add(job);
+		}
+		
+		return retJobs;
+	}
+	
+	/**
+	 * generate random solution from the rotate-neighborhood
+	 * @param solution
+	 * @return
+	 */
+	private Solution getSolutionRandomRotate(Solution solution){
+		
+		Solution curSolution = solution.clone();
+		
+		Random ran = new Random();
+		
+		//genereat random index i
+		int i = ran.nextInt(schedule.size());
+		
+		//generate random index j; i!=j
+		int j = -1;
+		do{
+			j = ran.nextInt(schedule.size());
+			if (j==i) j=-1;
+		}while(j == -1);
+		
+		//generate new solution
+		curSolution.setList(rotateJobs(curSolution.getList(), i, j));
+		
+		return curSolution;
 	}
 
 	/**
