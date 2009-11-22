@@ -25,7 +25,7 @@ public class Heuristic {
 
 
 
-	public void getSolution (Solution solution){
+	public Solution getSolution (Solution solution){
 		
 		Solution curSolution = solution.clone();
 		Solution bestSolution = solution.clone();
@@ -42,14 +42,13 @@ public class Heuristic {
 				}
 				curSolution = minSwitchesFixedSequence(curSolution.getList());
 				if (bestSolution.getCosts()>curSolution.getCosts()){
-					bestSolution = curSolution.clone();
+					bestSolution = curSolution;
 				}
 				curSolution = solution.clone();
 			}
 		}
 		
-		solution = bestSolution;
-		
+		return bestSolution;
 	}
 	
 	public void switchJobs(Solution solution, int i, int j){

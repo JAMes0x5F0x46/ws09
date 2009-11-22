@@ -118,7 +118,7 @@ public class ToolSwitching {
 				
 				bestSolution = gh.createInitialSolution(0);
 					
-				heu.getSolution(bestSolution);
+				bestSolution = heu.getSolution(bestSolution);
 				
 				logger.info(bestSolution.toString());
 				//TODO optimierungsalgorithmus
