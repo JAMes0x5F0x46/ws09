@@ -1,33 +1,22 @@
 \documentclass[a4paper,10pt]{article}
 
- \usepackage{amsfonts}
+\usepackage{amsfonts}
+\usepackage{ngerman}
+
 
 %opening
-\title{Fortgeschrittene Algorithmen und Datenstrukturen \\ \bigskip \textbf{Programmier\"{u}bung}}
+\title{Heuristische Optimierungsverfahren \\ \bigskip \textbf{1.Programmier\"{u}bung}}
 \author{Johannes Reiter, Christian Gruber}
-\date{\vspace{1cm} 26.Juni 2009}
+\date{\vspace{1cm} 01.Dezember 2009}
 
 \begin{document}
 
 \maketitle
 
-\section{Problem description}
-Gegeben ist ein ungerichteter Graph $G=(V,E,w)$ mit einer nicht negativen
-Gewichtungsfunktion $w(e) \in \mathbb{R}$. Das Ziel ist es in diesem Graphen einen
-k-node minimum spanning tree (k-MST) zu finden. Solch ein k-MST ist der
-kleinste MST mit genau $k$ verbunden Knoten in diesem Graphen. \\
-Gesucht ist nun eine Single Commodity Flow und eine Cycle Elimination
-Formulierung um diese Aufgabenstellung moeglichst gut zu lösen. Die
-ausgearbeiteten ILPs werden im Anschluss praesentiert und jeweils auf die
-verschiedenen Testinstanzen angewendet.
-
-\section{Single Commodity Flow Formulation}
-
-Das Prinzip des Single Commodity Flows (SCF) beruht auf die Ausbreitung eines Fluss
-in dem gegebenen Graphen. Ausgehend von einem artifical root node verbreitet sich
-dieser Fluss. \\
-Wir haben nun ein Minimierungsproblem, wobei $x_e$ eine Entscheidungsvariable ist,
-die festlegt, ob die Kante $e$ in der Loesung enthalten ist oder nicht.
+\section{Tool Switching Problem}
+Gegeben ist eine Menge von Jobs, die zu ihrer Abarbeitung jeweils einen gewissen Satz von Tools ben\"{o}tigt.
+Da nicht alle Tools gemeinsam in das Magazin der Maschine passen (max. Anzahl entspricht der Magazingr"se), ist
+nun eine m\"{o}glichst g\"{u}nstige Reihenfolge der Jobs gesucht, in der die Anzahl der Tool Switches minimiert wurde.
 
 \begin{equation}
 min \sum_{e \in E \setminus \delta^{+}(0)} w_e * x_e 
