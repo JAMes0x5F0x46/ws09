@@ -54,17 +54,16 @@ public class Heuristic {
 	
 	public void switchJobs(Solution solution, int i, int j){
 		
-//		logger.debug("vor:" + solution.getList().toString());
 		int tmp = solution.getList().get(j);
 		solution.getList().add(j, solution.getList().get(i));
 		solution.getList().remove(j+1);
 		solution.getList().add(i, tmp);
 		solution.getList().remove(i+1);
-//		logger.debug("nach:" + solution.getList().toString());
 	}
 	
 	public void moveJob(Solution solution, int i, int j){
-		//TODO
+		solution.getList().add(j, solution.getList().get(i));
+		solution.getList().remove(i);
 	}
 	
 	public Solution minSwitchesFixedSequence(List<Integer> sequence) {
