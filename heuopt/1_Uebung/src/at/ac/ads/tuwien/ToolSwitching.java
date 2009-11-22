@@ -39,12 +39,13 @@ public class ToolSwitching {
 	
 	private static String HEURISTIC;
 	private static String NEIGHBORHOOD;
+	private static String STEP;
 	
 	private ToolSwitching(String[] args) {
 		
 		try {
 			
-			if ((args.length < 1) || (args.length>2)){
+			if ((args.length < 1) || (args.length>3)){
 				printUsage();
 			}
 			
@@ -184,7 +185,7 @@ public class ToolSwitching {
 	}
 	
 	private void printUsage(){
-		System.err.println("Usage: TollSwitching <heuristic> [neighborhood]");
+		System.err.println("Usage: TollSwitching <heuristic> <step> [neighborhood]");
 		System.exit(1);
 	}
 
@@ -197,9 +198,16 @@ public class ToolSwitching {
 			printUsage();
 		}
 		
+		if (args[1]!=null && args[1].length()!=0){
+			STEP=args[1];
+		}else{
+			System.err.println("step is missing");
+			printUsage();
+		}
+		
 		if (HEURISTIC.equals("local")){
-			if (args.length==2 && args[1]!=null && args[1].length()!=0){
-				NEIGHBORHOOD = args[1];
+			if (args.length==3 && args[2]!=null && args[2].length()!=0){
+				NEIGHBORHOOD = args[2];
 			}else{
 				System.err.println("neighborhood is missing");
 				printUsage();
@@ -208,6 +216,13 @@ public class ToolSwitching {
 		
 	}
 	
+	/**
+	 * @return the sTEP
+	 */
+	public static String getSTEP() {
+		return STEP;
+	}
+
 	/**
 	 * @return the nEIGHBORHOOD
 	 */
