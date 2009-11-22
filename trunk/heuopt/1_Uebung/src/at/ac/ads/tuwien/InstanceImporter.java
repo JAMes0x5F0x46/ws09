@@ -2,11 +2,9 @@ package at.ac.ads.tuwien;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +35,7 @@ public class InstanceImporter {
 				
 				reader = new BufferedReader(new InputStreamReader(is));
 				String line = null;
+				int highestTool=-1;
 				
 				try {
 					String[] split;
@@ -52,15 +51,19 @@ public class InstanceImporter {
 						
 						logger.debug("Job: "+Integer.valueOf(split[0]));
 						
-						for(int i=1; i<split.length;i++) {						
+						for(int i=1; i<split.length;i++) {
+							if(highestTool < Integer.valueOf(split[i])) {
+								highestTool = Integer.valueOf(split[i]);
+							}
 							tools.add(Integer.valueOf(split[i]));
 							logger.debug("Tool "+i+": "+Integer.valueOf(split[i]));
 						}
 						schedule.put(Integer.valueOf(split[0]), tools);
 					}
-					
+					highestTool++;
+					ToolSwitching.setNUMBER_OF_TOOLS(highestTool);
 					logger.debug("Instance size: "+schedule.size());
-					
+					logger.debug("Number of used tools: "+highestTool);
 					
 				} catch (IOException e) {
 					logger.error("Could not read Instance-File (IOException): "+path);
