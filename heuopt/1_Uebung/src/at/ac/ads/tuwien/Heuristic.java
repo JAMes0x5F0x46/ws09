@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,22 +48,38 @@ public class Heuristic {
 	}
 
 
+	/**
+	 * return the best solution of local search
+	 * @param solution initial solution
+	 * @return best Solution of local search
+	 */
 	public Solution getSolution (Solution solution){
 		Solution bestSolution = solution;
-		Solution curSolution;
+		Solution curSolution = solution;
 		boolean run = true;
 		
+		//run until bestSolution was found
 		while (run){
 			
+			//check which neighborhood is selected and get the next Solution of the neighborhood
 			if (ToolSwitching.getNEIGHBORHOOD().equals("switch")){
-				curSolution = getSolutionSwitch(bestSolution);
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionSwitch(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomSwitch(bestSolution);
+				}
 			}else if (ToolSwitching.getNEIGHBORHOOD().equals("move")){
-				curSolution = getSolutionMove(bestSolution);
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionMove(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomMove(bestSolution);
+				}
 			}else{
 				logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
 				break;
 			}
 			
+			//if current solution is better then best solution : best Solution = current solution
 			if (curSolution.getCosts() < bestSolution.getCosts()){
 				bestSolution = curSolution;
 			}else{
@@ -75,6 +92,12 @@ public class Heuristic {
 	}
 	
 
+	/**
+	 * return the best solution (best improvement) or the first best solution (next improvement)
+	 * of the neighborhood
+	 * @param solution
+	 * @return
+	 */
 	private Solution getSolutionSwitch (Solution solution){
 		
 		Solution curSolution = solution;
@@ -83,9 +106,16 @@ public class Heuristic {
 		for (int i=0; i<schedule.size(); i++){
 			for (int j=i+1; j<schedule.size(); j++){
 				
+				//generate new Solution (switch two jobs)
 				curSolution = minSwitchesFixedSequence(switchJobs(curSolution.getList(), i, j));
+				
+				//if current solution is better then best solution : best Solution = current solution
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution;
+					//next improvement: stop if we found a better solution
+					if (ToolSwitching.getSTEP().equals("next")){
+						return bestSolution;
+					}
 				}
 				curSolution = solution;
 			}
@@ -94,6 +124,12 @@ public class Heuristic {
 		return bestSolution;
 	}
 	
+	/**
+	 * return the best solution (best improvement) or the first best solution (next improvement)
+	 * of the neighborhood
+	 * @param solution
+	 * @return
+	 */
 	private Solution getSolutionMove(Solution solution){
 		
 		Solution curSolution = solution;
@@ -104,10 +140,16 @@ public class Heuristic {
 				
 				if (i==j) continue;
 
+				//generate new Solution (move one job)
 				curSolution = minSwitchesFixedSequence(moveJob(curSolution.getList(), i, j));
 				
+				//if current solution is better then best solution : best Solution = current solution
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution;
+					//next improvement: stop if we found a better solution
+					if (ToolSwitching.getSTEP().equals("next")){
+						return bestSolution;
+					}
 				}
 				curSolution = solution;
 			}
@@ -116,6 +158,62 @@ public class Heuristic {
 		return bestSolution;
 	}
 	
+	/**
+	 * generate random solution from the switch-neighborhood
+	 * @param solution
+	 * @return
+	 */
+	private Solution getSolutionRandomSwitch (Solution solution){
+		
+		Solution curSolution = solution.clone();
+		
+		Random ran = new Random();
+		
+		//genereat random index i
+		int i = ran.nextInt(schedule.size());
+		
+		//generate random index j; i!=j
+		int j = -1;
+		do{
+			j = ran.nextInt(schedule.size());
+			if (j==i) j=-1;
+		}while(j == -1);
+		
+		//generate new solution (switch two jobs)
+		curSolution.setList(switchJobs(curSolution.getList(), i, j));
+		
+		return curSolution;
+	}
+	
+	private Solution getSolutionRandomMove (Solution solution){
+		
+		Solution curSolution = solution.clone();
+		
+		Random ran = new Random();
+		
+		//genereat random index i
+		int i = ran.nextInt(schedule.size());
+		
+		//generate random index j; i!=j
+		int j = -1;
+		do{
+			j = ran.nextInt(schedule.size());
+			if (j==i) j=-1;
+		}while(j == -1);
+		
+		//generate new solution (move one jobs)
+		curSolution.setList(moveJob(curSolution.getList(), i, j));
+		
+		return curSolution;
+	}
+	
+	/**
+	 * swap job with index i with job with index j
+	 * @param jobs
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public List<Integer> switchJobs(List<Integer> jobs, int i, int j){
 		List<Integer> retJobs = new ArrayList<Integer>();
 		
@@ -129,6 +227,13 @@ public class Heuristic {
 		return retJobs;
 	}
 	
+	/**
+	 * move job with index i to index j
+	 * @param jobs
+	 * @param i
+	 * @param j
+	 * @return
+	 */
 	public List<Integer> moveJob(List<Integer> jobs, int i, int j){
 		List<Integer> retJobs = new ArrayList<Integer>();
 		
