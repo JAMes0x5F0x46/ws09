@@ -44,46 +44,101 @@ public class Heuristic {
 	}
 
 
-
 	public Solution getSolution (Solution solution){
+		Solution bestSolution = solution;
+		Solution curSolution;
+		boolean run = true;
 		
-		Solution curSolution = solution.clone();
-		Solution bestSolution = solution.clone();
+		while (run){
+			
+			if (ToolSwitching.getNEIGHBORHOOD().equals("switch")){
+				curSolution = getSolutionSwitch(bestSolution);
+			}else if (ToolSwitching.getNEIGHBORHOOD().equals("move")){
+				curSolution = getSolutionMove(bestSolution);
+			}else{
+				logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
+				break;
+			}
+			
+			if (curSolution.getCosts() < bestSolution.getCosts()){
+				bestSolution = curSolution;
+			}else{
+				run=false;
+			}
+			
+		}
+		
+		return bestSolution;
+	}
+	
+
+	private Solution getSolutionSwitch (Solution solution){
+		
+		Solution curSolution = solution;
+		Solution bestSolution = solution;
 		
 		for (int i=0; i<schedule.size(); i++){
 			for (int j=i+1; j<schedule.size(); j++){
 				
-				if (ToolSwitching.getNEIGHBORHOOD().equals("switch")){
-					switchJobs(curSolution, i, j);
-				}else if (ToolSwitching.getNEIGHBORHOOD().equals("move")){
-					moveJob(curSolution, i, j);
-				}else{
-					logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
-				}
-				curSolution = minSwitchesFixedSequence(curSolution.getList());
-				
+				curSolution = minSwitchesFixedSequence(switchJobs(curSolution.getList(), i, j));
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution;
 				}
-				curSolution = solution.clone();
+				curSolution = solution;
 			}
 		}
 		
 		return bestSolution;
 	}
 	
-	public void switchJobs(Solution solution, int i, int j){
+	private Solution getSolutionMove(Solution solution){
 		
-		int tmp = solution.getList().get(j);
-		solution.getList().add(j, solution.getList().get(i));
-		solution.getList().remove(j+1);
-		solution.getList().add(i, tmp);
-		solution.getList().remove(i+1);
+		Solution curSolution = solution;
+		Solution bestSolution = solution;
+		
+		for (int i=0; i<schedule.size(); i++){
+			for (int j=0; j<schedule.size(); j++){
+				
+				if (i==j) continue;
+
+				curSolution = minSwitchesFixedSequence(moveJob(curSolution.getList(), i, j));
+				
+				if (bestSolution.getCosts()>curSolution.getCosts()){
+					bestSolution = curSolution;
+				}
+				curSolution = solution;
+			}
+		}
+		
+		return bestSolution;
 	}
 	
-	public void moveJob(Solution solution, int i, int j){
-		solution.getList().add(j, solution.getList().get(i));
-		solution.getList().remove(i);
+	public List<Integer> switchJobs(List<Integer> jobs, int i, int j){
+		List<Integer> retJobs = new ArrayList<Integer>();
+		
+		retJobs.addAll(jobs);
+		int tmp = retJobs.get(j);
+		retJobs.add(j, retJobs.get(i));
+		retJobs.remove(j+1);
+		retJobs.add(i, tmp);
+		retJobs.remove(i+1);
+		
+		return retJobs;
+	}
+	
+	public List<Integer> moveJob(List<Integer> jobs, int i, int j){
+		List<Integer> retJobs = new ArrayList<Integer>();
+		
+		retJobs.addAll(jobs);
+		
+		retJobs.add(j, retJobs.get(i));
+		if (i<j){
+			retJobs.remove(i);
+		}else{
+			retJobs.remove(i+1);
+		}
+		
+		return retJobs;
 	}
 	
 	public Solution minSwitchesFixedSequence(List<Integer> sequence) {

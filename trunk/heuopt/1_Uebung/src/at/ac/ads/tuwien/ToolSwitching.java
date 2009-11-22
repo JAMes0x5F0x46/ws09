@@ -121,9 +121,9 @@ public class ToolSwitching {
 				
 				bestSolution = gh.createInitialSolution(random.nextInt(schedule.size()));
 				logger.info((i+1)+".run initial solution: "+bestSolution.toString());
-					
+
 				bestSolution = heu.getSolution(bestSolution);
-				
+
 				logger.info(bestSolution.toString());
 				
 			}
