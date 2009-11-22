@@ -40,7 +40,10 @@ public class Heuristic {
 			}
 		}
 		
-		logger.debug(toolUsage.toString());
+		for(int i=0; i < ToolSwitching.getNUMBER_OF_TOOLS(); i++) {
+			
+			logger.debug("Usage of tool "+i+": "+this.toolUsage.get(i).toString());
+		}
 	}
 
 
@@ -281,29 +284,13 @@ public class Heuristic {
 	}
 	
 	private boolean isToolUsed(int tool, int job) {
-		boolean isToolUsed=false;
 		
-		for (int i=0; i < schedule.get(job).size(); i++){
-			if (schedule.get(job).contains(tool)){
-				isToolUsed=true;
-				break;
-			}
-		}
-		
-		return isToolUsed;
+		return this.schedule.get(job).contains(tool);
 	}
 	
-	private SortedSet<Integer> toolUsedInJobs (int tool){
+	private Set<Integer> toolUsedInJobs (int tool){
 		
-		SortedSet<Integer> jobs = new TreeSet<Integer>();
-		
-		for (int i=0; i < schedule.size(); i++){
-			if (isToolUsed(tool, i)){
-				jobs.add(i);
-			}
-		}
-		
-		return jobs;
+		return this.toolUsage.get(tool);
 	}
 	
 }
