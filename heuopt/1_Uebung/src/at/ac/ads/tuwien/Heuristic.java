@@ -33,7 +33,13 @@ public class Heuristic {
 		for (int i=0; i<schedule.size(); i++){
 			for (int j=i+1; j<schedule.size(); j++){
 				
-				switchJobs(curSolution, i, j);
+				if (ToolSwitching.getNEIGHBORHOOD().equals("switch")){
+					switchJobs(curSolution, i, j);
+				}else if (ToolSwitching.getNEIGHBORHOOD().equals("move")){
+					moveJob(curSolution, i, j);
+				}else{
+					logger.error("wrong neighborhood: " + ToolSwitching.getNEIGHBORHOOD());
+				}
 				curSolution = minSwitchesFixedSequence(curSolution.getList());
 				if (bestSolution.getCosts()>curSolution.getCosts()){
 					bestSolution = curSolution.clone();
@@ -57,7 +63,11 @@ public class Heuristic {
 //		logger.debug("nach:" + solution.getList().toString());
 	}
 	
-public Solution minSwitchesFixedSequence(List<Integer> sequence) {
+	public void moveJob(Solution solution, int i, int j){
+		//TODO
+	}
+	
+	public Solution minSwitchesFixedSequence(List<Integer> sequence) {
 		
 		if(sequence.size() != schedule.size()) {
 			logger.error("The given sequence is not correct. ");
