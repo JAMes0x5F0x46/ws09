@@ -114,7 +114,7 @@ public class ToolSwitching {
 			
 			logger.info(fixedSequence.toString());
 			
-		} else if (HEURISTIC.equals("local")){
+		} else if (HEURISTIC.equals("local")||HEURISTIC.equals("vnd")){
 		
 			Solution currentSolution = null;
 			GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
@@ -131,8 +131,13 @@ public class ToolSwitching {
 				currentSolution = gh.createInitialSolution(random.nextInt(schedule.size()));
 				logger.info((i+1)+".run initial solution: "+currentSolution.toString());
 
-				// improve solution of construction heuristic with a local search
-				currentSolution = heu.getSolution(currentSolution);
+				if (HEURISTIC.equals("local")){
+					// improve solution of construction heuristic with a local search
+					currentSolution = heu.getLocalSolution(currentSolution);
+				}else if (HEURISTIC.equals("vnd")){
+					// improve solution of construction heuristic with a VND
+					currentSolution = heu.getVNDSolution(currentSolution);
+				}
 				averageResult += currentSolution.getCosts();
 				solutionValues.add(currentSolution.getCosts());
 				
