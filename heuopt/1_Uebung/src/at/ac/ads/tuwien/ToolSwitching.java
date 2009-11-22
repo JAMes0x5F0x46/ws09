@@ -75,7 +75,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_40j_60to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		
@@ -121,7 +121,7 @@ public class ToolSwitching {
 			
 			logger.info(fixedSequence.toString());
 			
-		} else if (HEURISTIC.equals("local")||HEURISTIC.equals("vnd")){
+		} else if (HEURISTIC.equals("local")||HEURISTIC.equals("vnd")||HEURISTIC.equals("gvns")){
 		
 			Solution currentSolution = null;
 			GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
@@ -144,7 +144,11 @@ public class ToolSwitching {
 				}else if (HEURISTIC.equals("vnd")){
 					// improve solution of construction heuristic with a VND
 					currentSolution = heu.getVNDSolution(currentSolution);
+				}else if (HEURISTIC.equals("gvns")){
+					// improve solution of construction heuristic with a VND
+					currentSolution = heu.getGVNSSolution(currentSolution);
 				}
+				
 				averageResult += currentSolution.getCosts();
 				solutionValues.add(currentSolution.getCosts());
 				

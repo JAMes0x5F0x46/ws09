@@ -48,6 +48,45 @@ public class Heuristic {
 		}
 	}
 
+	public Solution getGVNSSolution (Solution solution){
+		Solution bestSolution = solution;
+		Solution curSolution = solution;
+
+		
+		int l=1;
+		do{
+			curSolution =  MultiMoveJob(bestSolution, l);
+			
+			curSolution = getVNDSolution(curSolution);
+			
+			if (curSolution.getCosts() < bestSolution.getCosts()){
+				bestSolution = curSolution;
+				l = 1;
+			}else{
+				l++;
+			}
+			
+		}while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
+		
+		return bestSolution;
+	}
+	
+	/**
+	 * 
+	 * @param jobs
+	 * @param n
+	 * @return
+	 */
+	public Solution MultiMoveJob(Solution solution, int n){
+		Solution retSolution = solution;
+		
+		for (int i=0; i < n; i++){
+			retSolution = this.getSolutionRandomMove(retSolution);
+		}
+		
+		return retSolution;
+	}
+	
 	public Solution getVNDSolution (Solution solution){
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
