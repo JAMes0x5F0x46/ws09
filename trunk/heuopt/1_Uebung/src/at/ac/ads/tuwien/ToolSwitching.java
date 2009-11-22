@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -35,6 +36,8 @@ public class ToolSwitching {
 	private int[][] similarities = null;
 	private int[][] differences = null;
 	
+	private Solution bestSolution = null;
+	
 	private static String DIR = "matrices"+ File.separator;
 	
 	private static String HEURISTIC;
@@ -62,14 +65,16 @@ public class ToolSwitching {
 			MAGAZINE_SIZE = Integer.valueOf(properties.getProperty("magazineSize"));
 			
 		} catch (IOException e) {
-			
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		
 		logger.info("Started algorithm...");
 		
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_40j_60to_NSS_0.txt");
+		//matrix_30j_40to_NSS_0.txt
+		//matrix_40j_60to_NSS_0.txt
+		
 		
 		logger.info("Compute cost graph.");
 		computeCostGraph();
@@ -109,25 +114,40 @@ public class ToolSwitching {
 			
 			logger.info(fixedSequence.toString());
 			
-		}else if (HEURISTIC.equals("local")){
+		} else if (HEURISTIC.equals("local")){
 		
-			Solution bestSolution = null;
+			Solution currentSolution = null;
 			GreedyHeuristic gh = new GreedyHeuristic(this.schedule);
 			Heuristic heu = new Heuristic(this.schedule);
 			
+			bestSolution = gh.createInitialSolution(0);
+			
 			Random random = new Random();
+			int averageResult = 0;
+			Set<Integer> solutionValues = new HashSet<Integer>();
 			
 			for(int i=0; i < RUNS; i++) {
 				
-				bestSolution = gh.createInitialSolution(random.nextInt(schedule.size()));
-				logger.info((i+1)+".run initial solution: "+bestSolution.toString());
+				currentSolution = gh.createInitialSolution(random.nextInt(schedule.size()));
+				logger.info((i+1)+".run initial solution: "+currentSolution.toString());
 
-				bestSolution = heu.getSolution(bestSolution);
-
-				logger.info(bestSolution.toString());
+				// improve solution of construction heuristic with a local search
+				currentSolution = heu.getSolution(currentSolution);
+				averageResult += currentSolution.getCosts();
+				solutionValues.add(currentSolution.getCosts());
 				
+				logger.info("Result of LS: "+currentSolution.toString());
+				// Found new best solution?
+				if(this.bestSolution.getCosts() > currentSolution.getCosts()) {
+					this.bestSolution = currentSolution;
+				}
+				logger.info("Best solution: "+bestSolution.toString());
 			}
-		}else{
+			logger.info("Best solution after "+RUNS+" runs: "+bestSolution.toString());
+			logger.info("Average result: "+averageResult/RUNS);
+			logger.info("Standard deviation: "+computeStdDeviation(solutionValues,averageResult/RUNS));
+			
+		} else {
 			logger.error("wrong heuristic: " + HEURISTIC);
 		}
 		
@@ -218,6 +238,21 @@ public class ToolSwitching {
 			}
 		}
 		
+	}
+	
+	private double computeStdDeviation(Set<Integer> values,int average) {
+		
+		double result = 0d;
+		
+		for(int value : values) {
+			
+			result += Math.pow(value - average, 2);
+		}
+		
+		result = result / values.size();		
+		result = Math.sqrt(result);
+		
+		return result;
 	}
 	
 	/**

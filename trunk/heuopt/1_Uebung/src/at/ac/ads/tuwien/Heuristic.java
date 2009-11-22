@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Heuristic {
@@ -26,13 +25,16 @@ public class Heuristic {
 		this.schedule = schedule;
 		this.toolUsage = new ArrayList<Set<Integer>>(ToolSwitching.getNUMBER_OF_TOOLS());
 		
+		logger.setLevel(Level.INFO);
+		
 		// initialize the tool usage of the different jobs
 		Set<Integer> usage = null;
-		for(int i=0; i < schedule.size(); i++) {
+		for(int i=0; i < ToolSwitching.getNUMBER_OF_TOOLS(); i++) {
 			
 			usage = new HashSet<Integer>();
 			this.toolUsage.add(usage);
 		}
+		
 		for(int i=0; i < schedule.size(); i++) {
 			
 			for(int tool : schedule.get(i)) {
@@ -41,8 +43,7 @@ public class Heuristic {
 			}
 		}
 		
-		for(int i=0; i < ToolSwitching.getNUMBER_OF_TOOLS(); i++) {
-			
+		for(int i=0; i < ToolSwitching.getNUMBER_OF_TOOLS(); i++) {			
 			logger.debug("Usage of tool "+i+": "+this.toolUsage.get(i).toString());
 		}
 	}
