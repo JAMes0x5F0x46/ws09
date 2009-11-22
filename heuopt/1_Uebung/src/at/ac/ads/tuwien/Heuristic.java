@@ -51,6 +51,42 @@ public class Heuristic {
 	public Solution getVNDSolution (Solution solution){
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
+		boolean run = true;
+		String curNeighborhood = "switch";
+		
+		while (run){
+			if (curNeighborhood.equals("switch")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionSwitch(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomSwitch(bestSolution);
+				}
+				
+				if (curSolution.getCosts() < bestSolution.getCosts()){
+					//if current solution is better then best solution : best Solution = current solution
+					bestSolution = curSolution;
+				}else{
+					//if we found no better solution, we go to the next neighborhood
+					curNeighborhood="move";
+				}
+				
+			}else if (curNeighborhood.equals("move")){
+				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+					curSolution = getSolutionMove(bestSolution);
+				}else if (ToolSwitching.getSTEP().equals("random")){
+					curSolution = getSolutionRandomMove(bestSolution);
+				}
+				
+				if (curSolution.getCosts() < bestSolution.getCosts()){
+					//if we found a better solution, we go to the first neighborhood
+					curNeighborhood="switch";
+					bestSolution = curSolution;
+				}else{
+					//if we found no better solution, we stop 
+					run=false;
+				}
+			}
+		}
 		
 		return bestSolution;
 	}
