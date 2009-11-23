@@ -65,7 +65,8 @@ public class Heuristic {
 			} else {
 				// increase the size of the neighborhood
 				l++;
-				logger.info("Increased neighborhood to: "+l);
+				logger.info("Increased neighborhood to: "+l+" result with last neighborhood size: "
+						+curSolution.getCosts());
 			}
 			
 		} while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
