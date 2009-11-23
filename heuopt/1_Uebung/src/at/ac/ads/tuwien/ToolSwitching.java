@@ -44,7 +44,9 @@ public class ToolSwitching {
 	private static String NEIGHBORHOOD;
 	private static String STEP;
 	
-	private ToolSwitching(String[] args) {
+	private static String inputFile;
+	
+	private ToolSwitching(String[] args, String inputFile, int magazine_size) {
 		
 		float relativeNeighborhoodSize = 0f;
 		
@@ -64,7 +66,12 @@ public class ToolSwitching {
 		
 			stream.close();
 			RUNS = Integer.valueOf(properties.getProperty("runs"));
-			MAGAZINE_SIZE = Integer.valueOf(properties.getProperty("magazineSize"));
+			//TODO Test
+//			MAGAZINE_SIZE = Integer.valueOf(properties.getProperty("magazineSize"));
+			//************************** Test ********************************
+			MAGAZINE_SIZE = magazine_size;
+			this.inputFile = inputFile;
+			//************************* Test end *****************************
 			relativeNeighborhoodSize = Float.valueOf(properties.getProperty("neighborhoodSize"));
 			
 		} catch (IOException e) {
@@ -74,7 +81,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + inputFile);
 		//matrix_10j_10to_NSS_0.txt
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
@@ -213,7 +220,199 @@ public class ToolSwitching {
 	 */
 	public static void main(String[] args) {
 				
-		new ToolSwitching(args);
+//		new ToolSwitching(args);
+		
+		//********************** Test start *********************************
+		
+		args[0]= "local";
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: best; switch");
+		args[1]="best";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: next; switch");
+		args[1]="next";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: random; switch");
+		args[1]="random";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: best; move");
+		args[1]="best";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: next; move");
+		args[1]="next";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: random; move");
+		args[1]="random";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: best; rotate");
+		args[1]="best";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: next; rotate");
+		args[1]="next";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: random; rotate");
+		args[1]="random";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: best; split");
+		args[1]="best";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: next; split");
+		args[1]="next";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		ToolSwitching.logger.info("new instance: matrix_10j_10to_NSS_0.txt: random; split");
+		args[1]="random";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_10j_10to_NSS_0.txt", 4);
+		
+		
+		
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: best; switch");
+		args[1]="best";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: next; switch");
+		args[1]="next";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: random; switch");
+		args[1]="random";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: best; move");
+		args[1]="best";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: next; move");
+		args[1]="next";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: random; move");
+		args[1]="random";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: best; rotate");
+		args[1]="best";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: next; rotate");
+		args[1]="next";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: random; rotate");
+		args[1]="random";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: best; split");
+		args[1]="best";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: next; split");
+		args[1]="next";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+		ToolSwitching.logger.info("new instance: matrix_30j_40to_NSS_0.txt: random; split");
+		args[1]="random";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_30j_40to_NSS_0.txt", 15);
+		
+
+		
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: best; switch");
+		args[1]="best";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: next; switch");
+		args[1]="next";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: random; switch");
+		args[1]="random";
+		args[2]="switch";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: best; move");
+		args[1]="best";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: next; move");
+		args[1]="next";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: random; move");
+		args[1]="random";
+		args[2]="move";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: best; rotate");
+		args[1]="best";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: next; rotate");
+		args[1]="next";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: random; rotate");
+		args[1]="random";
+		args[2]="rotate";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: best; split");
+		args[1]="best";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: next; split");
+		args[1]="next";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		ToolSwitching.logger.info("new instance: matrix_40j_60to_NSS_0.txt: random; split");
+		args[1]="random";
+		args[2]="split";
+		new ToolSwitching(args, "matrix_40j_60to_NSS_0.txt", 20);
+		
+		//********************** Test end ***********************************
 	}
 
 	public static int getMAGAZINE_SIZE() {
