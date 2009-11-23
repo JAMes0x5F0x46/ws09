@@ -75,9 +75,10 @@ public class Solution implements Cloneable{
 	
 	@Override
 	public Solution clone(){
+		
 		Solution sol = new Solution();
 		for (int i=0; i<this.getList().size(); i++){
-			sol.getList().add(this.getList().get(i));
+			sol.list.add(this.getList().get(i));
 			Set<Integer> magazin = new HashSet<Integer>();
 			if (this.getMagazineConfiguration()!=null){
 				for (int mag : this.getMagazineConfiguration().get(i)){
@@ -86,7 +87,7 @@ public class Solution implements Cloneable{
 			}
 			sol.getMagazineConfiguration().add(magazin);
 		}
-		sol.setCosts(this.getCosts());
+		sol.costs = this.getCosts();
 		return sol;
 	}
 }
