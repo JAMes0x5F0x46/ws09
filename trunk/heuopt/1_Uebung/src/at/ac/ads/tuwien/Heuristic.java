@@ -78,7 +78,7 @@ public class Heuristic {
 	 * @return
 	 */
 	public Solution MultiMoveJob(Solution solution, int n){
-		Solution retSolution = solution;
+		Solution retSolution = solution.clone();
 		
 		for (int i=0; i < n; i++){
 			retSolution = this.getSolutionRandomMove(retSolution);
@@ -296,6 +296,14 @@ public class Heuristic {
 		return bestSolution;
 	}
 	
+	/**
+	 * rotate a sequenz (begin: i; end: j) at index s
+	 * @param jobs
+	 * @param i
+	 * @param j
+	 * @param s
+	 * @return
+	 */
 	public List<Integer> rotateJobs(List<Integer> jobs, int i, int j, int s){
 		List<Integer> retJobs = new ArrayList<Integer>();
 		
