@@ -54,7 +54,9 @@ public class Heuristic {
 		// neighborhood size starts with one
 		int l=1;
 		do {
-			curSolution =  MultiMoveJob(bestSolution, l);
+			curSolution =  MultiMoveJob(bestSolution, 2*l);
+			curSolution = minSwitchesFixedSequence(curSolution.getList());
+			logger.info("Generated new solution in current neighborhood: "+curSolution.toString());
 			
 			curSolution = getVNDSolution(curSolution);
 			
@@ -69,7 +71,7 @@ public class Heuristic {
 						+curSolution.getCosts());
 			}
 			
-		} while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
+		} while (2*l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
 		
 		return bestSolution;
 	}
@@ -114,7 +116,7 @@ public class Heuristic {
 				if(curSolution.getCosts() < bestSolution.getCosts()){
 					//if current solution is better then best solution : best Solution = current solution
 					bestSolution = curSolution;
-					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.toString());
 				} else{
 					//if we found no better solution, we go to the next neighborhood
 					strategy = NeighborhoodStrategy.MOVE;
@@ -130,10 +132,10 @@ public class Heuristic {
 				
 				if (curSolution.getCosts() < bestSolution.getCosts()){
 					//if current solution is better then best solution : best Solution = current solution
-					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
-					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
-					
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.toString());
+					strategy = NeighborhoodStrategy.SPLIT;
+	
 				} else{
 					//if we found no better solution, we go to the next neighborhood
 					strategy = NeighborhoodStrategy.ROTATE;
@@ -149,9 +151,9 @@ public class Heuristic {
 				
 				if (curSolution.getCosts() < bestSolution.getCosts()){
 					//if we found a better solution, we go to the first neighborhood
-					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
-					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.toString());
+					strategy = NeighborhoodStrategy.SPLIT;					
 					
 				} else{
 					//if we found no better solution, we go to the next neighborhood
@@ -166,9 +168,10 @@ public class Heuristic {
 				
 				if(curSolution.getCosts() < bestSolution.getCosts()){
 					//if we found a better solution, we go to the first neighborhood
-					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
-					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.toString());
+					strategy = NeighborhoodStrategy.SPLIT;
+					
 					
 				} else{
 					//if we found no better solution, we stop 
