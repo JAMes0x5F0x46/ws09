@@ -56,7 +56,7 @@ public class Heuristic {
 		do {
 			curSolution =  MultiMoveJob(bestSolution, 2*l);
 			curSolution = minSwitchesFixedSequence(curSolution.getList());
-			logger.info("Generated new solution in current neighborhood: "+curSolution.toString());
+			logger.info("Generated new solution in "+l+".neighborhood: "+curSolution.toString());
 			
 			curSolution = getVNDSolution(curSolution);
 			
@@ -71,7 +71,7 @@ public class Heuristic {
 						+curSolution.getCosts());
 			}
 			
-		} while (2*l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
+		} while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
 		
 		return bestSolution;
 	}
