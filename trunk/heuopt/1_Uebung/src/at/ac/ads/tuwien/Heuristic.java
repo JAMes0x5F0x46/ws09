@@ -358,13 +358,13 @@ public class Heuristic {
 		Random ran = new Random();
 		
 		//genereat random index i
-		int i = ran.nextInt(schedule.size());
+		int i = ran.nextInt(schedule.size()-1);
 		
 		//generate random index j; i!=j
 		int j = -1;
 		do{
 			j = ran.nextInt(schedule.size());
-			if (j==i) j=-1;
+			if (j==i|| i>j ) j=-1;
 		}while(j == -1);
 		
 		Random rand = new Random();
