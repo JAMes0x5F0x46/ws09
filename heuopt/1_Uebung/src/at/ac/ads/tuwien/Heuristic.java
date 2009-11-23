@@ -266,35 +266,38 @@ public class Heuristic {
 	 */
 	private Solution getSolutionRotate(Solution solution){
 		
+		Random rand = new Random();
+		
 		Solution curSolution = solution;
 		Solution bestSolution = solution;
 		
 		for (int i=0; i<schedule.size(); i++){
 			for (int j=i+1; j<schedule.size(); j++){
-				
-				//generate new Solution (switch two jobs)
-				curSolution = minSwitchesFixedSequence(rotateJobs(curSolution.getList(), i, j));
-				
-				//if current solution is better then best solution : best Solution = current solution
-				if (bestSolution.getCosts()>curSolution.getCosts()){
-					bestSolution = curSolution;
-					//next improvement: stop if we found any better solution
-					if (ToolSwitching.getSTEP().equals("next")){
-						return bestSolution;
+				logger.info(Math.log(j-1));
+				for (int k=0; k < Math.log(j-i); k++){
+					int s = rand.nextInt(j-i) + i;
+					
+					//generate new Solution (switch two jobs)
+					curSolution = minSwitchesFixedSequence(rotateJobs(curSolution.getList(), i, j, s));
+					
+					//if current solution is better then best solution : best Solution = current solution
+					if (bestSolution.getCosts()>curSolution.getCosts()){
+						bestSolution = curSolution;
+						//next improvement: stop if we found any better solution
+						if (ToolSwitching.getSTEP().equals("next")){
+							return bestSolution;
+						}
 					}
+					curSolution = solution;
 				}
-				curSolution = solution;
 			}
 		}
 		
 		return bestSolution;
 	}
 	
-	public List<Integer> rotateJobs(List<Integer> jobs, int i, int j){
+	public List<Integer> rotateJobs(List<Integer> jobs, int i, int j, int s){
 		List<Integer> retJobs = new ArrayList<Integer>();
-		
-		Random rand = new Random();
-		int s = rand.nextInt(j-i) + i;
 		
 		for (int job : jobs.subList(0, i)){
 			retJobs.add(job);
@@ -333,8 +336,11 @@ public class Heuristic {
 			if (j==i) j=-1;
 		}while(j == -1);
 		
+		Random rand = new Random();
+		int s = rand.nextInt(j-i) + i;
+		
 		//generate new solution
-		curSolution.setList(rotateJobs(curSolution.getList(), i, j));
+		curSolution.setList(rotateJobs(curSolution.getList(), i, j, s));
 		
 		return curSolution;
 	}
