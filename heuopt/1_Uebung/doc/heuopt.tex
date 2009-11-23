@@ -19,10 +19,10 @@ Die L\"{o}sung zu einer Test-Instanz eines Tool Switching Problems ist nun eine 
 werden und eine dazu passende Sequenz von Magazin-Konfigurationen.
 
 \subsection{Tool-Konfiguration f\"{u}r eine vorgegebene Reihenfolge}
-Gesucht ist hier eine möglichst optimale Magazin-Konfiguration f\"{u}r eine vorgegebene Reihenfolge f\"{u}r die Abarbeitung der Jobs. In diesem Spezialfall kann man nun ausnutzen, dass der Algorithmus genau wei"s wann ein Tool das n\"{a}chste Mal ben\"{o}tigt wird und somit zu der vorgegebenen Reihenfolge die optimale Tool-Konfiguration erzeugen kann.
+Gesucht ist hier eine m\"{o}glichst optimale Magazin-Konfiguration f\"{u}r eine vorgegebene Reihenfolge f\"{u}r die Abarbeitung der Jobs. In diesem Spezialfall kann man nun ausnutzen, dass der Algorithmus genau wei"s wann ein Tool das n\"{a}chste Mal ben\"{o}tigt wird und somit zu der vorgegebenen Reihenfolge die optimale Tool-Konfiguration erzeugen kann.
 
 \subsection{Konstruktionsheuristik}
-Unsere Konstruktionsheuristik w\"{a}hlt am Beginn zuf\"{a}llig den ersten Job aus. Die weiteren Jobs werden so gew\"{a}hlt, dass möglichst wenig Kosten entstehen. D.h. der Algorithmus sieht sich alle noch offenen Jobs an und vergleicht die ben\"{o}tigten Tools mit der aktuellen Magazin-Konfiguration.
+Unsere Konstruktionsheuristik w\"{a}hlt am Beginn zuf\"{a}llig den ersten Job aus. Die weiteren Jobs werden so gew\"{a}hlt, dass m\"{o}glichst wenig Kosten entstehen. D.h. der Algorithmus sieht sich alle noch offenen Jobs an und vergleicht die ben\"{o}tigten Tools mit der aktuellen Magazin-Konfiguration.
 
 \subsection{Nachbarschaftsstrukturen}
 \begin{itemize}
@@ -38,9 +38,9 @@ F\"{u}r die vier verschiedenen Nachbarschaftsstrukturen haben wir jeweils auch d
 
 \begin{tabular}{cccccc}
 \hline
-Testinstanz & Nachbarschaft & Schrittfunktion & Durchschnittsergebnis \\
+Testinstanz & Nachbarschaft & Schrittfunktion & Mittelwert \\
 \hline
-4\zeta_{10}^{10} & move & random &  \\
+$4\zeta_{10}^{10}$ & move & random &  \\
 							 		& move & next &  \\
 									& move & best &  \\
 							 		& 2-exchange & random &  \\
@@ -53,7 +53,7 @@ Testinstanz & Nachbarschaft & Schrittfunktion & Durchschnittsergebnis \\
 							 		& rotate subsequence & next &  \\
 									& rotate subsequence & best &  \\
 \hline									
-15\zeta_{40}^{30}& move & random &  \\
+$15\zeta_{40}^{30}$ & move & random &  \\
 							 		& move & next &  \\
 									& move & best &  \\
 							 		& 2-exchange & random &  \\
@@ -66,7 +66,7 @@ Testinstanz & Nachbarschaft & Schrittfunktion & Durchschnittsergebnis \\
 							 		& rotate subsequence & next &  \\
 									& rotate subsequence & best &  \\
 \hline									
-20\zeta_{60}^{40}& move & random &  \\
+$20\zeta_{60}^{40}$ & move & random &  \\
 							 		& move & next &  \\
 									& move & best &  \\
 							 		& 2-exchange & random &  \\
@@ -85,5 +85,16 @@ Testinstanz & Nachbarschaft & Schrittfunktion & Durchschnittsergebnis \\
 
 \subsection{Generalized Variable Neighborhood Search (GVNS)}
 
+Wir haben mit der GVNS jeweils 30 runs gemacht und als Schrittfunktion haben wir best verwendet.
+
+\begin{tabular}{cccc}
+\hline
+Testinstanz & Mittelwert & Bestes Ergebnis & Standardabweichung \\
+\hline
+$4\zeta_{10}^{10}$ & 10.5 & 10 & 0.5 \\									
+$15\zeta_{40}^{30}$ & 113.7 & 111 & 2 \\									
+$20\zeta_{60}^{40}$ & 186.7 & 182 & 2.9 \\						
+\hline
+\end{tabular}
 
 \end{document}
