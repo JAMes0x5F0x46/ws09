@@ -35,8 +35,7 @@ public class Heuristic {
 			this.toolUsage.add(usage);
 		}
 		
-		for(int i=0; i < schedule.size(); i++) {
-			
+		for(int i=0; i < schedule.size(); i++) {			
 			for(int tool : schedule.get(i)) {
 				
 				this.toolUsage.get(tool).add(i);
@@ -51,22 +50,24 @@ public class Heuristic {
 	public Solution getGVNSSolution (Solution solution){
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
-
 		
+		// neighborhood size starts with one
 		int l=1;
-		do{
+		do {
 			curSolution =  MultiMoveJob(bestSolution, l);
 			
 			curSolution = getVNDSolution(curSolution);
 			
-			if (curSolution.getCosts() < bestSolution.getCosts()){
+			if (curSolution.getCosts() < bestSolution.getCosts()) {
 				bestSolution = curSolution;
+				// start again with the smallest neighborhood
 				l = 1;
-			}else{
+			} else {
+				// increase the size of the neighborhood
 				l++;
 			}
 			
-		}while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
+		} while (l <=  ToolSwitching.getNEIGHBORHOOD_SIZE());
 		
 		return bestSolution;
 	}
@@ -77,9 +78,11 @@ public class Heuristic {
 	 * @param n
 	 * @return
 	 */
-	public Solution MultiMoveJob(Solution solution, int n){
-		Solution retSolution = solution.clone();
+
+	public Solution MultiMoveJob(Solution solution, int n) {
 		
+		Solution retSolution = solution.clone();
+
 		for (int i=0; i < n; i++){
 			retSolution = this.getSolutionRandomMove(retSolution);
 		}
@@ -87,70 +90,81 @@ public class Heuristic {
 		return retSolution;
 	}
 	
-	public Solution getVNDSolution (Solution solution){
+	public Solution getVNDSolution (Solution solution) {
 		Solution bestSolution = solution;
 		Solution curSolution = solution;
 		boolean run = true;
-		String curNeighborhood = "split";
+			// start with the neighborhood split
+		NeighborhoodStrategy strategy = NeighborhoodStrategy.SPLIT;
 		
-		while (run){
-			if (curNeighborhood.equals("split")){
-				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+		while (run) {
+			if (strategy.equals(NeighborhoodStrategy.SPLIT)) {
+				
+				if(ToolSwitching.getSTEP().equals("best") || ToolSwitching.getSTEP().equals("next")) {
+					
 					curSolution = getSolutionSplit(bestSolution);
-				}else if (ToolSwitching.getSTEP().equals("random")){
+					
+				} else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomSplit(bestSolution);
 				}
 				
-				if (curSolution.getCosts() < bestSolution.getCosts()){
+				if(curSolution.getCosts() < bestSolution.getCosts()){
 					//if current solution is better then best solution : best Solution = current solution
 					bestSolution = curSolution;
-				}else{
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
+				} else{
 					//if we found no better solution, we go to the next neighborhood
-					curNeighborhood="switch";
+					strategy = NeighborhoodStrategy.MOVE;
 				}
 				
-			}else if (curNeighborhood.equals("switch")){
+			} else if(strategy.equals(NeighborhoodStrategy.SWITCH)) {
+				
 				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
 					curSolution = getSolutionSwitch(bestSolution);
-				}else if (ToolSwitching.getSTEP().equals("random")){
+				} else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomSwitch(bestSolution);
 				}
 				
 				if (curSolution.getCosts() < bestSolution.getCosts()){
 					//if current solution is better then best solution : best Solution = current solution
+					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
-				}else{
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
+				} else{
 					//if we found no better solution, we go to the next neighborhood
-					curNeighborhood="move";
+					strategy = NeighborhoodStrategy.ROTATE;
 				}
 				
-			}else if (curNeighborhood.equals("move")){
-				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+			} else if(strategy.equals(NeighborhoodStrategy.MOVE)) {
+				
+				if(ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")) {
 					curSolution = getSolutionMove(bestSolution);
-				}else if (ToolSwitching.getSTEP().equals("random")){
+				} else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomMove(bestSolution);
 				}
 				
 				if (curSolution.getCosts() < bestSolution.getCosts()){
 					//if we found a better solution, we go to the first neighborhood
-					curNeighborhood="split";
+					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
-				}else{
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
+				} else{
 					//if we found no better solution, we go to the next neighborhood
-					curNeighborhood="rotate";
+					strategy = NeighborhoodStrategy.SWITCH;
 				}
-			}else if (curNeighborhood.equals("rotate")){
-				if (ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")){
+			} else if(strategy.equals(NeighborhoodStrategy.ROTATE)) {
+				if(ToolSwitching.getSTEP().equals("best")||ToolSwitching.getSTEP().equals("next")) {
 					curSolution = getSolutionRotate(bestSolution);
-				}else if (ToolSwitching.getSTEP().equals("random")){
+				} else if (ToolSwitching.getSTEP().equals("random")){
 					curSolution = getSolutionRandomRotate(bestSolution);
 				}
 				
-				if (curSolution.getCosts() < bestSolution.getCosts()){
+				if(curSolution.getCosts() < bestSolution.getCosts()){
 					//if we found a better solution, we go to the first neighborhood
-					curNeighborhood="split";
+					strategy = NeighborhoodStrategy.SPLIT;
 					bestSolution = curSolution;
-				}else{
+					logger.info("Found new best solution with strategy: "+strategy.toString()+" "+bestSolution.getCosts());
+				} else{
 					//if we found no better solution, we stop 
 					run=false;
 				}
@@ -273,8 +287,8 @@ public class Heuristic {
 		
 		for (int i=0; i<schedule.size(); i++){
 			for (int j=i+1; j<schedule.size(); j++){
-				logger.info(Math.log(j-1));
-				for (int k=0; k < Math.log(j-i); k++){
+				//logger.info(Math.log(j-1));
+				for (int k=0; k <= Math.log(j-i+1); k++){
 					int s = rand.nextInt(j-i) + i;
 					
 					//generate new Solution (switch two jobs)

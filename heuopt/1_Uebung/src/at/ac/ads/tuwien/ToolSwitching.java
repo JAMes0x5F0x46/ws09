@@ -74,7 +74,7 @@ public class ToolSwitching {
 		
 		logger.info("Started algorithm...");
 
-		schedule = InstanceImporter.importTspFile(DIR + "matrix_10j_10to_NSS_0.txt");
+		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		
@@ -140,10 +140,10 @@ public class ToolSwitching {
 				if (HEURISTIC.equals("local")){
 					// improve solution of construction heuristic with a local search
 					currentSolution = heu.getLocalSolution(currentSolution);
-				}else if (HEURISTIC.equals("vnd")){
+				} else if (HEURISTIC.equals("vnd")){
 					// improve solution of construction heuristic with a VND
 					currentSolution = heu.getVNDSolution(currentSolution);
-				}else if (HEURISTIC.equals("gvns")){
+				} else if (HEURISTIC.equals("gvns")){
 					// improve solution of construction heuristic with a VND
 					currentSolution = heu.getGVNSSolution(currentSolution);
 				}
@@ -164,10 +164,7 @@ public class ToolSwitching {
 			
 		} else {
 			logger.error("wrong heuristic: " + HEURISTIC);
-		}
-		
-		
-		
+		}		
 	}
 
 	private void computeCostGraph() {
