@@ -75,6 +75,7 @@ public class ToolSwitching {
 		logger.info("Started algorithm...");
 
 		schedule = InstanceImporter.importTspFile(DIR + "matrix_30j_40to_NSS_0.txt");
+		//matrix_10j_10to_NSS_0.txt
 		//matrix_30j_40to_NSS_0.txt
 		//matrix_40j_60to_NSS_0.txt
 		
@@ -129,7 +130,7 @@ public class ToolSwitching {
 			bestSolution = gh.createInitialSolution(0);
 			
 			Random random = new Random();
-			int averageResult = 0;
+			float averageResult = 0;
 			Set<Integer> solutionValues = new HashSet<Integer>();
 			
 			for(int i=0; i < RUNS; i++) {
@@ -252,7 +253,7 @@ public class ToolSwitching {
 		
 	}
 	
-	private double computeStdDeviation(Set<Integer> values,int average) {
+	private double computeStdDeviation(Set<Integer> values,float average) {
 		
 		double result = 0d;
 		
