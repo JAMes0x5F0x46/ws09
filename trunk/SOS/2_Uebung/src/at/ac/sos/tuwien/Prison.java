@@ -29,6 +29,8 @@ public class Prison {
 		Object args[] = new Object[1];
 		args[0]=reference;
 		
+		System.out.println("Strategy: "+Strategy.create(3).toString());
+		
 		AgentController firstAgent;
 		try {
 			firstAgent = cc.createNewAgent("first",
