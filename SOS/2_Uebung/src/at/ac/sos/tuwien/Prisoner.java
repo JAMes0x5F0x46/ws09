@@ -6,6 +6,8 @@ import jade.core.behaviours.OneShotBehaviour;
 public class Prisoner extends Agent {
 	
 	private Strategy strategy;
+	
+	private Response ownLastDecision;
 
 	protected void setup() {
 		System.out.println("Hello World!");
@@ -33,11 +35,31 @@ public class Prisoner extends Agent {
 	    }
 	}
 	
-	private Response getResponse(Response lastDecision) {
+	private Response getResponse(Response lastDecisionOfTeammate) {
 		
 		switch (this.strategy) {
 		
-			case TITFORTAT: return Response.HUSH;
+			case TITFORTAT: {
+				if(lastDecisionOfTeammate == null)
+					return Response.HUSH;
+				else
+					return lastDecisionOfTeammate;
+			}
+			case MISTRUST: {
+				if(lastDecisionOfTeammate == null)
+					return Response.BETRAY;
+				else
+					return lastDecisionOfTeammate;
+			}
+			case SPITE: {
+				if(lastDecisionOfTeammate == null) 
+					return Response.HUSH;
+				else if(ownLastDecision == Response.BETRAY || lastDecisionOfTeammate == Response.BETRAY)
+					return Response.BETRAY;
+				else
+					return Response.HUSH;
+			}
+			
 			
 			default: return null;
 		}
