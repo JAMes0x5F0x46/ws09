@@ -29,15 +29,17 @@ public class Prison {
 		Object args[] = new Object[1];
 		args[0]=reference;
 		
+
+		AgentController guard;
+
 		System.out.println("Strategy: "+Strategy.create(3).toString());
-		
-		AgentController firstAgent;
+
 		try {
-			firstAgent = cc.createNewAgent("first",
-			"at.ac.sos.tuwien.Prisoner", args);
+			guard = cc.createNewAgent("guard",
+			"at.ac.sos.tuwien.Guard", args);
 			
 			// Fire up the agent
-			firstAgent.start();
+			guard.start();
 			
 		} catch (StaleProxyException e) {
 			e.printStackTrace();

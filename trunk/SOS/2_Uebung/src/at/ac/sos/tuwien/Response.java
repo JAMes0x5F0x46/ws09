@@ -4,6 +4,7 @@ public enum Response {
 
 	HUSH,	// schweigen
 	BETRAY;	// verraten
+
 	
 	public static Response create(String response) {
 		
@@ -14,4 +15,5 @@ public enum Response {
 		// to the given number is no strategy assigned
 		return null;		
 	}
+
 }
