@@ -36,56 +36,79 @@ F\"{u}r die vier verschiedenen Nachbarschaftsstrukturen haben wir jeweils auch d
 
 \subsection{Vergleich der verschiedenen Varianten f\"{u}r die lokale Suche}
 
-\begin{tabular}{cccccc}
+\begin{tabular}{cccc}
 \hline
 Testinstanz & Nachbarschaft & Schrittfunktion & Mittelwert \\
 \hline
-$4\zeta_{10}^{10}$ & move & random &  \\
-							 		& move & next &  \\
-									& move & best &  \\
-							 		& 2-exchange & random &  \\
-							 		& 2-exchange & next &  \\
-									& 2-exchange & best &  \\
-							 		& split & random &  \\
-							 		& split & next &  \\
-									& split & best &  \\
-							 		& rotate subsequence & random &  \\
-							 		& rotate subsequence & next &  \\
-									& rotate subsequence & best &  \\
+$4\zeta_{10}^{10}$ & move & random &  12.9 \\
+							 		& move & next &  11.2 \\
+									& move & best &  11.2 \\
+							 		& 2-exchange & random &  13.2 \\
+							 		& 2-exchange & next &  11.1 \\
+									& 2-exchange & best &  11.6 \\
+							 		& split & random &  13.1 \\
+							 		& split & next &  11.6 \\
+									& split & best &  11.6 \\
+							 		& rotate subsequence & random &  12.8 \\
+							 		& rotate subsequence & next &  11.3 \\
+									& rotate subsequence & best &  11.2 \\
 \hline									
-$15\zeta_{40}^{30}$ & move & random &  \\
-							 		& move & next &  \\
-									& move & best &  \\
-							 		& 2-exchange & random &  \\
-							 		& 2-exchange & next &  \\
-									& 2-exchange & best &  \\
-							 		& split & random &  \\
-							 		& split & next &  \\
-									& split & best &  \\
-							 		& rotate subsequence & random &  \\
-							 		& rotate subsequence & next &  \\
-									& rotate subsequence & best &  \\
+$15\zeta_{40}^{30}$ & move & random &  157.6 \\
+							 		& move & next &  119.6 \\
+									& move & best &  119.5 \\
+							 		& 2-exchange & random &  158 \\
+							 		& 2-exchange & next &  122.7 \\
+									& 2-exchange & best &  124 \\
+							 		& split & random &  158.6 \\
+							 		& split & next &  134.2 \\
+									& split & best &  133.8 \\
+							 		& rotate subsequence & random &  158.1 \\
+							 		& rotate subsequence & next &  118.9 \\
+									& rotate subsequence & best &  118.5 \\
 \hline									
-$20\zeta_{60}^{40}$ & move & random &  \\
-							 		& move & next &  \\
-									& move & best &  \\
-							 		& 2-exchange & random &  \\
-							 		& 2-exchange & next &  \\
-									& 2-exchange & best &  \\
-							 		& split & random &  \\
-							 		& split & next &  \\
-									& split & best &  \\
-							 		& rotate subsequence & random &  \\
-							 		& rotate subsequence & next &  \\
-									& rotate subsequence & best &  \\																																																		
+\end{tabular}
+
+\begin{tabular}{cccc}
+\hline
+Testinstanz & Nachbarschaft & Schrittfunktion & Mittelwert \\
+\hline									
+$20\zeta_{60}^{40}$ & move & random &  283.2 \\
+							 		& move & next &  196.2 \\
+									& move & best &  196.5 \\
+							 		& 2-exchange & random &  283.8 \\
+							 		& 2-exchange & next &  203.8 \\
+									& 2-exchange & best &  203.5 \\
+							 		& split & random &  284.5 \\
+							 		& split & next &  228.8 \\
+									& split & best & 227.5 \\
+							 		& rotate subsequence & random &  281.2 \\
+							 		& rotate subsequence & next &  192.8 \\
+									& rotate subsequence & best & 192.2 \\																																																		
 \hline
 \end{tabular}
 
+\bigskip
+
 \subsection{Variable Neighborhood Descent (VND)}
+Wir haben mit der VND jeweils 30 runs gemacht und als Schrittfunktion ist best verwendet worden. Sehr sch\"{o}n kann man hier erkennen, wie man aus einem lokalen Optimum f\"{u}r eine Nachbarschaft durch einen Wechsel der Nachbarschaftsstruktur wieder heraus finden kann und dadurch das Ergebnis weiter verbessert wird.
+\bigskip
+
+\begin{tabular}{cccc}
+\hline
+Testinstanz & Mittelwert & Bestes Ergebnis & Standardabweichung \\
+\hline
+$4\zeta_{10}^{10}$ & 11 & 10 & 0.8 \\									
+$15\zeta_{40}^{30}$ & 117.2 & 114 & 2.3 \\									
+$20\zeta_{60}^{40}$ & 193.9 & 188 & 4 \\						
+\hline
+\end{tabular}
+
+\bigskip
 
 \subsection{Generalized Variable Neighborhood Search (GVNS)}
 
-Wir haben mit der GVNS jeweils 30 runs gemacht und als Schrittfunktion haben wir best verwendet.
+Wir haben mit der GVNS jeweils 30 runs gemacht und als Schrittfunktion haben wir best verwendet. Man kann aus den erzielten Ergebnissen relativ eindeutig die Verbesserung durch die GVNS erkennen. In den log-Dateien sieht man auch wie sehr dieses \"shaking\" helfen kann, aus einem lokalen Optimum wieder heraus zu finden.
+\bigskip
 
 \begin{tabular}{cccc}
 \hline
