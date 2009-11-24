@@ -3,7 +3,9 @@ package at.ac.sos.tuwien;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 
-public class Prisoner extends Agent{
+public class Prisoner extends Agent {
+	
+	private Strategy strategy;
 
 	protected void setup() {
 		System.out.println("Hello World!");
@@ -31,6 +33,14 @@ public class Prisoner extends Agent{
 	    }
 	}
 	
-	
+	private Response getResponse(Response lastDecision) {
+		
+		switch (this.strategy) {
+		
+			case TITFORTAT: return Response.HUSH;
+			
+			default: return null;
+		}
+	}
 	
 }
