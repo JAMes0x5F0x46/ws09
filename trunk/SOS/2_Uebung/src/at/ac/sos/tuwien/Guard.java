@@ -37,14 +37,22 @@ public class Guard extends Agent{
 				
 					String argsfirst[] = new String[2];
 					argsfirst[0]= String.valueOf(rand.nextInt(Strategy.values().length));
-					argsfirst[1]=lastDecisionSecond.toString();
+					if (lastDecisionSecond!=null){
+						argsfirst[1]=lastDecisionSecond.toString();
+					}else{
+						argsfirst[1]=null;
+					}
 					
 					AgentController firstPrisoner = myAgent.getContainerController().
 											createNewAgent("first_prisoner", "at.ac.sos.tuwien.Prisoner", argsfirst);
 					
 					String argssecond[] = new String[2];
 					argssecond[0]=String.valueOf(rand.nextInt(Strategy.values().length));
-					argssecond[1]=lastDecisionFirst.toString();
+					if (lastDecisionFirst!=null){
+						argssecond[1]=lastDecisionFirst.toString();
+					}else{
+						lastDecisionFirst=null;
+					}
 					
 					AgentController secondPrisoner = myAgent.getContainerController().
 											createNewAgent("second_prisoner", "at.ac.sos.tuwien.Prisoner", argssecond);
@@ -54,7 +62,7 @@ public class Guard extends Agent{
 					secondPrisoner.start();
 					
 					ACLMessage msg = null;
-					for (int i=0; i < 2; i ++){
+					for (int i=0; i <= 1; i ++){
 						
 						msg = myAgent.blockingReceive();
 						String name = msg.getSender().getName().substring(0, msg.getSender().getName().indexOf("@"));
