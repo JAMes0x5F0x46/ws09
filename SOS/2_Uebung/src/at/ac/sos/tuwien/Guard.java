@@ -20,6 +20,9 @@ public class Guard extends Agent{
 
 		Response lastDecisionFirst;
 		Response lastDecisionSecond;
+		
+		int penaltyFirst;
+		int penaltySecond;
 		/**
 		 * @param a
 		 */
@@ -75,6 +78,24 @@ public class Guard extends Agent{
 					
 					System.out.println("DecisionFirst: " + lastDecisionFirst);
 					System.out.println("DecisionSecond: " + lastDecisionSecond);
+					
+					
+					if (lastDecisionFirst==Response.HUSH && lastDecisionSecond==Response.HUSH){
+						penaltyFirst=2;
+						penaltySecond=2;
+					}else if (lastDecisionFirst==Response.HUSH && lastDecisionSecond==Response.BETRAY){
+						penaltyFirst=5;
+						penaltySecond=0;
+					}else if (lastDecisionFirst==Response.BETRAY && lastDecisionSecond==Response.HUSH){
+						penaltyFirst=0;
+						penaltySecond=5;
+					}else if (lastDecisionFirst==Response.BETRAY && lastDecisionSecond==Response.BETRAY){
+						penaltyFirst=4;
+						penaltySecond=4;
+					}
+					System.out.println("penalty: ");
+					System.out.println("First agent: " + penaltyFirst);
+					System.out.println("Second agent: " + penaltySecond);
 				}
 				
 			} catch (StaleProxyException e) {
@@ -86,5 +107,6 @@ public class Guard extends Agent{
 	    	this.myAgent.doDelete();
 	    	return 0;
 	    }
+	    
 	}
 }
