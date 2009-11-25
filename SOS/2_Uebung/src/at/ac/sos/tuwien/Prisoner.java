@@ -1,7 +1,9 @@
 package at.ac.sos.tuwien;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
 
 public class Prisoner extends Agent {
 	
@@ -10,9 +12,18 @@ public class Prisoner extends Agent {
 	private Response ownLastDecision;
 
 	protected void setup() {
-		System.out.println("Hello World!");
 		
-	    addBehaviour(new myOneShot(this));
+		
+		if (getArguments() != null && getArguments().length >= 1){
+			strategy = Strategy.create(Integer.valueOf(getArguments()[0].toString()));
+		
+			System.out.println("Setup Agent: " + getAID().getName() + " strategy: " + strategy.toString());
+			
+			addBehaviour(new myOneShot(this));
+		}else{
+			System.err.println("no strategy was given.");
+			doDelete();
+		}
 		
 	}
 	
@@ -26,7 +37,22 @@ public class Prisoner extends Agent {
 		}
 		
 		public void action() {
-	      System.out.println("OneShot");
+			System.out.println("Action Agent: " + getAID().getName());
+			
+			Response lastDecisionOfTeammate=null;
+			
+			if (myAgent.getArguments().length > 1 && myAgent.getArguments()[1]!=null){
+				lastDecisionOfTeammate = Response.create(myAgent.getArguments()[1].toString());
+			}
+			
+			Response response = getResponse(lastDecisionOfTeammate);
+			
+			ACLMessage msg = new ACLMessage (ACLMessage.INFORM);
+			msg.addReceiver(new AID("guard", AID.ISLOCALNAME));
+			msg.setLanguage("English");
+			msg.setContent(response.toString());
+			send (msg);
+			System.out.println(getAID().getName() + " sended decision: " + response);
 	    } 
 		
 	    public int onEnd() {

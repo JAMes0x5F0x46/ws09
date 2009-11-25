@@ -1,5 +1,7 @@
 package at.ac.sos.tuwien;
 
+import java.util.Random;
+
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -28,33 +30,44 @@ public class Guard extends Agent{
 		public void action() {
 			System.out.println("Guard-action");
 			
-//			String args[] = new String[1];
-//			args[0]="test";
+			Random rand = new Random();
 			
 			try {
-				AgentController firstPrisoner = myAgent.getContainerController().
-										createNewAgent("first_prisoner", "at.ac.sos.tuwien.Prisoner", null);
+				for (int j=0; j < 1; j++){
 				
-				AgentController secondPrisoner = myAgent.getContainerController().
-										createNewAgent("second_prisoner", "at.ac.sos.tuwien.Prisoner", null);
-
-				System.out.println(Response.create("HUSH"));
-				firstPrisoner.start();
-				secondPrisoner.start();
-				
-				ACLMessage msg = null;
-				for (int i=0; i < 2; i ++){
-					msg = myAgent.blockingReceive();
-					if (msg.getSender().equals("first_prisoner")){
-						lastDecisionFirst=Response.create(msg.getContent());
-					}else if (msg.getSender().equals("second_prisoner")){
-						lastDecisionSecond=Response.create(msg.getContent());
+					String argsfirst[] = new String[2];
+					argsfirst[0]= String.valueOf(rand.nextInt(Strategy.values().length));
+					argsfirst[1]=lastDecisionSecond.toString();
+					
+					AgentController firstPrisoner = myAgent.getContainerController().
+											createNewAgent("first_prisoner", "at.ac.sos.tuwien.Prisoner", argsfirst);
+					
+					String argssecond[] = new String[2];
+					argssecond[0]=String.valueOf(rand.nextInt(Strategy.values().length));
+					argssecond[1]=lastDecisionFirst.toString();
+					
+					AgentController secondPrisoner = myAgent.getContainerController().
+											createNewAgent("second_prisoner", "at.ac.sos.tuwien.Prisoner", argssecond);
+	
+					System.out.println(Response.create("HUSH"));
+					firstPrisoner.start();
+					secondPrisoner.start();
+					
+					ACLMessage msg = null;
+					for (int i=0; i < 2; i ++){
+						
+						msg = myAgent.blockingReceive();
+						String name = msg.getSender().getName().substring(0, msg.getSender().getName().indexOf("@"));
+						if (name.equals("first_prisoner")){
+							lastDecisionFirst=Response.create(msg.getContent());
+						}else if (name.equals("second_prisoner")){
+							lastDecisionSecond=Response.create(msg.getContent());
+						}
 					}
+					
+					System.out.println("DecisionFirst: " + lastDecisionFirst);
+					System.out.println("DecisionSecond: " + lastDecisionSecond);
 				}
-				
-				System.out.println("DecisionFirst: " + lastDecisionFirst);
-				System.out.println("DecisionSecond: " + lastDecisionSecond);
-				
 				
 			} catch (StaleProxyException e) {
 				e.printStackTrace();
