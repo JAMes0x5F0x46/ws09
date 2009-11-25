@@ -8,9 +8,11 @@ public enum Response {
 	
 	public static Response create(String response) {
 		
-		for(Response rep : Response.values()) {
-			if(response.equals(rep.toString()))
-				return rep;
+		if (response != null){
+			for(Response rep : Response.values()) {
+				if(response.equals(rep.toString()))
+					return rep;
+			}
 		}
 		// to the given number is no strategy assigned
 		return null;		

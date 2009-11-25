@@ -2,11 +2,11 @@ package at.ac.sos.tuwien;
 
 public enum Strategy {
 	
-	TITFORTAT(1),
-	MISTRUST(2),
-	SPITE(3),
-	PUNISHER(4),
-	PAVLOV(5);
+	TITFORTAT(0),
+	MISTRUST(1),
+	SPITE(2),
+	PUNISHER(3),
+	PAVLOV(4);
 	
 	private final int strategy;
 	
