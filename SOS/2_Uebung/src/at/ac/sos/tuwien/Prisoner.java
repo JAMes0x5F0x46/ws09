@@ -2,6 +2,7 @@ package at.ac.sos.tuwien;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -9,59 +10,70 @@ public class Prisoner extends Agent {
 	
 	private Strategy strategy;
 	
-	private Response ownLastDecision;
+	private Response myDecision=null;
+	private Response lastDecisionOfTeammate=null;
+	private int lastPenaltyFirst;
+	private int lastPenaltySecond;
+	private ACLMessage sendMsg;
 
 	protected void setup() {
 		
+		sendMsg = new ACLMessage (ACLMessage.INFORM);
+		sendMsg.addReceiver(new AID("guard", AID.ISLOCALNAME));
+		sendMsg.setLanguage("English");
 		
-		if (getArguments() != null && getArguments().length >= 1){
-			strategy = Strategy.create(Integer.valueOf(getArguments()[0].toString()));
-		
-			System.out.println("Setup Agent: " + getAID().getName() + " strategy: " + strategy.toString());
-			
-			addBehaviour(new myOneShot(this));
-		}else{
-			System.err.println("no strategy was given.");
-			doDelete();
-		}
+		addBehaviour(new myMultiShot(this));
 		
 	}
 	
-	private class myOneShot extends OneShotBehaviour {
-
+	private class myMultiShot extends CyclicBehaviour {
+		
+		
+		private boolean stop = false;
 		/**
 		 * @param a
 		 */
-		public myOneShot(Agent a) {
+		public myMultiShot(Agent a) {
 			super(a);
 		}
 		
 		public void action() {
-			System.out.println("Action Agent: " + getAID().getName());
 			
-			Response lastDecisionOfTeammate=null;
+			ACLMessage instruction = myAgent.blockingReceive();
 			
-			if (myAgent.getArguments().length > 1 && myAgent.getArguments()[1]!=null){
-				lastDecisionOfTeammate = Response.create(myAgent.getArguments()[1].toString());
+			//if first command is stop then stop agent
+			if (instruction.getContent().equals("stop")){
+				myAgent.doDelete();
+				return;
 			}
+
+			strategy = Strategy.create(Integer.valueOf(instruction.getContent().toString()));
 			
-			Response response = getResponse(lastDecisionOfTeammate);
+			System.out.println("strategy: " + strategy);
 			
-			ACLMessage msg = new ACLMessage (ACLMessage.INFORM);
-			msg.addReceiver(new AID("guard", AID.ISLOCALNAME));
-			msg.setLanguage("English");
-			msg.setContent(response.toString());
-			send (msg);
+			//generate decision
+			Response response = getResponse();
+			
+			//send my decision to guard
+			sendMsg.setContent(response.toString());
+			send (sendMsg);
 			System.out.println(getAID().getName() + " sended decision: " + response);
+			
+			//waiting for decision of other agent
+			ACLMessage other = myAgent.blockingReceive();
+			lastDecisionOfTeammate = Response.create(other.getContent());
+			
+			//waiting for penalty
+			ACLMessage penalty = myAgent.blockingReceive();
+			String[] pen = penalty.getContent().split(":");
+			lastPenaltyFirst = Integer.valueOf(pen[0]);
+			lastPenaltySecond = Integer.valueOf(pen[1]);
+			
 	    } 
 		
-	    public int onEnd() {
-	    	this.myAgent.doDelete();
-	    	return 0;
-	    }
 	}
 	
-	private Response getResponse(Response lastDecisionOfTeammate) {
+	private Response getResponse() {
 		
 		switch (this.strategy) {
 		
@@ -80,7 +92,7 @@ public class Prisoner extends Agent {
 			case SPITE: {
 				if(lastDecisionOfTeammate == null) 
 					return Response.HUSH;
-				else if(ownLastDecision == Response.BETRAY || lastDecisionOfTeammate == Response.BETRAY)
+				else if(myDecision == Response.BETRAY || lastDecisionOfTeammate == Response.BETRAY)
 					return Response.BETRAY;
 				else
 					return Response.HUSH;
