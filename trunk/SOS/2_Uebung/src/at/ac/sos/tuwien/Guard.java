@@ -11,19 +11,29 @@ import jade.wrapper.StaleProxyException;
 
 public class Guard extends Agent{
 	
+	private static final long serialVersionUID = 1L;
+
 	protected void setup() {
 		
-	    addBehaviour(new myOneShot(this));
+	    addBehaviour(new GuardBehaviour(this));
 		
 	}
 	
-	private class myOneShot extends OneShotBehaviour {
+	private class GuardBehaviour extends OneShotBehaviour {
 
+		private static final long serialVersionUID = 1L;
+		
 		Response lastDecisionFirst;
 		Response lastDecisionSecond;
 		
 		int penaltyFirst;
 		int penaltySecond;
+		
+		private int scoreFirst = 0;
+		private int scoreSecond = 0;
+		
+		private Strategy strFirst;
+		private Strategy strSecond;
 		
 		private ACLMessage sendMsgFirst;
 		private ACLMessage sendMsgSecond;
@@ -33,7 +43,7 @@ public class Guard extends Agent{
 		/**
 		 * @param a
 		 */
-		public myOneShot(Agent a) {
+		public GuardBehaviour(Agent a) {
 			super(a);
 			
 			try {
@@ -45,6 +55,7 @@ public class Guard extends Agent{
 				firstPrisoner.start();
 				secondPrisoner.start();
 				
+				// configuration of ACL Messages
 				sendMsgFirst = new ACLMessage (ACLMessage.INFORM);
 				sendMsgFirst.addReceiver(new AID("first_prisoner", AID.ISLOCALNAME));
 				sendMsgFirst.setLanguage("English");
@@ -60,61 +71,72 @@ public class Guard extends Agent{
 		}
 		
 		public void action() {
+			
 			System.out.println("Guard-action");
 			
 			Random rand = new Random();
-
-				for (int j=1; j <= 1; j++){
-					
-					System.out.println("run " + j + ":");
-					
-					sendMsgFirst.setContent(String.valueOf(rand.nextInt(Strategy.values().length-2)));
-//					sendMsgFirst.setContent("0");
-					send(sendMsgFirst);
-					
-					sendMsgSecond.setContent(String.valueOf(rand.nextInt(Strategy.values().length-2)));
-//					sendMsgSecond.setContent("0");
-					send(sendMsgSecond);
-					
-					ACLMessage msg = null;
-					for (int i=0; i <= 1; i ++){
-						
-						msg = myAgent.blockingReceive();
-						String name = msg.getSender().getName().substring(0, msg.getSender().getName().indexOf("@"));
-						if (name.equals("first_prisoner")){
-							lastDecisionFirst=Response.create(msg.getContent());
-						}else if (name.equals("second_prisoner")){
-							lastDecisionSecond=Response.create(msg.getContent());
-						}
-					}
-					
-					System.out.println("DecisionFirst: " + lastDecisionFirst);
-					System.out.println("DecisionSecond: " + lastDecisionSecond);
-					
-					sendMsgFirst.setContent(lastDecisionSecond.toString());
-					send(sendMsgFirst);
-					
-					sendMsgSecond.setContent(lastDecisionFirst.toString());
-					send(sendMsgSecond);
-					
-					getPenalty();
-	
-					sendMsgFirst.setContent(String.valueOf(penaltyFirst)+":"+String.valueOf(penaltySecond));
-					send(sendMsgFirst);
-					
-					sendMsgSecond.setContent(String.valueOf(penaltyFirst)+":"+String.valueOf(penaltySecond));
-					send(sendMsgSecond);
-					
-					System.out.println("penalty: ");
-					System.out.println("First agent: " + penaltyFirst);
-					System.out.println("Second agent: " + penaltySecond);
-				}
+			//TODO new strategies
+			strFirst = Strategy.create(rand.nextInt(Strategy.values().length-2));
+			strSecond = Strategy.create(rand.nextInt(Strategy.values().length-2));
+			
+			for (int j=1; j <= Prison.RUNS; j++){
 				
-				sendMsgFirst.setContent("stop");
+				System.out.println("run " + j + ":");
+				
+				
+				sendMsgFirst.setContent(String.valueOf(strFirst.getStrategy()));
 				send(sendMsgFirst);
 				
-				sendMsgSecond.setContent("stop");
+				
+				sendMsgSecond.setContent(String.valueOf(strSecond.getStrategy()));
 				send(sendMsgSecond);
+				
+				// waiting for answers of the 2 players
+				ACLMessage msg = null;
+				for (int i=0; i < 2; i ++){
+					
+					msg = myAgent.blockingReceive();
+					String name = msg.getSender().getName().substring(0, msg.getSender().getName().indexOf("@"));
+					
+					if (name.equals("first_prisoner")) {
+						lastDecisionFirst=Response.create(msg.getContent());
+					} else if (name.equals("second_prisoner")){
+						lastDecisionSecond=Response.create(msg.getContent());
+					}
+				}
+				
+				System.out.println("DecisionFirst: " + lastDecisionFirst);
+				System.out.println("DecisionSecond: " + lastDecisionSecond);
+				
+				sendMsgFirst.setContent(lastDecisionSecond.toString());
+				send(sendMsgFirst);
+				
+				sendMsgSecond.setContent(lastDecisionFirst.toString());
+				send(sendMsgSecond);
+				
+				getPenalty();
+
+				// send judgment to prisoners
+				sendMsgFirst.setContent(String.valueOf(penaltyFirst)+":"+String.valueOf(penaltySecond));
+				send(sendMsgFirst);
+				
+				sendMsgSecond.setContent(String.valueOf(penaltyFirst)+":"+String.valueOf(penaltySecond));
+				send(sendMsgSecond);
+				
+				System.out.println("penalty: ");
+				System.out.println("First agent: " + penaltyFirst);
+				System.out.println("Second agent: " + penaltySecond);
+			}
+			
+			// shutdown players/agents
+			sendMsgFirst.setContent("stop");
+			send(sendMsgFirst);			
+			sendMsgSecond.setContent("stop");
+			send(sendMsgSecond);
+			
+			System.out.println("Final score:");
+			System.out.println("First agent: "+scoreFirst+" strategy: "+strFirst.toString());
+			System.out.println("Second agent: "+scoreSecond+" strategy: "+strSecond.toString());
 			
 	    } 
 		
@@ -123,7 +145,8 @@ public class Guard extends Agent{
 	    	return 0;
 	    }
 	    
-	    private void getPenalty(){
+	    private void getPenalty() {
+	    	
 	    	if (lastDecisionFirst==Response.HUSH && lastDecisionSecond==Response.HUSH){
 				penaltyFirst=2;
 				penaltySecond=2;
@@ -137,6 +160,9 @@ public class Guard extends Agent{
 				penaltyFirst=4;
 				penaltySecond=4;
 			}
+	    	
+	    	scoreFirst += penaltyFirst;
+	    	scoreSecond += penaltySecond;
 	    }
 	    
 	}
