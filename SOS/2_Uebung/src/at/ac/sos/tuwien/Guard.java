@@ -76,8 +76,8 @@ public class Guard extends Agent{
 			
 			Random rand = new Random();
 			//TODO new strategies
-			strFirst = Strategy.create(rand.nextInt(Strategy.values().length-2));
-			strSecond = Strategy.create(rand.nextInt(Strategy.values().length-2));
+			strFirst = Strategy.create(rand.nextInt(Strategy.values().length));
+			strSecond = Strategy.create(rand.nextInt(Strategy.values().length));
 			
 			for (int j=1; j <= Prison.RUNS; j++){
 				

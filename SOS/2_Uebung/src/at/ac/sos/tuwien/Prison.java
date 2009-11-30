@@ -7,7 +7,7 @@ import jade.wrapper.*;
 
 public class Prison {
 
-	public static int RUNS = 1;
+	public static int RUNS = 10;
 	
 	/**
 	 * 
