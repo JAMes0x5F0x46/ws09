@@ -579,13 +579,13 @@ public class Heuristic {
 			}
 		}
 		
-		logger.debug("Initial magazine: "+magazine.toString());
+		logger.debug("Added job: "+sequence.get(0)+" initial magazine: "+magazine.toString());
 		Solution sol = new Solution(sequence.get(0));
 				
 		for(int i=1; i < schedule.size(); i++) {
 			
 			sol.addJob(sequence.get(i), fillMagazine(magazine,sequence,i));
-			logger.debug("Added job: "+i+" magazine: "+magazine.toString());
+			logger.debug("Added job: "+sequence.get(i)+" costs: "+sol.getCosts()+" magazine: "+magazine.toString());
 		}
 		
 		return sol;
