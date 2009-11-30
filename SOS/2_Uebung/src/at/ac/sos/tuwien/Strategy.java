@@ -23,4 +23,8 @@ public enum Strategy {
 		// to the given number is no strategy assigned
 		return null;		
 	}
+
+	public int getStrategy() {
+		return strategy;
+	}
 }

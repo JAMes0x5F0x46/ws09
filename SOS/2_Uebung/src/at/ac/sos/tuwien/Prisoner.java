@@ -8,6 +8,11 @@ import jade.lang.acl.ACLMessage;
 
 public class Prisoner extends Agent {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Strategy strategy;
 	
 	private Response myDecision=null;
@@ -18,22 +23,20 @@ public class Prisoner extends Agent {
 
 	protected void setup() {
 		
+		// configure agent
 		sendMsg = new ACLMessage (ACLMessage.INFORM);
 		sendMsg.addReceiver(new AID("guard", AID.ISLOCALNAME));
 		sendMsg.setLanguage("English");
 		
-		addBehaviour(new myMultiShot(this));
+		addBehaviour(new PrisonerBehaviour(this));
 		
 	}
 	
-	private class myMultiShot extends CyclicBehaviour {
+	private class PrisonerBehaviour extends CyclicBehaviour {
 		
+		private static final long serialVersionUID = 1L;
 		
-		private boolean stop = false;
-		/**
-		 * @param a
-		 */
-		public myMultiShot(Agent a) {
+		public PrisonerBehaviour(Agent a) {
 			super(a);
 		}
 		

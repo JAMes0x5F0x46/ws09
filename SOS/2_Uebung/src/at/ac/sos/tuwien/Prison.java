@@ -7,6 +7,7 @@ import jade.wrapper.*;
 
 public class Prison {
 
+	public static int RUNS = 1;
 	
 	/**
 	 * 
@@ -29,14 +30,10 @@ public class Prison {
 		Object args[] = new Object[1];
 		args[0]=reference;
 		
-
 		AgentController guard;
 
-		System.out.println("Strategy: "+Strategy.create(3).toString());
-
 		try {
-			guard = cc.createNewAgent("guard",
-			"at.ac.sos.tuwien.Guard", args);
+			guard = cc.createNewAgent("guard","at.ac.sos.tuwien.Guard", args);
 			
 			// Fire up the agent
 			guard.start();
