@@ -1,9 +1,10 @@
 package at.ac.sos.tuwien;
 
+import java.util.Random;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
 public class Prisoner extends Agent {
@@ -15,11 +16,12 @@ public class Prisoner extends Agent {
 
 	private Strategy strategy;
 	
-	private Response myDecision=null;
+	private Response myLastDecision=null;
 	private Response lastDecisionOfTeammate=null;
 	private int lastPenaltyFirst;
 	private int lastPenaltySecond;
 	private ACLMessage sendMsg;
+	private boolean payBack = false;
 
 	protected void setup() {
 		
@@ -55,12 +57,12 @@ public class Prisoner extends Agent {
 			System.out.println("strategy: " + strategy);
 			
 			//generate decision
-			Response response = getResponse();
+			myLastDecision = getResponse();
 			
 			//send my decision to guard
-			sendMsg.setContent(response.toString());
+			sendMsg.setContent(myLastDecision.toString());
 			send (sendMsg);
-			System.out.println(getAID().getName() + " sended decision: " + response);
+			System.out.println(getAID().getName() + " sended decision: " + myLastDecision);
 			
 			//waiting for decision of other agent
 			ACLMessage other = myAgent.blockingReceive();
@@ -93,12 +95,47 @@ public class Prisoner extends Agent {
 					return lastDecisionOfTeammate;
 			}
 			case SPITE: {
-				if(lastDecisionOfTeammate == null) 
+				if(lastDecisionOfTeammate == null) { 
 					return Response.HUSH;
-				else if(myDecision == Response.BETRAY || lastDecisionOfTeammate == Response.BETRAY)
+				} else if(myLastDecision == Response.BETRAY || lastDecisionOfTeammate == Response.BETRAY)
 					return Response.BETRAY;
 				else
 					return Response.HUSH;
+			}
+			case PUNISHER: {
+				if(lastDecisionOfTeammate == null) 
+					return Response.HUSH;
+				else if(lastDecisionOfTeammate == Response.HUSH && !payBack)
+					return Response.HUSH;
+				else if(lastDecisionOfTeammate == Response.BETRAY && myLastDecision == Response.HUSH) {
+					payBack = true;
+					return Response.HUSH;
+				} else if(lastDecisionOfTeammate == Response.HUSH && myLastDecision == Response.BETRAY) {
+						payBack = false;
+						return Response.HUSH;	
+				} else if(payBack)
+					return Response.BETRAY;
+				else
+					return Response.HUSH;
+				
+			} case PAVLOV: {
+				if(lastDecisionOfTeammate == null) 
+					return Response.HUSH;
+				if(lastDecisionOfTeammate == myLastDecision)
+					return Response.HUSH;
+				else
+					return Response.BETRAY;
+					
+			} case DEFECT: {
+				return Response.BETRAY;
+			} case COOPERATE: {
+				return Response.HUSH;
+			} case RANDOM: {
+				Random rand = new Random();
+				if(rand.nextInt(2) == 0)
+					return Response.HUSH;
+				else
+					return Response.BETRAY;
 			}
 			
 			

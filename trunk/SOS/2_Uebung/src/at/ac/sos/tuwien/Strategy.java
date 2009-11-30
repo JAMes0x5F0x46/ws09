@@ -6,7 +6,10 @@ public enum Strategy {
 	MISTRUST(1),
 	SPITE(2),
 	PUNISHER(3),
-	PAVLOV(4);
+	PAVLOV(4),
+	DEFECT(5),
+	COOPERATE(6),
+	RANDOM(7);
 	
 	private final int strategy;
 	
