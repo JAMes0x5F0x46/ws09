@@ -1,5 +1,5 @@
-workingDirectory=\\input
-outputDirectory=\\output
+workingDirectory=./input
+outputDirectory=./output
 namePrefix=test
 vectorFileName=dataset_6.vec
 sparseData=no
