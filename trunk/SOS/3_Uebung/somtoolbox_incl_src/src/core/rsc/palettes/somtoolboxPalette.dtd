@@ -1,0 +1,17 @@
+
+<!ELEMENT palette (shortName, longName, description?, colors)>
+<!ATTLIST palette version CDATA "1.0">
+
+<!ELEMENT shortName (#PCDATA)>
+<!ELEMENT longName (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT colors (color, color+)>
+<!ATTLIST colors colorCount CDATA #IMPLIED>
+
+<!ELEMENT color (gradientPoint?, red, green, blue)>
+<!ELEMENT gradientPoint (#PCDATA)>
+<!ELEMENT red (#PCDATA)>
+<!ELEMENT green (#PCDATA)>
+<!ELEMENT blue (#PCDATA)>
+

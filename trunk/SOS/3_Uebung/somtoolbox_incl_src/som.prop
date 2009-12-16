@@ -1,0 +1,17 @@
+workingDirectory=\\input
+outputDirectory=\\output
+namePrefix=test
+vectorFileName=dataset_6.vec
+sparseData=no
+isNormalized=yes
+templateFileName=dataset_6.generic.tv
+#cacheSize=
+
+randomSeed=17
+xSize=12
+ySize=8
+learnrate=0.75
+#sigma=12
+#tau=
+#metricName=
+numIterations=2000
