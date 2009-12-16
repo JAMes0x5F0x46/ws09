@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Information Retrieval Group at IFS, TU Vienna</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="scripts.js"></script>
+</head>
+
+<body>
+
+<a name="top"></a>
+<h1>SOMtoolbox How-To</h1>
+
+<h2>1. normalize data files</h2>
+
+<pre>./somtoolbox.sh SOMLibVectorNormalization &lt;inputfile&gt; &lt;outputfile&gt;</pre>
+<p>(in Windows use somtoolbox.bat instead of ./somtoolbox.sh)</p>
+
+<p>For a brief introduction on the SOMLib input vector format see the <a href="somlibFileFormatQuick.html">quick guide on input files</a>, or take
+a look at the <a href="somlibFileFormat.html">detailed specification</a>.</p>
+
+<h2>2. train a Self Organizing Map (SOM)</h2>
+
+<h3>2.1. - setup</h3>
+
+<p>Download the <a href="examples/som.prop">som.prop</a> properties file and edit:</p>
+
+<blockquote>
+
+<p>workingDirectory = &lt;the directory with your data files&gt;<br>
+
+outputDirectory = &lt;directory where files will be created; empty means use workingDirectory&gt;<br>
+
+namePrefix = &lt;any project name you like&gt;<br>
+
+vectorFileName = &lt;name of *normalized* vector file - see 1.&gt;<br>
+
+sparseData = &lt;yes|no&gt; ... use yes if vectors are sparse (e.g. text data), no if vectors are not sparse (audio!)<br>
+
+isNormalized = &lt;yes|no&gt; ... set yes if vectorFile has been previously normalized<br>
+
+templateFileName=vector.tv (the template vector file - see below)</p>
+
+</blockquote>
+
+<p>Note: Under Windows use double backslashes \\ as path separator.</p>
+
+<p>The remaining parameters control the SOM algorithm and can be experimented with:</p>
+
+<blockquote>
+
+<p>xSize=20 ... size of map in x direction<br>
+
+ySize=14 ... size of map in y direction<br>
+
+learnrate=0.75<br>
+
+#sigma=12<br>
+
+#tau=<br>
+
+#metricName=<br>
+
+numIterations=2000 ... should be larger than the # of vectors in vectorFile (recommended: 5*&lt;#_of_vectors&gt;)</p>
+
+</blockquote>
+
+<p>You have to provide an appropriate template vector file:</p>
+<ul>
+  <li>For text vectors you have to create an individual vector file for each data. If you for example use the <i>TeSeTool</i>, those vectors will be automatically created for you.</li>
+  <li>For Rhythm Patterns vector files extracted from audio, use this <a href="examples/rhythm_patterns.tv">rhythm_patterns.tv</a> file.</li>
+</ul>
+
+<p>(Note: you can also take a look at the <a href="examples/PROPERTIES"> complete and documented properties file</a>.</p>
+
+<h3>2.1. - training</h3>
+
+<p>Now you are ready to train the SOM:</p>
+
+<pre> ./somtoolbox.sh GrowingSOM [path/to/]som.prop</pre>
+
+<p>If an error occurs, please check the parameters provided.</p>
+
+<p>At this point check if four files in your outputDirectory have been created with the namePrefix as provided in som.prop and the following
+extensions:</p>
+<ul>
+  <li>.dwm.gz - Data winner mapping file.</li>
+  <li>.map.gz - <a href="http://www.ifs.tuwien.ac.at/~andi/somlib/download/SOMLib_Datafiles.html#som_map">Map description</a> file.</li>
+  <li>.unit.gz - <a href="http://www.ifs.tuwien.ac.at/~andi/somlib/download/SOMLib_Datafiles.html#unit_descr">Unit description</a> file.</li>
+  <li>.wgt.gz - <a href="http://www.ifs.tuwien.ac.at/~andi/somlib/download/SOMLib_Datafiles.html#weight_vectors">Weight vector</a> file.</li>
+</ul>
+
+<h2>3. run the SOM Viewer</h2>
+
+<pre> ./somtoolbox.sh SOMViewer -u /path/to/file.unit.gz -w /path/to/file.wgt.gz --dw /path/to/file.dwm.gz</pre>
+
+<p>&nbsp;</p>
+
+<a href="#top" class="toplink up">^top</a>
+<hr/>
+Comments:
+<a href="mailto:mayer(at)ifs.tuwien.ac.at,lidy(at)ifs.tuwien.ac.at">mayer(at)ifs.tuwien.ac.at, lidy(at)ifs.tuwien.ac.at&nbsp;</a>
+<div class="edited" align="right">
+  <script type="text/javascript">
+    document.write(getPageInfo("$Id: somtoolbox-howto.html 1028 2007-01-25 11:30:47Z mayer $"));
+  </script>
+</div>
+
+</body>
+</html>
