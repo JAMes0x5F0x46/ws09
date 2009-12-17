@@ -10,18 +10,18 @@ IF EXIST %BASE_DIR%\somtoolbox.jar (
   SET CP=%BASE_DIR%\somtoolbox.jar
   ECHO Using somtoolbox.jar
 ) ELSE (
-  SET CP=%BASE_DIR%\bin
+  SET CP=%BASE_DIR%\bin\core
   ECHO Using class-files
 )
 
 REM add the optional-component if available.
 IF EXIST %BASE_DIR%\lib\somtoolbox_opt.jar (
   SET CP=%CP%;%BASE_DIR%\somtoolbox.jar
-  ECHO Enabling additional components (jar).
+  ECHO Enabling additional components from jar-file
 ) ELSE (
   IF EXIST %BASE_DIR%\bin\optional\ (
     SET CP=%CP%;%BASE_DIR%\bin\optional\
-    ECHO Enabling additional components (class).
+    ECHO Enabling additional components from class-files
   )
 )
 
