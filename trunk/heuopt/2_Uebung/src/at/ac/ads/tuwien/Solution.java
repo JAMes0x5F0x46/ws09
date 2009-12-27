@@ -34,4 +34,21 @@ public class Solution implements Cloneable{
 		
 		return new Solution(this.weight, newEdges);
 	}
+	
+	private double computeObjectiveFunctionValue() {
+		double[] maxdist = new double[Input.amount];
+		
+		for (Edge edge : edges) {
+			if (maxdist[edge.getStartNode()] < Input.dist[edge.getStartNode()][edge.getEndNode()]) {
+				maxdist[edge.getStartNode()] = Input.dist[edge.getStartNode()][edge.getEndNode()];
+			}
+		}
+		
+		double sum = 0.0;
+		for (int i = 0; i < Input.amount; i++) {
+			sum += maxdist[i];
+		}
+		
+		return sum;
+	}
 }
