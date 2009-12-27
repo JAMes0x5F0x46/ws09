@@ -65,7 +65,7 @@ public class ACO {
 			else if(rb.getWeight() > ib.getWeight())
 				rb = ib;
 			
-			applyPheromoneUpdate();
+			applyPheromoneUpdate(cf,restart);
 			
 			cf = computeConvergenceFactor();
 			
@@ -89,18 +89,34 @@ public class ACO {
 		return 0;
 	}
 
-	private void applyPheromoneUpdate() {
+	private void applyPheromoneUpdate(float cf, boolean restart) {
 
 
+		float xi = 0f;
+		Edge e = null;
 		for(int i=0; i < Input.dist.length; i++) {
 			for(int j=0; j < Input.dist.length; j++) {
 				
+				e = new Edge(i,j);
+				xi = getKib(cf,restart)*getDelta(ib,e)
+						+ getKrb(cf,restart)*getDelta(rb,e)
+						+ getKbs(restart)*getDelta(bs,e);
 			}
 		}
 		
 	}
 	
-	private float getKib(float cf) {		
+	private int getDelta(Solution solution, Edge edge) {
+		
+		if(solution.getEdges().contains(edge))
+			return 1;
+		else return 0;
+	}
+	
+	private float getKib(float cf, boolean restart) {
+		if(restart)
+			return 0f;
+		
 		if(cf < 0.7)
 			return TWOTHIRDS;
 		else if(cf < 0.9)
@@ -108,13 +124,22 @@ public class ACO {
 		else
 			return 0f;
 	}
-	private float getKrb(float cf) {		
+	private float getKrb(float cf, boolean restart) {	
+		if(restart)
+			return 0f;
+		
 		if(cf < 0.7)
 			return THIRD;
 		else if(cf < 0.9)
 			return TWOTHIRDS;
 		else
 			return 1f;
+	}
+	private float getKbs(boolean restart) {		
+		if(restart)
+			return 1f;
+		else 
+			return 0f;
 	}
 
 	private Set<Edge> constructBroadcastTree() {
