@@ -10,6 +10,9 @@ public class ACO {
 	private Solution ib = null;
 	private Solution rb = null;
 	private Solution bs = null;
+	
+	private final float THIRD = 1/3f;
+	private final float TWOTHIRDS = 2/3f;
 
 	private void initPheromone() {
 		
@@ -87,8 +90,31 @@ public class ACO {
 	}
 
 	private void applyPheromoneUpdate() {
-		// TODO Auto-generated method stub
+
+
+		for(int i=0; i < Input.dist.length; i++) {
+			for(int j=0; j < Input.dist.length; j++) {
+				
+			}
+		}
 		
+	}
+	
+	private float getKib(float cf) {		
+		if(cf < 0.7)
+			return TWOTHIRDS;
+		else if(cf < 0.9)
+			return THIRD;
+		else
+			return 0f;
+	}
+	private float getKrb(float cf) {		
+		if(cf < 0.7)
+			return THIRD;
+		else if(cf < 0.9)
+			return TWOTHIRDS;
+		else
+			return 1f;
 	}
 
 	private Set<Edge> constructBroadcastTree() {
