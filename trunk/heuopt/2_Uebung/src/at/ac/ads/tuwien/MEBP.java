@@ -108,7 +108,7 @@ public class MEBP {
 	private double calcdist(double x1, double y1, double x2, double y2) {
 		
 		double difX = Math.abs(x1-x2);
-		double difY = Math.abs(x1-x2);
+		double difY = Math.abs(y1-y2);
 		
 		return Math.sqrt(difX*difX + difY*difY);
 	}
