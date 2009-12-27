@@ -17,8 +17,6 @@ public class MEBP {
 	// Define a static logger variable so that it references the
 	private static Logger logger = Logger.getLogger(MEBP.class);
 	
-	private Input input;
-	
 	/**
 	 * 
 	 */
@@ -27,7 +25,6 @@ public class MEBP {
 		String filename = "mebp-01.dat";
 		
 		this.readInput("input" + File.separator + filename);
-		
 	}
 
 	/**
@@ -46,8 +43,6 @@ public class MEBP {
 	private void readInput(String path) {
 		
 		logger.debug("readInput...");
-		
-		input = new Input();
 		
 		BufferedReader reader = null;
 		DataInputStream is = null;
@@ -75,20 +70,17 @@ public class MEBP {
 				logger.debug("x = " + split[0] + " y = " + split[1]);
 			}
 			
-			input.setAmount(amount);
+			Input.dist = new double[amount][amount];
+			Input.amount = amount;
 			
 			for (int i = 0; i < amount; i++) {
-				List<Double> distList = new ArrayList<Double>();
 				for (int j = 0; j < amount; j++) {
-					
 					if (x!=y) {
-						distList.add(this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j)));
+						Input.dist[i][j] = this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j));
 					} else {
-						distList.add(0d);
+						Input.dist[i][j] = 0d;
 					}
-					
 				}
-				input.addDistList(distList);
 			}
 			
 			
