@@ -35,7 +35,7 @@ public class Solution implements Cloneable{
 		return new Solution(this.weight, newEdges);
 	}
 	
-	private double computeObjectiveFunctionValue() {
+	public double computeObjectiveFunctionValue() {
 		double[] maxdist = new double[Input.amount];
 		
 		for (Edge edge : edges) {
