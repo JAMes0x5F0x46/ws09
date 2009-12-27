@@ -1,10 +1,15 @@
 package at.ac.ads.tuwien;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ACO {
 	
 	private float pheromone[][];
+	
+	private Solution ib = null;
+	private Solution rb = null;
+	private Solution bs = null;
 
 	private void initPheromone() {
 		
@@ -20,14 +25,84 @@ public class ACO {
 		
 		initPheromone();
 		
-		for(int ant=0; ant < numberOfAnts; ant++) {
+		Set<Set<Edge>> constructedSolutions = new HashSet<Set<Edge>>();
+		
+		int iterationCounter = 1;
+		
+		// convergence factor
+		float cf = 0;
+		// bs_update
+		boolean restart = false;
+		
+		while(iterationCounter < 100) {
+		
+			for(int ant=0; ant < numberOfAnts; ant++) {
+				
+				constructedSolutions.add(constructBroadcastTree());
+			}
 			
+			Solution computedSolution;
+			for(Set<Edge> edges : constructedSolutions) {
+				
+				computedSolution = createSolution(edges);
+				if(ib == null)
+					ib = computedSolution;
+				else if(ib.getWeight() > computedSolution.getWeight())
+					ib = computedSolution;
+			}
 			
-		}
+			// update best so far and restart best if found a better solution
+			if(bs == null)
+				bs = ib;
+			else if(bs.getWeight() > ib.getWeight())
+				bs = ib;
+			
+			if(rb == null)
+				rb = ib;
+			else if(rb.getWeight() > ib.getWeight())
+				rb = ib;
+			
+			applyPheromoneUpdate();
+			
+			cf = computeConvergenceFactor();
+			
+			if(cf >= 0.99f) {
+				
+				if(restart) {
+					initPheromone();
+					rb = null;
+					restart = false;
+				} else {
+					restart = true;
+				}
+			}
+			
+			iterationCounter++;
+		}	
 	}
 	
+	private float computeConvergenceFactor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private void applyPheromoneUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private Set<Edge> constructBroadcastTree() {
 		
 		return null;
+	}
+	
+	private Solution createSolution(Set<Edge> edges) {
+		
+		return new Solution(computeObjectiveFunctionValue(edges),edges);
+	}
+	
+	private double computeObjectiveFunctionValue(Set<Edge> edges) {
+		
+		return 0;
 	}
 }
