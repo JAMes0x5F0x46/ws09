@@ -6,7 +6,7 @@ import java.util.List;
 public class LocalSearch {
 
 	public Solution getVNDSolution (Solution sol) {
-		int rmax = 3;
+		int rmax = Input.amount-1;
 		
 		Solution bestSolution = sol;
 		Solution curSolution;
