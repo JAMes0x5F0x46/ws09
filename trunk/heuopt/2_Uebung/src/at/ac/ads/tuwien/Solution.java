@@ -3,11 +3,11 @@ package at.ac.ads.tuwien;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Solution implements Cloneable{
+public class Solution implements Cloneable {
 
-	private final double weight;
+	private double weight;
 	
-	private final Set<Edge> edges;
+	private Set<Edge> edges;
 	
 	public Solution(double weight, Set<Edge> edges) {
 		

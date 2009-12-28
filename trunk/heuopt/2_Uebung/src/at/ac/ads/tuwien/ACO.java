@@ -3,7 +3,12 @@ package at.ac.ads.tuwien;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 public class ACO {
+	
+	// Define a static logger variable so that it references the
+	private static Logger logger = Logger.getLogger(ACO.class);
 	
 	private float pheromone[][];
 	
@@ -13,6 +18,11 @@ public class ACO {
 	
 	private final float THIRD = 1/3f;
 	private final float TWOTHIRDS = 2/3f;
+	
+	private final float TAUMIN = 0.01f;
+	private final float TAUMAX = 0.99f;
+	
+	private final float p = 0.1f;
 
 	private void initPheromone() {
 		
@@ -68,6 +78,7 @@ public class ACO {
 			applyPheromoneUpdate(cf,restart);
 			
 			cf = computeConvergenceFactor();
+			logger.debug("cf: "+cf);
 			
 			if(cf >= 0.99f) {
 				
@@ -85,12 +96,17 @@ public class ACO {
 	}
 	
 	private float computeConvergenceFactor() {
-		// TODO Auto-generated method stub
-		return 0;
+
+		float sum = 0f;
+		for(Edge e : rb.getEdges()) {
+			
+			sum += pheromone[e.getStartNode()][e.getEndNode()];
+		}
+		
+		return sum / ((rb.getEdges().size() - 1) * TAUMAX);
 	}
 
 	private void applyPheromoneUpdate(float cf, boolean restart) {
-
 
 		float xi = 0f;
 		Edge e = null;
@@ -101,9 +117,11 @@ public class ACO {
 				xi = getKib(cf,restart)*getDelta(ib,e)
 						+ getKrb(cf,restart)*getDelta(rb,e)
 						+ getKbs(restart)*getDelta(bs,e);
+				
+				pheromone[i][j] = Math.min(Math.max(pheromone[i][j] + (p * (xi - pheromone[i][j])), TAUMIN), TAUMAX);
+				logger.debug("New pheromone value for edge "+e.toString()+": "+pheromone[i][j]);
 			}
-		}
-		
+		}		
 	}
 	
 	private int getDelta(Solution solution, Edge edge) {
