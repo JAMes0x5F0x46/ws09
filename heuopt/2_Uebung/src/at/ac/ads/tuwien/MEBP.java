@@ -17,8 +17,6 @@ public class MEBP {
 	// Define a static logger variable so that it references the
 	private static Logger logger = Logger.getLogger(MEBP.class);
 	
-	private int L = 3;
-	
 	/**
 	 * 
 	 */
@@ -78,7 +76,7 @@ public class MEBP {
 			for (int i = 0; i < amount; i++) {
 				for (int j = 0; j < amount; j++) {
 					if (x!=y) {
-						Input.dist[i][j] = Math.pow(this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j)),L);
+						Input.dist[i][j] = this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j));
 					} else {
 						Input.dist[i][j] = 0d;
 					}
