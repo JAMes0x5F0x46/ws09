@@ -9,10 +9,15 @@ public class Solution implements Cloneable {
 	
 	private Set<Edge> edges;
 	
+	public Solution(Set<Edge> edges) {
+		
+		this.edges = edges;
+		computeObjectiveFunctionValue();
+	}
 	public Solution(double weight, Set<Edge> edges) {
 		
-		this.weight = weight;
 		this.edges = edges;
+		this.weight = weight;
 	}
 
 	public double getWeight() {
@@ -35,7 +40,7 @@ public class Solution implements Cloneable {
 		return new Solution(this.weight, newEdges);
 	}
 	
-	public double computeObjectiveFunctionValue() {
+	public void computeObjectiveFunctionValue() {
 		double[] maxdist = new double[Input.amount];
 		
 		for (Edge edge : edges) {
@@ -49,6 +54,6 @@ public class Solution implements Cloneable {
 			sum += maxdist[i];
 		}
 		
-		return sum;
+		this.weight = sum;
 	}
 }

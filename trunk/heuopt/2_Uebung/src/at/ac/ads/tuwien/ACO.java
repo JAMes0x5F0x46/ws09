@@ -165,13 +165,21 @@ public class ACO {
 		return null;
 	}
 	
-	private Solution createSolution(Set<Edge> edges) {
+	private float computeEdgeProbability(Set<Edge> candidates, Edge e, Solution partialSol) {
 		
-		return new Solution(computeObjectiveFunctionValue(edges),edges);
-	}
-	
-	private double computeObjectiveFunctionValue(Set<Edge> edges) {
+		Solution copiedSol = partialSol.clone();
+		
+		float sum = 0f;
+		for(Edge candidate : candidates) {
+			
+			sum += pheromone[candidate.getStartNode()][candidate.getEndNode()];
+		}
 		
 		return 0;
+	}
+	
+	private Solution createSolution(Set<Edge> edges) {
+		
+		return new Solution(edges);
 	}
 }
