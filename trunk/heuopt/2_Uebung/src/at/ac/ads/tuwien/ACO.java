@@ -1,7 +1,9 @@
 package at.ac.ads.tuwien;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -22,12 +24,20 @@ public class ACO {
 	private final float TAUMIN = 0.01f;
 	private final float TAUMAX = 0.99f;
 	
+	private final int RESTRICTION_SIZE = 10;
+	
+	private final int MAX_ITERATIONS = 30;
+	
 	private final float p = 0.1f;
 
 	private void initPheromone() {
 		
 		for(int i=0; i< Input.dist.length ; i++) {
 			for(int j=i; j < Input.dist.length; j++) {
+				
+				if(i==j)
+					pheromone[i][j] = 0;
+				
 				pheromone[i][j] = 0.5f;
 				pheromone[j][i] = 0.5f;
 			}
@@ -36,9 +46,11 @@ public class ACO {
 	
 	public void runACO(int numberOfAnts) {
 		
+		pheromone = new float[Input.amount][Input.amount];
+		
 		initPheromone();
 		
-		Set<Set<Edge>> constructedSolutions = new HashSet<Set<Edge>>();
+		Set<Solution> constructedSolutions = new HashSet<Solution>();
 		
 		int iterationCounter = 1;
 		
@@ -47,22 +59,24 @@ public class ACO {
 		// bs_update
 		boolean restart = false;
 		
-		while(iterationCounter < 100) {
+		logger.info("Initialization completed. Start ACO...");
 		
+		while(iterationCounter <= MAX_ITERATIONS) {
+		
+			constructedSolutions.clear();
 			for(int ant=0; ant < numberOfAnts; ant++) {
 				
 				constructedSolutions.add(constructBroadcastTree());
 			}
 			
-			Solution computedSolution;
-			for(Set<Edge> edges : constructedSolutions) {
+			for(Solution sol : constructedSolutions) {
 				
-				computedSolution = createSolution(edges);
 				if(ib == null)
-					ib = computedSolution;
-				else if(ib.getWeight() > computedSolution.getWeight())
-					ib = computedSolution;
+					ib = sol;
+				else if(ib.getWeight() > sol.getWeight())
+					ib = sol;
 			}
+			logger.info("Best created solution in "+iterationCounter+".run: "+ib.toString());
 			
 			// update best so far and restart best if found a better solution
 			if(bs == null)
@@ -84,12 +98,16 @@ public class ACO {
 				
 				if(restart) {
 					initPheromone();
+					logger.info("Restarted! Best solution in this turn: "+rb.toString());
 					rb = null;
 					restart = false;
 				} else {
 					restart = true;
 				}
 			}
+			
+			if(iterationCounter % 5 == 1 || iterationCounter < 10)
+				logger.info("Best so far: "+bs.toString());
 			
 			iterationCounter++;
 		}	
@@ -113,25 +131,30 @@ public class ACO {
 		for(int i=0; i < Input.dist.length; i++) {
 			for(int j=0; j < Input.dist.length; j++) {
 				
+				if(i==j)
+					continue;
+				
 				e = new Edge(i,j);
 				xi = getKib(cf,restart)*getDelta(ib,e)
 						+ getKrb(cf,restart)*getDelta(rb,e)
 						+ getKbs(restart)*getDelta(bs,e);
-				
+
 				pheromone[i][j] = Math.min(Math.max(pheromone[i][j] + (p * (xi - pheromone[i][j])), TAUMIN), TAUMAX);
-				logger.debug("New pheromone value for edge "+e.toString()+": "+pheromone[i][j]);
+				if(xi!=0)
+					logger.debug("New pheromone value for edge "+e.toString()+": "+pheromone[i][j]+ " xi: "+xi);
 			}
 		}		
 	}
 	
 	private int getDelta(Solution solution, Edge edge) {
-		
+			
 		if(solution.getEdges().contains(edge))
 			return 1;
 		else return 0;
 	}
 	
 	private float getKib(float cf, boolean restart) {
+		
 		if(restart)
 			return 0f;
 		
@@ -142,7 +165,8 @@ public class ACO {
 		else
 			return 0f;
 	}
-	private float getKrb(float cf, boolean restart) {	
+	private float getKrb(float cf, boolean restart) {
+		
 		if(restart)
 			return 0f;
 		
@@ -160,12 +184,114 @@ public class ACO {
 			return 0f;
 	}
 
-	private Set<Edge> constructBroadcastTree() {
+	private Solution constructBroadcastTree() {
 		
-		return null;
+		Set<Integer> linkedNodes = new HashSet<Integer>();
+		Set<Integer> unlinkedNodes = new HashSet<Integer>();
+		int nextNode = 0;
+
+		linkedNodes.add(0);
+		for(int i=1; i<Input.amount; i++)
+			unlinkedNodes.add(i);
+		
+		TreeSet<WeightedEdge> candidates = new TreeSet<WeightedEdge>();
+		TreeSet<WeightedEdge> restrictedCandidates = new TreeSet<WeightedEdge>();
+		double probabilitySum;
+		double probability[] = new double[RESTRICTION_SIZE];
+		
+		Random rand = new Random();
+		
+		Solution partialSol = new Solution();
+		
+		while(!unlinkedNodes.isEmpty()) {
+			
+			candidates = updateCandidates(candidates,linkedNodes,unlinkedNodes,nextNode);
+			
+			restrictedCandidates.clear();			
+			for(WeightedEdge e : candidates) {
+				
+				restrictedCandidates.add(e);
+				
+				if(restrictedCandidates.size() >= RESTRICTION_SIZE)
+					break;
+			}
+			
+			logger.debug("Restricted candidates: "+restrictedCandidates.toString());
+			
+			// choose next node according to the probability values
+			probabilitySum = 0.0d;
+			int i=0;
+			for(WeightedEdge e : restrictedCandidates) {
+				probability[i] = computeEdgeProbability(restrictedCandidates,e,partialSol);
+				probabilitySum += probability[i];
+				i++;
+			}
+			// normalize computed probabilities
+			for(i=0; i < restrictedCandidates.size(); i++) {
+				
+				probability[i] = probability[i] / probabilitySum;
+			}
+			double r = rand.nextDouble();
+			
+			double currentSum = 0f;
+			i=0;
+			for(WeightedEdge e : restrictedCandidates) {
+				currentSum += probability[i];
+				if(currentSum >= r) {
+						// next node is chosen
+					nextNode = e.getEndNode();
+						// update new partial solution
+					partialSol.addEdge(new Edge(e.getStartNode(),e.getEndNode()));
+					partialSol.computeObjectiveFunctionValue();
+					
+					logger.debug("Chosen edge: "+e.toString()+" with probability "+probability[i]);
+					logger.debug("Updated partial solution: "+partialSol.toString());
+					
+					linkedNodes.add(nextNode);
+					unlinkedNodes.remove(nextNode);
+					
+						// remove chosen link/edge from candidates list
+					//logger.debug("cand old: "+candidates.toString());
+					candidates.remove(e);
+					//logger.debug("cand new: "+candidates.toString());
+					
+						// check if other nodes are also in the new coverage
+					for(WeightedEdge edge : restrictedCandidates.headSet(e)) {
+						if(edge.getStartNode() == e.getStartNode() && edge.getWeight() < e.getWeight()) {
+							linkedNodes.add(edge.getEndNode());
+							unlinkedNodes.remove(edge.getEndNode());
+							
+								// update new partial solution
+							partialSol.addEdge(new Edge(edge.getStartNode(),edge.getEndNode()));
+								// should not be needed
+							//partialSol.computeObjectiveFunctionValue();
+							logger.debug("Updated partial solution: "+partialSol.toString());
+							candidates = updateCandidates(candidates,linkedNodes,unlinkedNodes,edge.getEndNode());
+						}
+					}
+					break;
+				}
+				i++;
+			}
+		}
+		logger.info("Completed solution "+partialSol.toString());
+		return partialSol;
 	}
 	
-	private double computeEdgeProbability(Set<Edge> candidates, Edge e, Solution partialSol) {
+	private TreeSet<WeightedEdge> updateCandidates(TreeSet<WeightedEdge> cand, Set<Integer> linkedNodes, Set<Integer> unlinkedNodes, int lastAdded) {
+		
+		for(Integer node : linkedNodes) {
+			cand.remove(new WeightedEdge(node,lastAdded,Input.dist[node][lastAdded]));
+		}
+		
+		for(Integer node : unlinkedNodes) {
+			cand.add(new WeightedEdge(lastAdded,node,Input.dist[lastAdded][node]));
+		}
+		
+		return cand;
+	}
+	
+	private double computeEdgeProbability(Set<WeightedEdge> candidates,Edge e, Solution partialSol) {
 		
 		Solution copiedSol = partialSol.clone();
 		
@@ -173,22 +299,21 @@ public class ACO {
 		for(Edge candidate : candidates) {
 			
 			copiedSol.addEdge(candidate);
+			copiedSol.computeObjectiveFunctionValue();
 			sum += pheromone[candidate.getStartNode()][candidate.getEndNode()] 
-			         * (1 / (copiedSol.computeObjectiveFunctionValue() - partialSol.getWeight()));
+			         * (1 / (copiedSol.getWeight() - partialSol.getWeight()));
+			//logger.debug(" new:"+copiedSol.getWeight()+" old:"+partialSol.getWeight()+" pher:"+pheromone[candidate.getStartNode()][candidate.getEndNode()]+" sum:"+sum);
 			copiedSol.removeEdge(candidate);
 		}
 		
 		double result = 0d;
 		copiedSol.addEdge(e);
 		result = pheromone[e.getStartNode()][e.getEndNode()] 
-		              * (1 / (copiedSol.computeObjectiveFunctionValue() - partialSol.getWeight()));
+		             * (1 / (copiedSol.computeObjectiveFunctionValue() - partialSol.getWeight()));
 		copiedSol.removeEdge(e);
+		//logger.debug("r:"+result+" sum: "+sum);
+		logger.debug("Computed probability for edge "+e.toString()+": "+result/sum);
 		
 		return result / sum;
-	}
-	
-	private Solution createSolution(Set<Edge> edges) {
-		
-		return new Solution(edges);
 	}
 }

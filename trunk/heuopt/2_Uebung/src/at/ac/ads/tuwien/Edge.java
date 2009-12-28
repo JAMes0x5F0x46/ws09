@@ -1,9 +1,9 @@
 package at.ac.ads.tuwien;
 
-public final class Edge {
+public class Edge {
 
-	private final int startNode;
-	private final int endNode;
+	protected final int startNode;
+	protected final int endNode;
 	
 	public Edge(int startNode, int endNode) {
 		
