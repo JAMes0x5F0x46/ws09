@@ -25,6 +25,9 @@ public class MEBP {
 		String filename = "mebp-01.dat";
 		
 		this.readInput("input" + File.separator + filename);
+		
+		ACO aco = new ACO();
+		aco.runACO(1);
 	}
 
 	/**

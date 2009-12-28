@@ -19,6 +19,12 @@ public class Solution implements Cloneable {
 	//Map: key=node value=list of neighbors
 	private Map<Integer, List<Integer>> neighbor;
 	
+	public Solution() {
+		
+		this.edges = new HashSet<Edge>();
+		this.weight = 0d;
+	}
+	
 	public Solution(Set<Edge> edges) {
 		
 		this.edges = edges;
@@ -104,6 +110,11 @@ public class Solution implements Cloneable {
 	}
 	public void removeEdge(Edge e) {
 		this.edges.remove(e);
+	}
+	
+	@Override
+	public String toString() {
+		 return "weight: "+this.weight + ", edges: "+this.edges.toString();
 	}
 
 	@Override
