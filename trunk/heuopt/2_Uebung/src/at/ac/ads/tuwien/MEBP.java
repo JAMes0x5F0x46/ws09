@@ -17,6 +17,8 @@ public class MEBP {
 	// Define a static logger variable so that it references the
 	private static Logger logger = Logger.getLogger(MEBP.class);
 	
+	private final int ANTS = 1;
+	
 	/**
 	 * 
 	 */
@@ -27,7 +29,7 @@ public class MEBP {
 		this.readInput("input" + File.separator + filename);
 		
 		ACO aco = new ACO();
-		aco.runACO(1);
+		aco.runACO(ANTS);
 	}
 
 	/**
