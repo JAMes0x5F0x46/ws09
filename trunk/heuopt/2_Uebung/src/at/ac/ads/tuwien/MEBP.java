@@ -66,7 +66,7 @@ public class MEBP {
 			int amount = 0;
 			
 			while((line=reader.readLine()) != null) {
-				split = line.split("  ");
+				split = line.split("[\\s]+");
 				
 				amount++;
 				x.add(Double.valueOf(split[0]));

@@ -65,8 +65,8 @@ public class ACO {
 		
 			constructedSolutions.clear();
 			for(int ant=0; ant < numberOfAnts; ant++) {
-				
-				constructedSolutions.add(constructBroadcastTree());
+				constructedSolutions.add(LocalSearch.getVNDSolution(
+						LocalSearch.getVNDSolution(constructBroadcastTree())));
 			}
 			
 			for(Solution sol : constructedSolutions) {
