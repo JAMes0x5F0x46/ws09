@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class ACO {
@@ -26,7 +27,7 @@ public class ACO {
 	
 	private final int RESTRICTION_SIZE = 10;
 	
-	private final int MAX_ITERATIONS = 30;
+	private final int MAX_ITERATIONS = 1000;
 	
 	private final float p = 0.1f;
 
@@ -58,8 +59,11 @@ public class ACO {
 		float cf = 0;
 		// bs_update
 		boolean restart = false;
+		double average = 0;
 		
 		logger.info("Initialization completed. Start ACO...");
+		
+		logger.setLevel(Level.INFO);
 		
 		while(iterationCounter <= MAX_ITERATIONS) {
 		
@@ -69,14 +73,18 @@ public class ACO {
 						LocalSearch.getVNDSolution(constructBroadcastTree())));
 			}
 			
+			average = 0d;
 			for(Solution sol : constructedSolutions) {
 				
 				if(ib == null)
 					ib = sol;
 				else if(ib.getWeight() > sol.getWeight())
 					ib = sol;
+				
+				average += sol.getWeight();
 			}
-			logger.info("Best created solution in "+iterationCounter+".run: "+ib.toString());
+			
+			logger.info("Average solution weight: "+(average/numberOfAnts)+" best solution in "+iterationCounter+".run: "+ib.toString());
 			
 			// update best so far and restart best if found a better solution
 			if(bs == null)
@@ -92,7 +100,7 @@ public class ACO {
 			applyPheromoneUpdate(cf,restart);
 			
 			cf = computeConvergenceFactor();
-			logger.debug("cf: "+cf);
+			logger.info("cf: "+cf);
 			
 			if(cf >= 0.99f) {
 				
@@ -106,9 +114,11 @@ public class ACO {
 				}
 			}
 			
-			if(iterationCounter % 5 == 1 || iterationCounter < 10)
+			if(iterationCounter % 10 == 1 || iterationCounter < 10) {
+				if(rb != null)
+					logger.info("Since restart best: "+rb.toString());
 				logger.info("Best so far: "+bs.toString());
-			
+			}
 			iterationCounter++;
 		}	
 	}
@@ -274,7 +284,7 @@ public class ACO {
 				i++;
 			}
 		}
-		logger.info("Completed solution "+partialSol.toString());
+		logger.debug("Completed solution "+partialSol.toString());
 		return partialSol;
 	}
 	

@@ -20,7 +20,6 @@ public class Solution implements Cloneable {
 	//Map: key=node value level
 	private Map<Integer, Integer> levelOfNode;
 	
-	//TODO list should be sorted
 	//Map: key=node value=list of neighbors
 	private Map<Integer, List<Integer>> neighbor;
 	

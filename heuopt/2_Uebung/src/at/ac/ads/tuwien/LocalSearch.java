@@ -3,6 +3,7 @@ package at.ac.ads.tuwien;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class LocalSearch {
@@ -11,8 +12,10 @@ public class LocalSearch {
 	private static Logger logger = Logger.getLogger(LocalSearch.class);
 	
 	public static Solution getVNDSolution (Solution sol) {
-		int rmax = Input.amount-1;
 		
+		logger.setLevel(Level.INFO);
+		int rmax = Input.amount-1;
+		double oldWeight = sol.getWeight();
 		Solution bestSolution = sol;
 		
 		bestSolution.computeObjectiveFunctionValue();
@@ -29,6 +32,9 @@ public class LocalSearch {
 				r++;
 			}
 		}
+		
+		if(oldWeight > bestSolution.getWeight())
+			logger.debug("Local search improved solution to "+bestSolution.toString());
 		
 		return bestSolution;
 	}
