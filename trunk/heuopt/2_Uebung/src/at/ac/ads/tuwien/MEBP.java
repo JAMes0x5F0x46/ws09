@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -19,6 +21,7 @@ public class MEBP {
 	private static Logger logger = Logger.getLogger(MEBP.class);
 	
 	private final int ANTS = 10;
+	private final int MAX_RUNS = 30;
 	
 	/**
 	 * 
@@ -27,12 +30,48 @@ public class MEBP {
 		
 		logger.setLevel(Level.INFO);
 		
-		String filename = "mebp-01.dat";
+		String filename = "mebp-06.dat";
 		
 		this.readInput("input" + File.separator + filename);
 		
 		ACO aco = new ACO();
-		aco.runACO(ANTS);
+		
+		Solution solution, best = null;
+		double average=0d;
+		Set<Double> values = new HashSet<Double>();
+		long startTime = System.currentTimeMillis();
+		for(int i=1; i <= MAX_RUNS; i++) {
+			
+			solution = aco.runACO(ANTS);
+			
+			if(best == null)
+				best = solution;
+			else if(best.getWeight() > solution.getWeight())
+				best = solution;
+			
+			average += solution.getWeight();
+			values.add(solution.getWeight());
+			logger.warn("Finished "+i+".run; Best so far "+solution.toString());
+		}
+		average = average / MAX_RUNS;
+		logger.warn("Best after "+MAX_RUNS+" runs "+best.toString());
+		logger.warn("Average weight: "+average+" standard deviation: "+computeStdDeviation(values,average));
+		logger.warn("Average run time: "+((System.currentTimeMillis() - startTime) / MAX_RUNS));
+	}
+	
+	private double computeStdDeviation(Set<Double> values,double average) {
+		
+		double result = 0d;
+		
+		for(double value : values) {
+			
+			result += Math.pow(value - average, 2);
+		}
+		
+		result = result / values.size();		
+		result = Math.sqrt(result);
+		
+		return result;
 	}
 
 	/**

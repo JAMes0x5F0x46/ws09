@@ -27,8 +27,8 @@ public class ACO {
 	
 	private final int RESTRICTION_SIZE = 10;
 	
-	private final int MAX_ITERATIONS = 1000;
-	private final int MAX_RESTARTS = 30;
+	private final int MAX_ITERATIONS = 100;
+	private final int MAX_RESTARTS = 10;
 	
 	private final float p = 0.1f;
 
@@ -46,7 +46,7 @@ public class ACO {
 		}
 	}
 	
-	public void runACO(int numberOfAnts) {
+	public Solution runACO(int numberOfAnts) {
 		
 		pheromone = new float[Input.amount][Input.amount];
 		
@@ -62,6 +62,8 @@ public class ACO {
 		// bs_update
 		boolean restart = false;
 		double average = 0;
+		rb = null;
+		bs = null;
 		
 		logger.info("Initialization completed. Start ACO...");
 		
@@ -128,6 +130,8 @@ public class ACO {
 		
 		logger.info("Finshed ACO with "+restartCounter+" restarts.");
 		logger.info("Best solution "+bs.toString());
+		
+		return bs;
 	}
 	
 	private float computeConvergenceFactor() {
