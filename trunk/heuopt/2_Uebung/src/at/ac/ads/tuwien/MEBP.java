@@ -84,7 +84,7 @@ public class MEBP {
 			for (int i = 0; i < amount; i++) {
 				for (int j = 0; j < amount; j++) {
 					if (x!=y) {
-						Input.dist[i][j] = this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j));
+						Input.dist[i][j] = Math.pow(this.calcdist(x.get(i), y.get(i), x.get(j), y.get(j)),3);
 					} else {
 						Input.dist[i][j] = 0d;
 					}
