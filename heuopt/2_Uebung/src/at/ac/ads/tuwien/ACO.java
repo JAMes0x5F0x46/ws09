@@ -27,7 +27,7 @@ public class ACO {
 	
 	private final int RESTRICTION_SIZE = 10;
 	
-	private final int MAX_ITERATIONS = 100;
+	private final int MAX_ITERATIONS = 150;
 	private final int MAX_RESTARTS = 10;
 	
 	private final float p = 0.1f;
@@ -224,14 +224,20 @@ public class ACO {
 		
 		Solution partialSol = new Solution();
 		
+		Set<Integer> perTargetNode = new HashSet<Integer>();
+		
 		while(!unlinkedNodes.isEmpty()) {
 			
 			candidates = updateCandidates(candidates,linkedNodes,unlinkedNodes,nextNode);
 			
-			restrictedCandidates.clear();			
+			restrictedCandidates.clear();
+			perTargetNode.clear();
 			for(WeightedEdge e : candidates) {
 				
-				restrictedCandidates.add(e);
+				if(!perTargetNode.contains(e.getEndNode())) {
+					restrictedCandidates.add(e);
+					perTargetNode.add(e.getEndNode());					
+				} 
 				
 				if(restrictedCandidates.size() >= RESTRICTION_SIZE)
 					break;
