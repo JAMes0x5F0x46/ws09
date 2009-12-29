@@ -234,6 +234,8 @@ public class ACO {
 			perTargetNode.clear();
 			for(WeightedEdge e : candidates) {
 				
+				
+				// TODO is this an advantage?
 				if(!perTargetNode.contains(e.getEndNode())) {
 					restrictedCandidates.add(e);
 					perTargetNode.add(e.getEndNode());					
