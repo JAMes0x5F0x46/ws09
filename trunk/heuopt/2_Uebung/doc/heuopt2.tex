@@ -22,13 +22,13 @@ c(P) = \sum_{i \in V} \max_{(i,j) \in E_T} d_{ij}^l
 minimiert wird. In unserem Fall ist $l=3$. Ein Knoten $j$ bekommt nun die Nachricht von dem Knoten $i$, falls es eine Kante $(i,j) \in E_T$ gibt.
 
 \subsection{Ant Colony Optimization}
-Wir verwenden den \textit{MAX-MIN Ant System (MMAS)} als ACO Algorithmus. Dabei werden von 10 k\"{u}nstlichen Ameisen L\"{o}sungen generiert, die mittels einer lokalen Suche anschließend noch wenn m\"{o}glich verbessert werden. Das Pheromon-Modell sieht bei uns so aus, dass die Variable $\tau_{ij}$ den Wunsch vom Knoten $i$ zum Knoten $j$ die Nachricht zu senden ausdr\"{u}ckt. Zu Beginn und bei jedem Neustart nach einem bereits konvergierten Zustand werden alle $\tau_e = 0.5$ gesetzt. Beim Konstruieren einer L\"{o}sung verwendet jede Ameise eine eingeschr\"{a}nkte Kandidatenliste $E_{cand}$, von der sie \"{u}ber die Wahrscheinlichkeiten
+Wir verwenden den \textit{MAX-MIN Ant System (MMAS)} als ACO Algorithmus. Dabei werden von 10 k\"{u}nstlichen Ameisen L\"{o}sungen generiert, die mittels einer lokalen Suche anschlie"send noch wenn m\"{o}glich verbessert werden. Das Pheromon-Modell sieht bei uns so aus, dass die Variable $\tau_{ij}$ den Wunsch vom Knoten $i$ zum Knoten $j$ die Nachricht zu senden ausdr\"{u}ckt. Zu Beginn und bei jedem Neustart nach einem bereits konvergierten Zustand werden alle $\tau_e = 0.5$ gesetzt. Beim Konstruieren einer L\"{o}sung verwendet jede Ameise eine eingeschr\"{a}nkte Kandidatenliste $E_{cand}$, von der sie \"{u}ber die Wahrscheinlichkeiten
 
 \begin{displaymath} 
 p(e) = \frac{\tau_{e} \cdot \eta(e)}{\sum_{e' \in E_{cand}} \tau_{e'} \cdot \eta(e')}
 \end{displaymath}
 
-der einzelnen m\"{o}glichen Kandidaten einen ausw\"{a}hlen. Erm\"{o}glicht dieser Schritt weitere Knoten ohne zus\"{a}tzliche Kosten der Teill\"{o}sungen hinzuzuf\"{u}gen, wird das anschließend erledigt. Danach wird der n\"{a}chste Knoten wieder mittels der Wahrscheinlichkeiten ausgew\"{a}hlt.\\
+der einzelnen m\"{o}glichen Kandidaten einen ausw\"{a}hlen. Erm\"{o}glicht dieser Schritt weitere Knoten ohne zus\"{a}tzliche Kosten der Teill\"{o}sungen hinzuzuf\"{u}gen, wird das anschlie"send erledigt. Danach wird der n\"{a}chste Knoten wieder mittels der Wahrscheinlichkeiten ausgew\"{a}hlt.\\
 Nachdem alle Ameisen ihre L\"{o}sungen generiert haben, wird das Pheromon-Update \"{u}ber die Formel
  
 \begin{displaymath} 
@@ -39,7 +39,11 @@ durchgef\"{u}hrt, wobei das $\xi_e=\frac{2}{3}$ falls $e$ in der besten L\"{o}su
 $e$ in der besten L\"{o}sung seit dem letzten Neustart oder $\xi_e=1$ falls $e$ in beiden besten L\"{o}sungen enthalten ist.
 
 \subsection{Verbesserungsheuristik}
+Als Verbesserungsheuristik wurde Variable Neighborhood Descent (VND) verwendet. Als Nachbarschaftsstruktur wurde r-shrink, das in Kapitel \ref{sec:shrink} beschrieben wird, verwendet. Dabei ist r die Anzahl der Nachkommen eines Knoten die versucht werden an einem anderen Knoten anzuh"angen. Im VND werden verschiedene Nachbarschaften verwendet, indem $r$ die Werte $1\ bis\ |V-1|$ annimmt.
 
+\subsubsection{r-shrink}
+\label{sec:shrink}
+Hier wird f"ur einen Knoten $q$ versucht die $r$ am weitesten eintfernten Nachkommen $N$ von $q$ an einem anderen Knoten, des selben Levels $L(q)$, anzuh"angen. Ein Knoten $n \in N$ wird an einem anderen Knoten $p$ angeh"angt wenn $dist(q,n) > dist(p,n)$, wobei $dist(x,y)$ die Distanz zwischen Knoten $x$ und Knoten $y$ ist. 
 
 \subsection{Vergleich der verschiedenen Varianten f\"{u}r die lokale Suche}
 
