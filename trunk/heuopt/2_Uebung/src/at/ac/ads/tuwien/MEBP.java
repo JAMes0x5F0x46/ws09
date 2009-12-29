@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class MEBP {
@@ -17,12 +18,14 @@ public class MEBP {
 	// Define a static logger variable so that it references the
 	private static Logger logger = Logger.getLogger(MEBP.class);
 	
-	private final int ANTS = 1;
+	private final int ANTS = 10;
 	
 	/**
 	 * 
 	 */
 	public MEBP() {
+		
+		logger.setLevel(Level.INFO);
 		
 		String filename = "mebp-01.dat";
 		
@@ -47,7 +50,7 @@ public class MEBP {
 	 */
 	private void readInput(String path) {
 		
-		logger.debug("readInput...");
+		logger.info("readInput...");
 		
 		BufferedReader reader = null;
 		DataInputStream is = null;
@@ -96,7 +99,7 @@ public class MEBP {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logger.debug("readInput finished");
+		logger.info("readInput finished");
 	}
 	
 	/**
