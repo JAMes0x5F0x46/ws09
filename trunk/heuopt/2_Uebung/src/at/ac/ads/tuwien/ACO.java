@@ -28,6 +28,7 @@ public class ACO {
 	private final int RESTRICTION_SIZE = 10;
 	
 	private final int MAX_ITERATIONS = 1000;
+	private final int MAX_RESTARTS = 30;
 	
 	private final float p = 0.1f;
 
@@ -54,6 +55,7 @@ public class ACO {
 		Set<Solution> constructedSolutions = new HashSet<Solution>();
 		
 		int iterationCounter = 1;
+		int restartCounter=0;
 		
 		// convergence factor
 		float cf = 0;
@@ -65,7 +67,7 @@ public class ACO {
 		
 		logger.setLevel(Level.INFO);
 		
-		while(iterationCounter <= MAX_ITERATIONS) {
+		while(iterationCounter <= MAX_ITERATIONS && restartCounter <= MAX_RESTARTS) {
 		
 			constructedSolutions.clear();
 			for(int ant=0; ant < numberOfAnts; ant++) {
@@ -74,6 +76,7 @@ public class ACO {
 			}
 			
 			average = 0d;
+			ib=null;
 			for(Solution sol : constructedSolutions) {
 				
 				if(ib == null)
@@ -84,7 +87,7 @@ public class ACO {
 				average += sol.getWeight();
 			}
 			
-			logger.info("Average solution weight: "+(average/numberOfAnts)+" best solution in "+iterationCounter+".run: "+ib.toString());
+			logger.info("Average solution weight: "+(average/numberOfAnts)+" best solution in "+iterationCounter+".iteration: "+ib.toString());
 			
 			// update best so far and restart best if found a better solution
 			if(bs == null)
@@ -100,7 +103,7 @@ public class ACO {
 			applyPheromoneUpdate(cf,restart);
 			
 			cf = computeConvergenceFactor();
-			logger.info("cf: "+cf);
+			logger.debug("cf: "+cf);
 			
 			if(cf >= 0.99f) {
 				
@@ -109,6 +112,7 @@ public class ACO {
 					logger.info("Restarted! Best solution in this turn: "+rb.toString());
 					rb = null;
 					restart = false;
+					restartCounter++;
 				} else {
 					restart = true;
 				}
@@ -120,7 +124,10 @@ public class ACO {
 				logger.info("Best so far: "+bs.toString());
 			}
 			iterationCounter++;
-		}	
+		}
+		
+		logger.info("Finshed ACO with "+restartCounter+" restarts.");
+		logger.info("Best solution "+bs.toString());
 	}
 	
 	private float computeConvergenceFactor() {
