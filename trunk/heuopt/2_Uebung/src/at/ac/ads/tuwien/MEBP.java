@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,9 @@ public class MEBP {
 	
 	private final int ANTS = 10;
 	private final int MAX_RUNS = 30;
+	public final static int MAX_TIME = 500;
+	
+	private DecimalFormat dec = new DecimalFormat("###,###,###");
 	
 	/**
 	 * 
@@ -30,7 +34,7 @@ public class MEBP {
 		
 		logger.setLevel(Level.INFO);
 		
-		String filename = "mebp-07.dat";
+		String filename = "mebp-01.dat";
 		
 		this.readInput("input" + File.separator + filename);
 		
@@ -55,8 +59,10 @@ public class MEBP {
 		}
 		average = average / MAX_RUNS;
 		logger.warn("Best after "+MAX_RUNS+" runs "+best.toString());
-		logger.warn("Average weight: "+average+" standard deviation: "+computeStdDeviation(values,average));
-		logger.warn("Average run time: "+((System.currentTimeMillis() - startTime) / MAX_RUNS));
+		logger.warn("Average weight: "+dec.format(average)+" standard deviation: "+dec.format(computeStdDeviation(values,average)));
+		logger.warn("Average run time: "+((System.currentTimeMillis() - startTime) / MAX_RUNS)/1000 );
+		logger.warn("Complete run time: "+((System.currentTimeMillis() - startTime)/1000));
+		logger.warn("Time limit for one run: "+ (MAX_TIME / 1000)+" sec");
 	}
 	
 	private double computeStdDeviation(Set<Double> values,double average) {
