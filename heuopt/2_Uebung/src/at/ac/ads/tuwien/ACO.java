@@ -1,5 +1,6 @@
 package at.ac.ads.tuwien;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,8 +30,10 @@ public class ACO {
 	
 	private final int RESTRICTION_SIZE = 10;
 	
-	private final int MAX_ITERATIONS = 150;
+	private final int MAX_ITERATIONS = 1000;
 	private final int MAX_RESTARTS = 10;
+	
+	private DecimalFormat dec = new DecimalFormat("###,###,###");
 	
 	private final float p = 0.1f;
 
@@ -71,7 +74,9 @@ public class ACO {
 		
 		logger.setLevel(Level.INFO);
 		
-		while(iterationCounter <= MAX_ITERATIONS && restartCounter <= MAX_RESTARTS) {
+		float startTime = System.currentTimeMillis();
+		
+		while(iterationCounter <= MAX_ITERATIONS && restartCounter <= MAX_RESTARTS && ((System.currentTimeMillis() - startTime) < MEBP.MAX_TIME)) {
 		
 			constructedSolutions.clear();
 			for(int ant=0; ant < numberOfAnts; ant++) {
@@ -91,7 +96,7 @@ public class ACO {
 				average += sol.getWeight();
 			}
 			
-			logger.info("Average solution weight: "+(average/numberOfAnts)+" best solution in "+iterationCounter+".iteration: "+ib.toString());
+			logger.info("Average solution weight: "+dec.format((average/numberOfAnts))+" best solution in "+iterationCounter+".iteration: "+ib.toString());
 			
 			// update best so far and restart best if found a better solution
 			if(bs == null)

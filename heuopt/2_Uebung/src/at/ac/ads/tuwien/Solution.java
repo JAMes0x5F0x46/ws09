@@ -1,5 +1,6 @@
 package at.ac.ads.tuwien;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,8 @@ public class Solution implements Cloneable {
 	
 	//Map: key=node value=list of neighbors
 	private Map<Integer, List<Integer>> neighbor;
+	
+	private DecimalFormat dec = new DecimalFormat("###,###,###");
 	
 	public Solution() {
 		
@@ -176,7 +179,7 @@ public class Solution implements Cloneable {
 	
 	@Override
 	public String toString() {
-		 return "weight: "+this.weight + ", edges: "+this.edges.toString();
+		 return "weight: "+dec.format(this.weight) + ", edges: "+this.edges.toString();
 	}
 
 	@Override
