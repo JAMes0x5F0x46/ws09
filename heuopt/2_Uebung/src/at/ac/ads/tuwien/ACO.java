@@ -1,6 +1,8 @@
 package at.ac.ads.tuwien;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -224,22 +226,23 @@ public class ACO {
 		
 		Solution partialSol = new Solution();
 		
-		Set<Integer> perTargetNode = new HashSet<Integer>();
+//		Set<Integer> perTargetNode = new HashSet<Integer>();
 		
 		while(!unlinkedNodes.isEmpty()) {
 			
 			candidates = updateCandidates(candidates,linkedNodes,unlinkedNodes,nextNode);
 			
 			restrictedCandidates.clear();
-			perTargetNode.clear();
+//			perTargetNode.clear();
 			for(WeightedEdge e : candidates) {
 				
 				
 				// TODO is this an advantage?
-				if(!perTargetNode.contains(e.getEndNode())) {
+//				if(!perTargetNode.contains(e.getEndNode())) {
 					restrictedCandidates.add(e);
-					perTargetNode.add(e.getEndNode());					
-				} 
+//					perTargetNode.add(e.getEndNode());					
+//				} 
+
 				
 				if(restrictedCandidates.size() >= RESTRICTION_SIZE)
 					break;
@@ -344,5 +347,15 @@ public class ACO {
 		logger.debug("Computed probability for edge "+e.toString()+": "+result/sum);
 		
 		return result / sum;
+	}
+	
+	private double computeEta (WeightedEdge e, Solution sol) {
+		double eta = 0.0;
+		Solution copiedSol = sol.clone();
+		
+		copiedSol.addEdge(e);
+		eta = 1 / (copiedSol.computeObjectiveFunctionValue() - sol.getWeight());
+		
+		return eta;
 	}
 }
