@@ -12,7 +12,7 @@
 \maketitle
 
 \section{Minimum Energy Broadcast Problem}
-Das \textit{Minimum Energy Broadcast Problem (MEBP)} ist ein NP-hartes Optimierungsproblem f\"{u}r das Verbinden von mobilen Ger\"{a}ten in einem drahtlosen Ad-hoc Netzwerk. Es gilt eine Konfiguration f\"{u}r das Netzwerk zu finden, bei der die Sendeleitung und die n\"{o}tige Energie f\"{u}r die Kommunikation m\"{o}glichst minimal ist. Die Aufgabenstellung ist nun so, dass eine Nachricht ausgehend von einem vorgegebenen Knoten an alle anderen weitergegeben werden soll. Dabei k\"{o}nnen Knoten, die die Nachricht schon erhalten haben, auch als Zwischensender dienen, da dies eine energiesparendere Kommunikation erm\"{o}glicht. Gesucht sind nun konkrete Pfade, wie die einzelnen Knoten an den Startknoten angebunden werden.\\
+Das \textit{Minimum Energy Broadcast Problem (MEBP)} ist ein NP-hartes Optimierungsproblem f\"{u}r das Verbinden von mobilen Ger\"{a}ten in einem drahtlosen Ad-hoc Netzwerk. Es gilt eine Konfiguration f\"{u}r das Netzwerk zu finden, bei der die Sendeleistung und die n\"{o}tige Energie f\"{u}r die Kommunikation m\"{o}glichst minimal ist. Die Aufgabenstellung ist nun so, dass eine Nachricht ausgehend von einem vorgegebenen Knoten an alle anderen weitergegeben werden soll. Dabei k\"{o}nnen Knoten, die die Nachricht schon erhalten haben, auch als Zwischensender dienen, da dies eine energiesparendere Kommunikation erm\"{o}glicht. Gesucht sind nun konkrete Pfade, wie die einzelnen Knoten an den Startknoten angebunden werden.\\
 Ein bisschen abstrakter haben wir einen vollst\"{a}ndigen gerichteten Graph $G = (V,E,d)$ gegeben. Eine L\"{o}sung wird nun durch einen zusammenh\"{a}ngenden gerichteten Spannbaum $T = (V,E_{T})$ repr\"{a}sentiert, in der die Gesamt\"{u}bertragungsleitung
 
 \begin{displaymath} 
@@ -45,6 +45,9 @@ Als Verbesserungsheuristik wurde Variable Neighborhood Descent (VND) verwendet. 
 \label{sec:shrink}
 Hier wird f"ur einen Knoten $q$ versucht die $r$ am weitesten eintfernten Nachkommen $N$ von $q$ an einem anderen Knoten, des selben Levels $L(q)$, anzuh"angen. Ein Knoten $n \in N$ wird an einem anderen Knoten $p$ angeh"angt wenn $dist(q,n) > dist(p,n)$, wobei $dist(x,y)$ die Distanz zwischen Knoten $x$ und Knoten $y$ ist. 
 
+\subsection{Ergebnisse}
+F"ur unsere Ergebnisse haben wir pro Instanz 30 runs durchgef"uhrt. Die Anzahl der Ameisen haben wir auf 10 gesetzt. Die weiteren Parameter sind die Verdampfungsrate $p=0.1$, $\tau_{min}=0.01$ und $\tau_{max}=0.99$.
+
 \begin{table}[htbp]
 \makebox[\linewidth]{
 \begin{tabular}{cccccc}
@@ -68,5 +71,7 @@ mebp-12 & 18.459.750 & 18.403.138 & 103.441 & 2000 & 31:01min\\
 \end{tabular}
 }
 \end{table}
+
+
 
 \end{document}
