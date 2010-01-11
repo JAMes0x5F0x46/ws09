@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+body {
+  margin: 20px;
+  background-image: url('background.jpg');
+  background-repeat: repeat-y;
+  font-weight: normal;
+  background-position: center;
+}
+
+h1 {
+  color: green;
+  text-align: center;
+}
+
+h2 {
+  color: navy;
+}
+
+h3 {
+  color: teal;
+}
