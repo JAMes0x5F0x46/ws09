@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="somtoolbox" basedir="." default="build">
+
+	<property name="javadoc.title" value="SOMToolbox" />
+
+	<property name="src" location="src" />
+	<property name="lib" location="lib" />
+	<property name="doc" location="doc" />
+	<property name="javadoc" location="${doc}/api" />
+	<property name="dist" location="dist" />
+	<property name="bin" location="bin" />
+
+	<property name="component-main" value="core" />
+	<property name="component-opt" value="optional" />
+	<property name="component-test" value="test" />
+
+	<property name="codename" value="" />
+
+	<property name="jar.filename" location="${ant.project.name}${codename}.jar" />
+	<property name="jar.filename.opt" location="${ant.project.name}${codename}_opt.jar" />
+
+	<property name="jar.filename.doc" location="${ant.project.name}${codename}_doc.jar" />
+	<property name="jar.filename.doc.opt" location="${ant.project.name}${codename}_opt+doc.jar" />
+
+	<property name="jar.filename.src" location="${ant.project.name}${codename}_scr.jar" />
+	<property name="jar.filename.src.opt" location="${ant.project.name}${codename}_opt+scr.jar" />
+
+	<property name="jar.filename.fat" location="${ant.project.name}${codename}_full.jar" />
+	<property name="jar.filename.fat.opt" location="${ant.project.name}${codename}_complete.jar" />
+
+	<property name="pkg.filename" location="${dist}/${ant.project.name}${codename}.tar.gz" />
+	<property name="pkg.filename.src" location="${dist}/${ant.project.name}${codename}_incl_src.tar.gz" />
+
+	<property name="pkg.opt.filename" location="${dist}/${ant.project.name}${codename}_incl_opt.tar.gz" />
+	<property name="pkg.opt.filename.src" location="${dist}/${ant.project.name}${codename}_incl_opt+src.tar.gz" />
+
+
+	<path id="classpath">
+		<fileset dir="${lib}" id="libs">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+	</path>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${bin}" />
+		<mkdir dir="${bin}/${component-main}" />
+		<mkdir dir="${bin}/${component-opt}" />
+		<mkdir dir="${bin}/${component-test}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${javadoc}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin}" />
+		<delete dir="${dist}" />
+		<delete dir="${javadoc}" />
+		<delete file="${jar.filename}" />
+		<delete file="${jar.filename.fat}" />
+		<delete file="${jar.filename.src}" />
+		<delete file="${jar.filename.doc}" />
+	</target>
+
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+	<target name="build" depends="init" description="Build the ${ant.project.name}">
+		<copy todir="${bin}/${component-main}/rsc">
+			<fileset dir="${src}/${component-main}/rsc/">
+				<include name="**" />
+			</fileset>
+		</copy>
+
+		<javac srcdir="${src}/${component-main}" destdir="${bin}/${component-main}" classpathref="classpath" debug="on">
+			<classpath refid="classpath" />
+		</javac>
+
+		<javac srcdir="${src}/${component-opt}" destdir="${bin}/${component-opt}" classpathref="classpath" debug="on">
+			<classpath>
+				<path path="${bin}/${component-main}" />
+				<path refid="classpath" />
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- ================================= 
+          target: javadoc              
+         ================================= -->
+	<target name="javadoc" depends="init" description="Create javadoc-API">
+		<copy file="${doc}/background.jpg" todir="${javadoc}" />
+		<javadoc destdir="${javadoc}" access="private" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" packagenames="at.tuwien.ifs.somtoolbox.**.*" stylesheetfile="${doc}/style.css" doctitle="${javadoc.title}">
+			<packageset dir="${src}/${component-main}" />
+			<packageset dir="${src}/${component-opt}" />
+			<packageset dir="${src}/${component-test}" />
+
+			<classpath refid="classpath" />
+			<link href="http://java.sun.com/javase/6/docs/api/" />
+
+			<tag name="todo" scope="all" description="Todo:" />
+		</javadoc>
+	</target>
+
+	<!-- ================================= 
+          target: dist              
+         ================================= -->
+	<target name="dist" depends="build" description="Build a jar">
+		<jar destfile="${jar.filename}" basedir="${bin}/${component-main}">
+			<manifest>
+				<attribute name="Main-Class" value="at.tuwien.ifs.somtoolbox.apps.SOMToolboxMain" />
+				<section name="${ant.project.name}-0.6">
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="IFS, Vienna University of Technology" />
+					<attribute name="Implementation-Title" value="${ant.project.name}" />
+					<attribute name="Implementation-Vendor" value="IFS, Vienna University of Technology" />
+				</section>
+				<section name="${ant.project.name}-0.4.3">
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="iSpaces, ec3" />
+					<attribute name="Implementation-Title" value="${ant.project.name}" />
+					<attribute name="Implementation-Vendor" value="iSpaces, ec3" />
+				</section>
+			</manifest>
+		</jar>
+		<copy todir="${dist}" file="${jar.filename}" />
+
+		<jar destfile="${jar.filename.opt}" basedir="${bin}/${component-opt}">
+			<manifest>
+				<section name="${ant.project.name}-0.6 optional components">
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="IFS, Vienna University of Technology" />
+					<attribute name="Implementation-Title" value="${ant.project.name}" />
+					<attribute name="Implementation-Vendor" value="IFS, Vienna University of Technology" />
+				</section>
+			</manifest>
+		</jar>
+		<copy todir="${dist}" file="${jar.filename.opt}" />
+	</target>
+
+	<!-- ================================= 
+          target: fatjar              
+         ================================= -->
+	<target name="fatjar" depends="dist" description="Build a single jar containing also the full classpath">
+		<jar destfile="${jar.filename.fat}" filesetmanifest="merge">
+			<manifest>
+				<section name="Referenced Libs">
+					<attribute name="Info" value="Additional libraries are provided as-is, and might fall under different licenses." />
+				</section>
+			</manifest>
+			<zipgroupfileset file="${jar.filename}" />
+			<zipgroupfileset dir="${lib}" />
+			<zipfileset dir="${doc}" prefix="doc" />
+		</jar>
+		<copy todir="${dist}" file="${jar.filename.fat}" />
+
+		<jar destfile="${jar.filename.fat.opt}" filesetmanifest="merge">
+			<zipgroupfileset file="${jar.filename.fat}" />
+			<zipgroupfileset file="${jar.filename.opt}" />
+		</jar>
+		<copy todir="${dist}" file="${jar.filename.fat.opt}" />
+
+	</target>
+
+
+	<target name="dist+doc" depends="dist, javadoc">
+		<jar jarfile="${jar.filename.doc}">
+			<zipgroupfileset file="${jar.filename}" />
+			<zipfileset dir="${doc}" prefix="doc" />
+		</jar>
+
+		<jar jarfile="${jar.filename.doc.opt}">
+			<zipgroupfileset file="${jar.filename.doc}" />
+			<zipgroupfileset file="${jar.filename.opt}" />
+		</jar>
+	</target>
+
+	<!-- ================================= 
+          target: dist+src              
+         ================================= -->
+	<target name="dist+src" depends="dist" description="Create jar with included sources.">
+		<jar destfile="${jar.filename.src}">
+			<zipgroupfileset file="${jar.filename}" />
+			<zipfileset dir="${src}/${component-main}" prefix="${src}">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</zipfileset>
+		</jar>
+
+		<jar destfile="${jar.filename.src.opt}">
+			<zipgroupfileset file="${jar.filename.src}" />
+			<zipgroupfileset file="${jar.filename.opt}" />
+			<zipfileset dir="${src}/${component-opt}">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</zipfileset>
+		</jar>
+	</target>
+
+	<!-- ================================= 
+          target: package              
+         ================================= -->
+	<target name="package" depends="dist, javadoc" description="Create Packages">
+		<tar destfile="${pkg.filename}" compression="gzip" longfile="gnu">
+			<tarfileset dir="${basedir}" mode="664">
+				<include name="somtoolbox.*" />
+				<exclude name="somtoolbox.sh" />
+				<include name="somviewer.prop*" />
+				<include name="ChangeLog" />
+				<include name="LICENSES-libraries" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" mode="775">
+				<include name="somtoolbox.sh" />
+			</tarfileset>
+			<tarfileset dir="${lib}" prefix="lib" mode="664">
+				<include name="*.jar" />
+			</tarfileset>
+			<tarfileset dir="${doc}" prefix="doc" mode="664">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+		</tar>
+
+		<tar destfile="${pkg.filename.src}" compression="gzip" longfile="gnu">
+			<tarfileset dir="${basedir}" mode="664">
+				<include name="somtoolbox.*" />
+				<exclude name="somtoolbox.sh" />
+				<include name="somviewer.prop*" />
+				<include name="ChangeLog" />
+				<include name="LICENSES-libraries" />
+				<include name=".settings/*" />
+				<include name=".classpath" />
+				<include name=".project" />
+				<include name="build.xml" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" mode="775">
+				<include name="somtoolbox.sh" />
+			</tarfileset>
+			<tarfileset dir="${lib}" prefix="lib" mode="664">
+				<include name="*.jar" />
+			</tarfileset>
+			<tarfileset dir="${doc}" prefix="doc" mode="664">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+			<tarfileset dir="${src}/${component-main}" prefix="src/core" mode="664">
+				<include name="rsc/**" />
+				<include name="**/*.java" />
+			</tarfileset>
+		</tar>
+
+		<tar destfile="${pkg.opt.filename}" compression="gzip" longfile="gnu">
+			<tarfileset dir="${basedir}" mode="664">
+				<include name="somtoolbox.*" />
+				<exclude name="somtoolbox.sh" />
+				<include name="somviewer.prop*" />
+				<include name="ChangeLog" />
+				<include name="LICENSES-libraries" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" prefix="lib">
+				<include name="somtoolbox_opt.jar" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" mode="775">
+				<include name="somtoolbox.sh" />
+			</tarfileset>
+			<tarfileset dir="${lib}" prefix="lib" mode="664">
+				<include name="**/*.jar" />
+				<exclude name="src/**" />
+				<exclude name="doc/**" />
+			</tarfileset>
+			<tarfileset dir="${doc}" prefix="doc" mode="664">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+		</tar>
+
+		<tar destfile="${pkg.opt.filename.src}" compression="gzip" longfile="gnu">
+			<tarfileset dir="${basedir}" mode="664">
+				<include name="somtoolbox.*" />
+				<exclude name="somtoolbox.sh" />
+				<include name="somviewer.prop*" />
+				<include name="ChangeLog" />
+				<include name="LICENSES-libraries" />
+				<include name=".settings/*" />
+				<include name=".classpath" />
+				<include name=".project" />
+				<include name="build.xml" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" prefix="lib">
+				<include name="somtoolbox_opt.jar" />
+			</tarfileset>
+			<tarfileset dir="${basedir}" mode="775">
+				<include name="somtoolbox.sh" />
+			</tarfileset>
+			<tarfileset dir="${lib}" prefix="lib" mode="664">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+			<tarfileset dir="${doc}" prefix="doc" mode="664">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+			<tarfileset dir="${src}" prefix="src" mode="664">
+				<exclude name="**/.svn/**" />
+			</tarfileset>
+		</tar>
+
+	</target>
+
+
+</project>
