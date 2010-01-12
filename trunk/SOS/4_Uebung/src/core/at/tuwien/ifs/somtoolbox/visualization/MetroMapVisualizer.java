@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -323,14 +324,14 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
      */
     private BufferedImage createMetromapImage(int index, GrowingSOM gsom, int width, int height) throws SOMToolboxException {
         GrowingLayer layer = gsom.getLayer();
-
+        
         // we do this every time now, check for existing binCentres and correct sizes
         // thereof inside computeFinalComponentLines
         binCentres = computeFinalComponentLines(layer);
 
-        BufferedImage res = createOverlayVisualisation(width, height);
+        BufferedImage res = createOverlayVisualisation(width + 3000, height);
         Graphics2D g = (Graphics2D) res.getGraphics();
-
+        
         unitWidth = width / layer.getXSize();
         unitHeight = height / layer.getYSize();
 
@@ -351,6 +352,9 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
             createLayout(g, layer, false);
             createSnappedMetroLayout(g, layer);
         }
+
+        drawCorrelationResult(g, width, height, layer);
+        
         return res;
     }
 
@@ -1942,5 +1946,62 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
             Map<String, String> flavourParameters) throws SOMToolboxException {
         // FIXME: implement this
         return getVisualizationFlavours(index, gsom, width, height, -1);
+    }
+    
+    private void drawCorrelationResult(Graphics2D g, int width, int height, GrowingLayer layer){
+   	
+    	double[][] dist = getCorrelation();
+    	
+    	double strongLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.33;
+    	double weakLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.5;
+    	
+    	g.setFont(new Font("Serif", Font.PLAIN, 60));
+    	g.setColor(Color.BLACK);
+    	
+    	int ypos = 100;
+    	
+    	for (int i=0; i < dist.length; i++){
+    		
+    		String corStrong = "";
+    		String corWeak = "";
+    		for (int j=0; j < dist.length; j++){
+    			if (i==j) continue;
+    			if (dist[i][j]<=strongLimit){
+    				if (!corStrong.isEmpty()) corStrong += ", ";
+    				
+    				corStrong += "comp" + String.valueOf(j);
+    			}else if (dist[i][j]<=weakLimit ){
+    				if (!corWeak.isEmpty()) corWeak += ", ";
+    				
+    				corWeak += "comp" + String.valueOf(j);
+    			}
+    		}
+    		if (!corStrong.isEmpty()){
+				g.drawString("comp" + String.valueOf(i) + " korreliert stark mit " + corStrong, width + 20, ypos);
+				ypos+=70;
+			}
+			if (!corWeak.isEmpty()){
+				g.drawString("comp" + String.valueOf(i) + " korreliert schwach mit " + corWeak, width + 20, ypos);
+				ypos+=70;
+			}
+    	}
+    }
+    
+    private double[][] getCorrelation(){
+    	
+    	ClusterElementFunctions<ComponentLine2D> distanceFunc = new ComponentLine2DDistance(lineDistanceFunction);
+    	
+    	double[][] dist = new double[binCentres.length][binCentres.length];
+    	
+    	for (int i=0; i < binCentres.length - 1; i++) {
+    		for (int j=i+1; j < binCentres.length; j++) {
+    			double d = distanceFunc.distance(new ComponentLine2D(binCentres[i]), 
+    											 new ComponentLine2D(binCentres[j]));
+    			dist[i][j]= d;
+    			dist[j][i]= d;
+    		}
+    	}
+    	
+    	return dist;
     }
 }
