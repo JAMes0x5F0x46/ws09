@@ -2012,7 +2012,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 				posMaxOutput += "rechts";
 			}
 			
-			g.drawString("comp" + String.valueOf(i) + " verläuft von " + posMinOutput + " zu " + posMaxOutput, width + 20, ypos);
+			g.drawString("comp" + String.valueOf(i) + " verlaeuft von " + posMinOutput + " zu " + posMaxOutput, width + 20, ypos);
 			ypos+=35;
     	}
     		
