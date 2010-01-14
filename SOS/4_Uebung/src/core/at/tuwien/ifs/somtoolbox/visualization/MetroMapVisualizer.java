@@ -50,6 +50,11 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import cern.colt.function.DoubleFunction;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.jet.math.Functions;
+
 import at.tuwien.ifs.somtoolbox.SOMToolboxException;
 import at.tuwien.ifs.somtoolbox.apps.viewer.CommonSOMViewerStateData;
 import at.tuwien.ifs.somtoolbox.apps.viewer.controls.ColourLegendTable;
@@ -354,6 +359,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
         }
 
         drawCorrelationResult(g, width, height, layer);
+        drawExtrema(gsom);
         
         return res;
     }
@@ -1948,6 +1954,27 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
         return getVisualizationFlavours(index, gsom, width, height, -1);
     }
     
+    private void drawExtrema (GrowingSOM gsom) {
+    	DoubleMatrix2D plane = this.createNormalizedComponentPlane(gsom, 2);
+    }
+    
+    private DoubleMatrix2D createNormalizedComponentPlane(GrowingSOM gsom, int component) {
+        DoubleMatrix2D plane = new DenseDoubleMatrix2D(gsom.getLayer().getComponentPlane(component, 0));
+        plane = plane.viewDice();
+
+        // normalize component plane
+        final double minValue = plane.aggregate(Functions.min, Functions.identity);
+        final double maxValue = plane.aggregate(Functions.max, Functions.identity);
+        plane.assign(new DoubleFunction() {
+            public double apply(double argument) {
+                return (argument - minValue) / (maxValue - minValue);
+            }
+        });
+
+        return plane;
+
+    }
+    
     private void drawCorrelationResult(Graphics2D g, int width, int height, GrowingLayer layer){
    	
     	double[][] dist = getCorrelation();
@@ -1955,7 +1982,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     	double strongLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.33;
     	double weakLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.5;
     	
-    	g.setFont(new Font("Serif", Font.PLAIN, 60));
+    	g.setFont(new Font("Serif", Font.PLAIN, 30));
     	g.setColor(Color.BLACK);
     	
     	int ypos = 100;
@@ -1976,13 +2003,14 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     				corWeak += "comp" + String.valueOf(j);
     			}
     		}
+    		 g.setColor(colorMap.getColor(i));
     		if (!corStrong.isEmpty()){
 				g.drawString("comp" + String.valueOf(i) + " korreliert stark mit " + corStrong, width + 20, ypos);
-				ypos+=70;
+				ypos+=35;
 			}
 			if (!corWeak.isEmpty()){
 				g.drawString("comp" + String.valueOf(i) + " korreliert schwach mit " + corWeak, width + 20, ypos);
-				ypos+=70;
+				ypos+=35;
 			}
     	}
     }
