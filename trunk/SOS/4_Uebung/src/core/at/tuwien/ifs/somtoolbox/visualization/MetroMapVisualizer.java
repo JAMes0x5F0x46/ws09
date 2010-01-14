@@ -1974,9 +1974,8 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     			}
     		}
     		g.setColor(colorMap.getColor(i));
-			g.drawString("minimum von comp" + String.valueOf(i) + " liegt auf Position (" + String.valueOf(xmin) + ", " + String.valueOf(ymin) + ")", width + 20, ypos);
-			ypos+=35;
-			g.drawString("maximum von comp" + String.valueOf(i) + " liegt auf Position (" + String.valueOf(xmax) + ", " + String.valueOf(ymax) + ")", width + 20, ypos);
+			g.drawString("comp" + String.valueOf(i) + ": min auf Position (" + String.valueOf(ymin) + ", " + String.valueOf(xmin) + 
+					"), max auf Position (" + String.valueOf(ymax) + ", " + String.valueOf(xmax) + ")", width + 20, ypos);
 			ypos+=35;
 			
 			String posMinOutput ="";
