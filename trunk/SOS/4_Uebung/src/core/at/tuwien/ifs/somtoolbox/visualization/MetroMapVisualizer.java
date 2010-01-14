@@ -358,8 +358,8 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
             createSnappedMetroLayout(g, layer);
         }
 
-        drawCorrelationResult(g, width, height, layer);
-        drawExtrema(gsom);
+        int ypos = drawCorrelationResult(g, width, height, layer);
+        drawExtrema(g,width, height, gsom, ypos);
         
         return res;
     }
@@ -1954,8 +1954,69 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
         return getVisualizationFlavours(index, gsom, width, height, -1);
     }
     
-    private void drawExtrema (GrowingSOM gsom) {
-    	DoubleMatrix2D plane = this.createNormalizedComponentPlane(gsom, 2);
+    private void drawExtrema (Graphics2D g, int width, int height, GrowingSOM gsom, int ypos) {
+    	
+    	ypos += 60;
+    	
+    	for (int i = 0; i < binCentres.length; i++) {
+    		int xmax=0,ymax=0,xmin=0,ymin=0;
+    		DoubleMatrix2D plane = this.createNormalizedComponentPlane(gsom, i);
+    		for (int j=0; j < plane.columns(); j++) {
+    			for (int k=0; k < plane.rows(); k++) {
+    				if (plane.get(j, k)==1) {
+    					xmax = j;
+    					ymax = k;
+    				}
+    				if (plane.get(j, k)==0) {
+    					xmin = j;
+    					ymin = k;
+    				}
+    			}
+    		}
+    		g.setColor(colorMap.getColor(i));
+			g.drawString("minimum von comp" + String.valueOf(i) + " liegt auf Position (" + String.valueOf(xmin) + ", " + String.valueOf(ymin) + ")", width + 20, ypos);
+			ypos+=35;
+			g.drawString("maximum von comp" + String.valueOf(i) + " liegt auf Position (" + String.valueOf(xmax) + ", " + String.valueOf(ymax) + ")", width + 20, ypos);
+			ypos+=35;
+			
+			String posMinOutput ="";
+			if (ymin <= plane.rows()/3) {
+				posMinOutput += "oben";
+			}else if (ymin <= plane.rows()*2/3){
+				posMinOutput += "mitte";
+			}else {
+				posMinOutput += "unten";
+			}
+			posMinOutput += "-";
+			if (xmin <= plane.rows()/3) {
+				posMinOutput += "links";
+			}else if (xmin <= plane.rows()*2/3){
+				posMinOutput += "mitte";
+			}else {
+				posMinOutput += "rechts";
+			}
+			
+			String posMaxOutput ="";
+			if (ymax <= plane.columns()/3) {
+				posMaxOutput += "oben";
+			}else if (ymax <= plane.columns()*2/3){
+				posMaxOutput += "mitte";
+			}else {
+				posMaxOutput += "unten";
+			}
+			posMaxOutput += "-";
+			if (xmax <= plane.columns()/3) {
+				posMaxOutput += "links";
+			}else if (xmax <= plane.columns()*2/3){
+				posMaxOutput += "mitte";
+			}else {
+				posMaxOutput += "rechts";
+			}
+			
+			g.drawString("comp" + String.valueOf(i) + " verläuft von " + posMinOutput + " zu " + posMaxOutput, width + 20, ypos);
+			ypos+=35;
+    	}
+    		
     }
     
     private DoubleMatrix2D createNormalizedComponentPlane(GrowingSOM gsom, int component) {
@@ -1975,7 +2036,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 
     }
     
-    private void drawCorrelationResult(Graphics2D g, int width, int height, GrowingLayer layer){
+    private int drawCorrelationResult(Graphics2D g, int width, int height, GrowingLayer layer){
    	
     	double[][] dist = getCorrelation();
     	
@@ -2013,6 +2074,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 				ypos+=35;
 			}
     	}
+    	return ypos;
     }
     
     private double[][] getCorrelation(){
