@@ -1,0 +1,13 @@
+$TYPE template
+$XDIM 2
+$YDIM 214
+$VEC_DIM 9
+0 component_0
+1 component_1
+2 component_2
+3 component_3
+4 component_4
+5 component_5
+6 component_6
+7 component_7
+8 component_8
