@@ -159,6 +159,8 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 
     private LeastRecentlyUsedCache<String, WardClustering<ComponentLine2D>> clusterCache = new LeastRecentlyUsedCache<String, WardClustering<ComponentLine2D>>(
             20);
+    
+    private int textSize;
 
     public MetroMapVisualizer() {
         NUM_VISUALIZATIONS = 1;
@@ -358,6 +360,8 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
             createSnappedMetroLayout(g, layer);
         }
 
+        textSize = Integer.valueOf(String.valueOf(Math.round(2.5*layer.getYSize())));
+        
         int ypos = drawCorrelationResult(g, width, height, layer);
         drawExtrema(g,width, height, gsom, ypos);
         
@@ -1956,7 +1960,9 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     
     private void drawExtrema (Graphics2D g, int width, int height, GrowingSOM gsom, int ypos) {
     	
-    	ypos += 60;
+    	g.setFont(new Font("Serif", Font.PLAIN, textSize));
+    	
+    	ypos += textSize*2;
     	
     	for (int i = 0; i < binCentres.length; i++) {
     		int xmax=0,ymax=0,xmin=0,ymin=0;
@@ -1976,7 +1982,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     		g.setColor(colorMap.getColor(i));
 			g.drawString("comp" + String.valueOf(i) + ": min auf Position (" + String.valueOf(ymin) + ", " + String.valueOf(xmin) + 
 					"), max auf Position (" + String.valueOf(ymax) + ", " + String.valueOf(xmax) + ")", width + 20, ypos);
-			ypos+=35;
+			ypos+=textSize+5;
 			
 			String posMinOutput ="";
 			if (ymin <= plane.rows()/3) {
@@ -2013,7 +2019,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 			}
 			
 			g.drawString("comp" + String.valueOf(i) + " verlaeuft von " + posMinOutput + " zu " + posMaxOutput, width + 20, ypos);
-			ypos+=35;
+			ypos+=textSize+5;
     	}
     		
     }
@@ -2039,10 +2045,12 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
    	
     	double[][] dist = getCorrelation();
     	
-    	double strongLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.33;
+    	double strongLimit = (layer.getXSize()+layer.getXSize())/2*binCentres[0].length*0.33;
     	double weakLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.5;
     	
-    	g.setFont(new Font("Serif", Font.PLAIN, 30));
+    	 
+
+    	g.setFont(new Font("Serif", Font.PLAIN, textSize));
     	g.setColor(Color.BLACK);
     	
     	int ypos = 100;
@@ -2066,11 +2074,11 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     		 g.setColor(colorMap.getColor(i));
     		if (!corStrong.isEmpty()){
 				g.drawString("comp" + String.valueOf(i) + " korreliert stark mit " + corStrong, width + 20, ypos);
-				ypos+=35;
+				ypos+=textSize+5;
 			}
 			if (!corWeak.isEmpty()){
 				g.drawString("comp" + String.valueOf(i) + " korreliert schwach mit " + corWeak, width + 20, ypos);
-				ypos+=35;
+				ypos+=textSize+5;
 			}
     	}
     	return ypos;
