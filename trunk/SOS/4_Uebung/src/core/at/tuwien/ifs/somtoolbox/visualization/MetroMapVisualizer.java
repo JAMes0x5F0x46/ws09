@@ -360,11 +360,11 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
             createSnappedMetroLayout(g, layer);
         }
 
-        textSize = Integer.valueOf(String.valueOf(Math.round(2.5*layer.getYSize())));
+        textSize = Integer.valueOf(String.valueOf(Math.round(2*layer.getYSize())));
         
         int ypos = drawCorrelationResult(g, width, height, layer);
-        drawExtrema(g,width, height, gsom, ypos);
-        
+        ypos = drawExtrema(g,width, height, gsom, ypos);
+        drawDeviation(g, width, height, layer,ypos);
         return res;
     }
 
@@ -1958,7 +1958,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
         return getVisualizationFlavours(index, gsom, width, height, -1);
     }
     
-    private void drawExtrema (Graphics2D g, int width, int height, GrowingSOM gsom, int ypos) {
+    private int drawExtrema (Graphics2D g, int width, int height, GrowingSOM gsom, int ypos) {
     	
     	g.setFont(new Font("Serif", Font.PLAIN, textSize));
     	
@@ -2021,7 +2021,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
 			g.drawString("comp" + String.valueOf(i) + " verlaeuft von " + posMinOutput + " zu " + posMaxOutput, width + 20, ypos);
 			ypos+=textSize+5;
     	}
-    		
+    		return ypos;
     }
     
     private DoubleMatrix2D createNormalizedComponentPlane(GrowingSOM gsom, int component) {
@@ -2045,7 +2045,7 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
    	
     	double[][] dist = getCorrelation();
     	
-    	double strongLimit = (layer.getXSize()+layer.getXSize())/2*binCentres[0].length*0.33;
+    	double strongLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.33;
     	double weakLimit = (layer.getXSize()+layer.getYSize())/2*binCentres[0].length*0.5;
     	
     	 
@@ -2100,5 +2100,21 @@ public class MetroMapVisualizer extends AbstractMatrixVisualizer {
     	}
     	
     	return dist;
+    }
+    
+    private void drawDeviation(Graphics2D g, int width, int height, GrowingLayer layer, int ypos){
+    	double deviation [] = layer.getDeviation(binCentres.length);
+    	
+    	double strongLimit = (layer.getXSize()+layer.getYSize())/2 / 5 ;
+    	
+    	ypos+=textSize+5;
+    	for (int i=0; i < binCentres.length; i++){
+    		if (deviation[i]>= strongLimit){
+    			g.setColor(colorMap.getColor(i));
+    			g.drawString("comp" + String.valueOf(i) + " streut stark. ", width + 20, ypos);
+    			ypos+=textSize+5;
+    		}
+    	}
+
     }
 }
