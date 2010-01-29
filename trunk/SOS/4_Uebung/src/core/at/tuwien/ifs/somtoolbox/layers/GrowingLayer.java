@@ -759,6 +759,72 @@ public class GrowingLayer implements Layer {
         // System.out.println("centre sizes: " + Arrays.toString(counts));
         return res;
     }
+    
+    public double getBinDeviation(int[][] binAssignment, int bins) {
+        Point2D.Double[] res = new Point2D.Double[bins];
+        ArrayList<java.awt.geom.Point2D.Double> p = new ArrayList<java.awt.geom.Point2D.Double>();
+        int[] xs = new int[bins];
+        int[] ys = new int[bins];
+        int[] counts = new int[bins];
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                if (binAssignment[x][y] != -1) { // do not consider not assigned units
+                	
+                    xs[binAssignment[x][y]] += x;
+                    ys[binAssignment[x][y]] += y;
+                    counts[binAssignment[x][y]] += 1;
+                }
+            }
+        }
+        double sumDeviation = 0;
+        for (int i = 0; i < ys.length; i++) {
+            if (counts[i] != 0) {
+                res[i] = new Point2D.Double((double) xs[i] / (double) counts[i], (double) ys[i] / (double) counts[i]);
+                p.add(new Point2D.Double((double) xs[i] / (double) counts[i], (double) ys[i] / (double) counts[i]));
+            } else { // if the bin is empty
+                if (i > 0) { // we use the same point as for the previous bin
+                    res[i] = res[i - 1];
+                }
+            }
+            if (i == 1 && res[0] == null) { // we need to check the special case of the first bin being empty
+                res[0] = res[i];
+            }
+            
+            double sumXdif = 0;
+            double sumYdif = 0;
+            
+            for (int x = 0; x < xSize; x++) {
+                for (int y = 0; y < ySize; y++) {
+                    if (binAssignment[x][y] != -1) { // do not consider not assigned units
+                    	
+                        sumXdif = x - res[i].x;
+                        sumYdif = y - res[i].y;
+                        
+                    }
+                }
+            }
+            sumDeviation += sumXdif / counts[i] + sumYdif / counts[i];
+        }
+        
+       
+        // debug info
+        // System.out.println("centre sizes: " + Arrays.toString(counts));
+        return sumDeviation/bins;
+    }
+    
+    public double[] getDeviation(int bins) {
+        
+    	double[] result = new double[dim];
+            for (int i = 0; i < dim; i++) {
+                int[][] binAssignement = getBinAssignment(i, bins);
+                result[i] = getBinDeviation(binAssignement, bins);
+
+            }
+            
+            return result;
+        
+    }
+    
 
     public Point2D[][] getBinCentres(int bins) {
         Point2D[][] cachedResult = binAssignmentCache.get(new Integer(bins));
