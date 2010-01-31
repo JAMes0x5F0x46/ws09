@@ -797,13 +797,15 @@ public class GrowingLayer implements Layer {
                 for (int y = 0; y < ySize; y++) {
                     if (binAssignment[x][y] != -1) { // do not consider not assigned units
                     	
-                        sumXdif = x - res[i].x;
-                        sumYdif = y - res[i].y;
+                        sumXdif = Math.abs(x - res[i].x);
+                        sumYdif = Math.abs(y - res[i].y);
                         
                     }
                 }
             }
-            sumDeviation += sumXdif / counts[i] + sumYdif / counts[i];
+            if (counts[i]!=0){
+            	sumDeviation += sumXdif / counts[i] + sumYdif / counts[i];
+            }
         }
         
        
