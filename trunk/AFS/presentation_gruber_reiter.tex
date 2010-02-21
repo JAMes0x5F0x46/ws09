@@ -60,11 +60,31 @@ Eine n-dimensionale Array Grammatik kann nun als Sechstupel
 definiert werden. $\{(v_0,S)\}$ wird als Startarray (Axiom), $v_0$ als Startvektor und $S$ als das Startsymbol bezeichnet.
 }
 
-\subsection{Subsection no.1.1  }
-\frame{ 
-Without title somethink is missing. 
+\section{Control mechanisms} 
+\frame{\frametitle{matrix grammar} 
+Eine Matrixgrammatik $G_M$ ist ein 4-Tupel
+
+\[ G_M = (V_N,V_T,(M,F),S),
+\]
+$F$ kann auch als Fehlermenge bezeichnet werden. Ist $F= \emptyset$, dann kann $G_M$ als Matrixgrammatik ohne appearence checking bezeichnet werden.
 }
 
+\frame{\frametitle{graph controlled grammar} 
+Eine graph-controlled Grammatik $G_P$ ist ein 4-Tupel
+
+\[ G_M = (V_N,V_T,(R,L_{in},L_{fin}),S),
+\]
+$R$ ist eine endliche Menge von Regeln $r$ der Form 
+\[ (l(r) : p(l(r)), \sigma (l(r)), \varphi (l(r))).
+\]
+Falls alle Felder $\varphi (l(r))$ leer sind für alle $r \in R$, dann kann $G_P$ als graph-controlled Grammatik ohne appearence checking bezeichnet werden.
+
+\pause
+
+\begin{alertblock}{}
+Matrix- und graph-controlled Grammatiken können in Arraygrammatiken direkt übergeführt werden, indem ihre Produktionen durch Arrayproduktionen ersetzt werden.
+\end{alertblock}
+}
 
 \section{Section no. 2} 
 \subsection{Lists I}
