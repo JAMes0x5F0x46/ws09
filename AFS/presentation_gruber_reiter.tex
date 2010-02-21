@@ -100,6 +100,89 @@ ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y
 \end{eqnarray*}
 }
 
+
+\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams}
+\textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
+
+\[ G=(n,\left\{ D,E,L,Q,R,S,U \right\} , \left\{ a \right\} , \# , (P,R,F), \left\{ ((0,0),S) \right\} )
+\]
+
+\[P= \left\{
+\begin{array}{ll}
+\# & \\
+S & \#
+\end{array}
+\rightarrow
+\begin{array}{ll}
+L & \\
+a & D
+\end{array}
+,
+\begin{array}{l}
+\# \\
+L 
+\end{array}
+\rightarrow
+\begin{array}{l}
+L \\
+a 
+\end{array}
+,
+\begin{array}{ll}
+D & \# \\
+\end{array}
+\rightarrow
+\begin{array}{ll}
+a & D \\
+\end{array} \right
+,\]
+\[
+\begin{array}{ll}
+\# & \# \\
+L &
+\end{array}
+\rightarrow
+\begin{array}{ll}
+a & U \\
+a &
+\end{array}
+,
+\begin{array}{ll}
+D & \# \\
+\end{array}
+\rightarrow
+\begin{array}{ll}
+a & R \\
+\end{array}
+,\ \ \ \ \ \ \ \ 
+\]
+\[\ \ \ \ \ \ \ \ \ \ 
+\left
+\begin{array}{ll}
+U & \# \\
+\end{array}
+\rightarrow
+\begin{array}{ll}
+a & U \\
+\end{array}
+,
+U \rightarrow E,
+\begin{array}{l}
+\# \\
+R
+\end{array}
+\rightarrow
+\begin{array}{l}
+Q \\
+a
+\end{array}
+,
+R \rightarrow a,
+E \rightarrow a
+\right\} 
+\]
+}
+
 \section{Section no. 2} 
 \subsection{Lists I}
 \frame{\frametitle{unnumbered lists}
