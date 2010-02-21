@@ -86,6 +86,20 @@ Matrix- und graph-controlled Grammatiken können in Arraygrammatiken direkt überg
 \end{alertblock}
 }
 
+\frame{\frametitle{bounded derivations} 
+\begin{alertblock}{Index einer Ableitung}
+Der Index einer Ableitung $D$ eines Terminalobjekts $w$ in einer Grammatik $G$ ist mit der maximalen Anzahl von non-terminal Symbolen, die in einem Zwischenableitungsschritt vorkommen, definiert und wird mit $ind_{G,D}(w)$ bezeichnet.
+\end{alertblock}
+Weiters bezeichnet $ind_{G,min}(w)$ bzw. $ind_{G,max}(w)$ das Minimum bzw. das Maximum aus der Menge
+
+\[ \{ind_{G,D}(w) \ | \ w \ \mathrm{is \ generated \ by} \ G \}
+\]
+Entsprechend gibt es nun die Definition für die Grammatik
+\begin{eqnarray*}
+ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y \in \{min,max\}
+\end{eqnarray*}
+}
+
 \section{Section no. 2} 
 \subsection{Lists I}
 \frame{\frametitle{unnumbered lists}
