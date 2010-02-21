@@ -34,8 +34,9 @@
 
 
 \section{Preliminaries} 
+\subsection{n-dimensional array}
 \frame{\frametitle{n-dimensional array} 
-Ein n-dimensionales Array $A$  \"uber ein Alaphabet $V$ (Menge aller non-terminal und terminal Symbole) ist eine Funktion 
+Ein n-dimensionales Array $A$  \"uber ein Alphabet $V$ (Menge aller non-terminal und terminal Symbole) ist eine Funktion 
 
 \begin{eqnarray*}
 A : Z^n \rightarrow V \cup \{\#\} & n \in N = \{1,2,...\}
@@ -44,8 +45,21 @@ A : Z^n \rightarrow V \cup \{\#\} & n \in N = \{1,2,...\}
 wobei 
 \[ shape(A) = \{ v \in Z^n | A(v) \not = \# \}
 \]
-endlich ist und $\# \not \in  V$ als \textit{background} oder \textit{blank Symbol} bezeichnet wird.
+endlich ist und $\# \not \in  V$ als \textit{background} oder \textit{blank Symbol} bezeichnet wird. Das Array $A$ kann nun so definiert werden
+\[ A = \{ (v,A(v)) \ | \ v \in shape(A) \}.
+\]
 }
+
+\frame{\frametitle{n-dimensional array production and grammar} 
+Eine n-dimensionale Array Produktion $p$ \"uber dem Alphabet $V$ ist ein Tripel $(W,A_1,A_2)$ wobei $W \subseteq Z^n$ eine endliche Menge von Koordinaten ist und $A_1$ und $A_2$ Abbildungen von $W$ auf $V \cup \{\#\}$ sind.
+\newline
+\newline
+Eine n-dimensionale Array Grammatik kann nun als Sechstupel 
+\[ G = (n,V_N,V_T,\#,P,\{(v_0,S)\})
+\]
+definiert werden. $\{(v_0,S)\}$ wird als Startarray (Axiom), $v_0$ als Startvektor und $S$ als das Startsymbol bezeichnet.
+}
+
 \subsection{Subsection no.1.1  }
 \frame{ 
 Without title somethink is missing. 
