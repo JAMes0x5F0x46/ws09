@@ -90,6 +90,9 @@ Matrix- und graph-controlled Grammatiken können in Arraygrammatiken direkt überg
 \begin{alertblock}{Index einer Ableitung}
 Der Index einer Ableitung $D$ eines Terminalobjekts $w$ in einer Grammatik $G$ ist mit der maximalen Anzahl von non-terminal Symbolen, die in einem Zwischenableitungsschritt vorkommen, definiert und wird mit $ind_{G,D}(w)$ bezeichnet.
 \end{alertblock}
+
+\pause
+
 Weiters bezeichnet $ind_{G,min}(w)$ bzw. $ind_{G,max}(w)$ das Minimum bzw. das Maximum aus der Menge
 
 \[ \{ind_{G,D}(w) \ | \ w \ \mathrm{is \ generated \ by} \ G \}
@@ -98,8 +101,16 @@ Entsprechend gibt es nun die Definition für die Grammatik
 \begin{eqnarray*}
 ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y \in \{min,max\}
 \end{eqnarray*}
+Bei einer endlichen Index Restriktion nur Objekte $w$, die von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ für $Y \in \{min,max\}$.
 }
 
+\frame{\frametitle{grammar with prescribed teams}
+Eine Grammatik mit prescribed teams $G_t$ ist ein 4-Tupel
+
+\[ G_t = (V_N,V_T,(P,R,F),S),
+\]
+$G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking übersprungen werden können. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.
+}
 
 \frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams(1)}
 \textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
@@ -321,15 +332,6 @@ a
 \item Introduction to  \LaTeX  
 \item Course 2 
 \item Termpapers and presentations with \LaTeX 
-\item Beamer class
-\end{itemize} 
-}
-
-\frame{\frametitle{lists with pause}
-\begin{itemize}
-\item Introduction to  \LaTeX \pause 
-\item Course 2 \pause 
-\item Termpapers and presentations with \LaTeX \pause 
 \item Beamer class
 \end{itemize} 
 }
