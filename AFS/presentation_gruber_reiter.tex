@@ -1,11 +1,3 @@
-% This text is proprietary.
-% It's a part of presentation made by myself.
-% It may not used commercial.
-% The noncommercial use such as private and study is free
-% Nov. 2006
-% Author: Sascha Frank 
-% University Freiburg 
-% www.informatik.uni-freiburg.de/~frank/
 %
 % additional usepackage{beamerthemeshadow} is used
 %  
@@ -112,7 +104,7 @@ Eine Grammatik mit prescribed teams $G_t$ ist ein 4-Tupel
 $G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking übersprungen werden können. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.
 }
 
-\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams(1)}
+\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams (1)}
 \textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
 
 \[ G=(n,\left\{ D,E,L,Q,R,S,U \right\} , \left\{ a \right\} , \# , (P,R,F), \left\{ ((0,0),S) \right\} )
@@ -212,7 +204,7 @@ E \rightarrow a
 \]
 }
 
-\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams(2)}
+\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams (2)}
 \[R= \left\{
 \left\langle 
 \begin{array}{l}
@@ -358,131 +350,27 @@ a\ a\ a\
 
 }
 
-\section{Section no. 2} 
-\subsection{Lists I}
-\frame{\frametitle{unnumbered lists}
-\begin{itemize}
-\item Introduction to  \LaTeX  
-\item Course 2 
-\item Termpapers and presentations with \LaTeX 
-\item Beamer class
-\end{itemize} 
-}
+\section{The finite index restriction} 
+\frame{\frametitle{Gefolgerte Resultate} 
+\begin{alertblock}{Theorem 1}
+Für jedes $k \in \{fin\} \cup \{j \ | \ j\geq 1 \}$, gilt
+\[PT^{\left\lceil k \right\rceil}(cf) = PT_{ac}^{\left\lceil k \right\rceil}(cf) = Z^{Y, \left\lceil k \right\rceil}(cf) = Z^{min, \cap\left\lceil k \right\rceil}(cf)
+\]
+für alle $Z \in \{M,M_{ac},P,P_{ut},P_{ac}\}$ und $Y \in \{min,max\}$.
+\end{alertblock}
 
-\subsection{Lists II}
-\frame{\frametitle{numbered lists}
-\begin{enumerate}
-\item Introduction to  \LaTeX  
-\item Course 2 
-\item Termpapers and presentations with \LaTeX 
-\item Beamer class
-\end{enumerate}
-}
-\frame{\frametitle{numbered lists with pause}
-\begin{enumerate}
-\item Introduction to  \LaTeX \pause 
-\item Course 2 \pause 
-\item Termpapers and presentations with \LaTeX \pause 
-\item Beamer class
-\end{enumerate}
-}
+\pause
 
-\section{Section no.3} 
-\subsection{Tables}
-\frame{\frametitle{Tables}
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Date} & \textbf{Instructor} & \textbf{Title} \\
-\hline
-WS 04/05 & Sascha Frank & First steps with  \LaTeX  \\
-\hline
-SS 05 & Sascha Frank & \LaTeX \ Course serial \\
-\hline
-\end{tabular}}
+\begin{alertblock}{Theorem 2}
+Für $X \in \{n-\#-cf, n-cf \ | \ n \geq 1\}$, gilt
 
+\begin{eqnarray*}
+\mathrm{1. \ }PT^{\left\lceil fin \right\rceil}(X) = Z^{Y, \left\lceil fin \right\rceil}(X) = Z^{min, \cap \left\lceil fin \right\rceil}(X) & \mathrm{und \ auch} \\
+\mathrm{2. \ }PT_{ac}^{\left\lceil fin \right\rceil}(X) = Z_{ac}^{Y, \left\lceil fin \right\rceil}(X) = Z_{ac}^{min, \cap \left\lceil fin \right\rceil}(X) &
+\end{eqnarray*}
 
-\frame{\frametitle{Tables with pause}
-\begin{tabular}{c c c}
-A & B & C \\ 
-\pause 
-1 & 2 & 3 \\  
-\pause 
-A & B & C \\ 
-\end{tabular} }
-
-
-\section{Section no. 4}
-\subsection{blocs}
-\frame{\frametitle{blocs}
-
-\begin{block}{title of the bloc}
-bloc text
-\end{block}
-
-\begin{exampleblock}{title of the bloc}
-bloc text
-\end{exampleblock}
-
-
-\begin{alertblock}{title of the bloc}
-bloc text
+für alle $Z \in \{M,P\}$ und $Y \in \{min,max\}$.
 \end{alertblock}
 }
-
-\section{Section no. 5}
-\subsection{split screen}
-
-\frame{\frametitle{splitting screen}
-\begin{columns}
-\begin{column}{5cm}
-\begin{itemize}
-\item Beamer 
-\item Beamer Class 
-\item Beamer Class Latex 
-\end{itemize}
-\end{column}
-\begin{column}{5cm}
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Instructor} & \textbf{Title} \\
-\hline
-Sascha Frank &  \LaTeX \ Course 1 \\
-\hline
-Sascha Frank &  Course serial  \\
-\hline
-\end{tabular}
-\end{column}
-\end{columns}
-}
-
-%\subsection{Pictures} 
-%\frame{\frametitle{pictures in latex beamer class}
-
-%\begin{figure}
-%\includegraphics[scale=0.5]{PIC1} 
-%\caption{show an example picture}
-%\end{figure}}
-
-%\subsection{joining picture and lists} 
-
-%\frame{
-%\frametitle{pictures and lists in beamer class}
-%\begin{columns}
-%\begin{column}{5cm}
-%\begin{itemize}
-%\item<1-> subject 1
-%\item<3-> subject 2
-%\item<5-> subject 3
-%\end{itemize}
-%\vspace{3cm} 
-%\end{column}
-%\begin{column}{5cm}
-%\begin{overprint}
-%\includegraphics<2>{PIC1}
-%\includegraphics<4>{PIC2}
-%\includegraphics<6>{PIC3}
-%\end{overprint}
-%\end{column}
-%\end{columns}}
 
 \end{document}
