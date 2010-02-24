@@ -69,12 +69,12 @@ Eine graph-controlled Grammatik $G_P$ ist ein 4-Tupel
 $R$ ist eine endliche Menge von Regeln $r$ der Form 
 \[ (l(r) : p(l(r)), \sigma (l(r)), \varphi (l(r))).
 \]
-Falls alle Felder $\varphi (l(r))$ leer sind für alle $r \in R$, dann kann $G_P$ als graph-controlled Grammatik ohne appearence checking bezeichnet werden.
+Falls alle Felder $\varphi (l(r))$ leer sind f\"{u}r alle $r \in R$, dann kann $G_P$ als graph-controlled Grammatik ohne appearence checking bezeichnet werden.
 
 \pause
 
 \begin{alertblock}{}
-Matrix- und graph-controlled Grammatiken können in Arraygrammatiken direkt übergeführt werden, indem ihre Produktionen durch Arrayproduktionen ersetzt werden.
+Matrix- und graph-controlled Grammatiken können in Arraygrammatiken direkt \"{u}bergef\"{u}hrt werden, indem ihre Produktionen durch Arrayproduktionen ersetzt werden.
 \end{alertblock}
 }
 
@@ -89,11 +89,11 @@ Weiters bezeichnet $ind_{G,min}(w)$ bzw. $ind_{G,max}(w)$ das Minimum bzw. das M
 
 \[ \{ind_{G,D}(w) \ | \ w \ \mathrm{is \ generated \ by} \ G \}
 \]
-Entsprechend gibt es nun die Definition für die Grammatik
+Entsprechend gibt es nun die Definition f\"{u}r die Grammatik
 \begin{eqnarray*}
 ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y \in \{min,max\}
 \end{eqnarray*}
-Bei einer endlichen Index Restriktion nur Objekte $w$, die von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ für $Y \in \{min,max\}$.
+Bei einer endlichen Index Restriktion nur Objekte $w$, die von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ f\"{u}r $Y \in \{min,max\}$.
 }
 
 \frame{\frametitle{grammar with prescribed teams}
@@ -101,10 +101,10 @@ Eine Grammatik mit prescribed teams $G_t$ ist ein 4-Tupel
 
 \[ G_t = (V_N,V_T,(P,R,F),S),
 \]
-$G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking übersprungen werden können. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.
+$G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking \"{u}bersprungen werden können. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.
 }
 
-\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams (1)}
+\frame{\frametitle{Beispiel f\"{u}r eine Grammatik mit prescribed teams (1)}
 \textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
 
 \[ G=(n,\left\{ D,E,L,Q,R,S,U \right\} , \left\{ a \right\} , \# , (P,R,F), \left\{ ((0,0),S) \right\} )
@@ -204,7 +204,7 @@ E \rightarrow a
 \]
 }
 
-\frame{\frametitle{Beispiel für eine Grammatik mit prescribed teams (2)}
+\frame{\frametitle{Beispiel f\"{u}r eine Grammatik mit prescribed teams (2)}
 \[R= \left\{
 \left\langle 
 \begin{array}{l}
@@ -353,51 +353,78 @@ a\ a\ a\
 \section{The finite index restriction} 
 \frame{\frametitle{Gefolgerte Resultate} 
 \begin{alertblock}{Theorem 1}
-Für jedes $k \in \{fin\} \cup \{j \ | \ j\geq 1 \}$, gilt
+F\"{u}r jedes $k \in \{fin\} \cup \{j \ | \ j\geq 1 \}$, gilt
 \[PT^{\left\lceil k \right\rceil}(cf) = PT_{ac}^{\left\lceil k \right\rceil}(cf) = Z^{Y, \left\lceil k \right\rceil}(cf) = Z^{min, \cap\left\lceil k \right\rceil}(cf)
 \]
-für alle $Z \in \{M,M_{ac},P,P_{ut},P_{ac}\}$ und $Y \in \{min,max\}$.
+f\"{u}r alle $Z \in \{M,M_{ac},P,P_{ut},P_{ac}\}$ und $Y \in \{min,max\}$.
 \end{alertblock}
 
 \pause
 
 \begin{alertblock}{Theorem 2}
-Für $X \in \{n-\#-cf, n-cf \ | \ n \geq 1\}$, gilt
+F\"{u}r $X \in \{n-\#-cf, n-cf \ | \ n \geq 1\}$, gilt
 
-\begin{eqnarray*}
-\mathrm{1. \ }PT^{\left\lceil fin \right\rceil}(X) = Z^{Y, \left\lceil fin \right\rceil}(X) = Z^{min, \cap \left\lceil fin \right\rceil}(X) & \mathrm{und \ auch} \\
-\mathrm{2. \ }PT_{ac}^{\left\lceil fin \right\rceil}(X) = Z_{ac}^{Y, \left\lceil fin \right\rceil}(X) = Z_{ac}^{min, \cap \left\lceil fin \right\rceil}(X) &
-\end{eqnarray*}
+\begin{enumerate}
+\item $PT^{\left\lceil fin \right\rceil}(X) = Z^{Y, \left\lceil fin \right\rceil}(X) = Z^{min, \cap \left\lceil fin \right\rceil}(X)$ und auch
+\item $PT_{ac}^{\left\lceil fin \right\rceil}(X) = Z_{ac}^{Y, \left\lceil fin \right\rceil}(X) = Z_{ac}^{min, \cap \left\lceil fin \right\rceil}(X)$
+\end{enumerate}
 
-für alle $Z \in \{M,P\}$ und $Y \in \{min,max\}$.
+f\"{u}r alle $Z \in \{M,P\}$ und $Y \in \{min,max\}$.
 \end{alertblock}
 }
 
 \frame{\frametitle{Gefolgerte Resultate (2)}
 \begin{alertblock}{Theorem 3}
-	Für alle $k\in \left\{ fin\right\} \cup \left\{ j | j \geq 1 \right\}$ gilt
+	F\"{u}r alle $k\in \left\{ fin\right\} \cup \left\{ j | j \geq 1 \right\}$ gilt
 \begin{enumerate}
 	\item $PT^{\left\lceil k \right\rceil} (X) = Z^{Y,\left\lceil k \right\rceil} (X) = Z^{min,\cap \left\lceil k \right\rceil} (X)\ genau\ so\ wie$
 	\item $PT_{ac}^{\left\lceil k \right\rceil} (X) = Z_{ac}^{Y,\left\lceil k \right\rceil} (X) = Z_{ac}^{min,\cap \left\lceil k \right\rceil} (X)$
 \end{enumerate}
-Für alle $X\in \left\{ n-scf,n-scf_1 | n \geq 1\right\},\ Z\in \left\{ M,P\right\},\ und\ Y\in \left\{ min,max\right\}$.
+F\"{u}r alle $X\in \left\{ n-scf,n-scf_1 | n \geq 1\right\},\ Z\in \left\{ M,P\right\},\ und\ Y\in \left\{ min,max\right\}$.
 \end{alertblock}
 
 \begin{alertblock}{Theorem 4}
-	Für alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}$ gilt
+	F\"{u}r alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}$ gilt
 \[PT^{\left\lceil  1\right\rceil} (X) = PT_{ac}^{\left\lceil  1\right\rceil} (X) = Z^{Y,\left\lceil 1 \right\rceil} (X) = Z^{min,\cap \left\lceil 1 \right\rceil} (X) = L(1-reg)\]
 
-Für alle $Z\in \left\{ M,M_{ac},P,P_{ut},P_{ac}\right\}\ und\ Y\in \left\{ min,max\right\}$.
+F\"{u}r alle $Z\in \left\{ M,M_{ac},P,P_{ut},P_{ac}\right\}\ und\ Y\in \left\{ min,max\right\}$.
 \end{alertblock}
 }
 
 \frame{\frametitle{Gefolgerte Resultate (3)}
 
 \begin{alertblock}{Theorem 5}
-	Für alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}\ und\ alle\ k\geq 2$ gilt
+	F\"{u}r alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}\ und\ alle\ k\geq 2$ gilt
 \[PT^{\left\lceil  k\right\rceil} (X) = PT_{ac}^{\left\lceil  k\right\rceil} (X) = Z^{Y,\left\lceil k \right\rceil} (X) = Z^{min,\cap \left\lceil k \right\rceil} (X) = PT^{\left\lceil  2\right\rceil} (X)\]\\
-Für alle $Z\in \left\{ M,M_{ac},P,P_{ut},P_{ac}\right\}\ und\ Y\in \left\{ min,max\right\}$.
+F\"{u}r alle $Z\in \left\{ M,M_{ac},P,P_{ut},P_{ac}\right\}\ und\ Y\in \left\{ min,max\right\}$.
 $PT^{\left\lceil  2\right\rceil} (X)$ repräsentiert eine Familie von String-Sprachen $L(lin)$.
 \end{alertblock}
+}
+
+\section{Syntaktisches Pattern Recognition} 
+\subsection{Aspekte der syntaktischen Character Recognition}
+\frame{\frametitle{Stufen in Character Recognition} 
+
+\begin{columns}
+\begin{column}{7cm}
+\begin{enumerate}
+\item Anlegen von Daten
+\item Preprocessing
+\begin{itemize}
+	\item Normalisierung und Rauscheliminierung: anschließend abbilden auf eine 20 x 25 Gitter
+	\item Ausdünnung (Skelletierung)
+\end{itemize}
+\item Syntaktische Analyse
+\end{enumerate}
+\end{column}
+\begin{column}{5cm}
+
+\begin{figure}	
+	\includegraphics[width=0.70\textwidth]{character_H}
+	\label{fig:character_H}
+\end{figure}
+
+\end{column}
+\end{columns}
 }
 \end{document}
