@@ -427,4 +427,274 @@ $PT^{\left\lceil  2\right\rceil} (X)$ repräsentiert eine Familie von String-Spra
 \end{column}
 \end{columns}
 }
+
+\frame{\frametitle{Beispiel zur Erkennung eines H}
+\textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
+
+\[ G=(n,\left\{ S,L,R,D_L,U_L,D_R,U_R \right\} , \left\{ a \right\} , \# , (P,R,\emptyset ), \left\{ ((0,0),S) \right\} )
+\]
+
+\[P= \left\{
+\begin{array}{l}
+	S \#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	LR \\
+\end{array}
+,
+\begin{array}{l}
+	\# L \\
+\end{array}
+\rightarrow
+\begin{array}{l}
+	L a\\ 
+\end{array}
+,
+\begin{array}{l}
+	R \# \\
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a R \\
+\end{array} 
+,
+\begin{array}{l}
+	\# \\
+	\ \ \ L \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_L \\
+	\ \ \ a \\
+	D_L
+\end{array}
+,\right \]
+\[\ \ \ \ \ \ \ \ \ \ 
+\begin{array}{l}
+	\ \ \ \# \\
+	R \\
+	\ \ \ \#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	\ \ \ U_R \\
+	a \\
+	\ \ \ D_R
+\end{array}
+,
+\begin{array}{l}
+	\# \\
+	U_L
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_L \\
+	a
+\end{array}
+,
+\begin{array}{l}
+	\# \\
+	U_R
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_R \\
+	a
+\end{array}
+,
+\begin{array}{l}
+	D_L \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a \\
+	D_L
+\end{array}
+,
+\]
+\[
+\left
+\begin{array}{l}
+	D_R \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a \\
+	D_R
+\end{array}
+,
+	U_L \rightarrow a,
+	U_R \rightarrow a,
+	D_L \rightarrow a,
+	D_R \rightarrow a
+\right\} \ \ \ \ \ \ \  
+\]
+}
+
+\frame{\frametitle{Beispiel zur Erkennung eines H (2)}
+\[R= \left\{
+\left\langle 
+\begin{array}{l}
+	S \#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	LR \\
+\end{array} \right\rangle
+,
+\left\langle  \begin{array}{l}
+	\# L \\
+\end{array}
+\rightarrow
+\begin{array}{l}
+	L a\\ 
+\end{array}
+,
+\begin{array}{l}
+	R \# \\
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a R \\
+\end{array}  \right\rangle \right 
+,\ \ \ \ \ \ \ \ \ \ 
+\]
+\[ \left\langle 
+\begin{array}{l}
+	\# \\
+	\ \ \ L \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_L \\
+	\ \ \ a \\
+	D_L
+\end{array},
+\begin{array}{l}
+	\ \ \ \# \\
+	R \\
+	\ \ \ \#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	\ \ \ U_R \\
+	a \\
+	\ \ \ D_R
+\end{array} 
+\right\rangle 
+,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+\]
+\[\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+\left\langle 
+\begin{array}{l}
+	\# \\
+	U_L
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_L \\
+	a
+\end{array}
+,
+\begin{array}{l}
+	\# \\
+	U_R
+\end{array}
+\rightarrow
+\begin{array}{l}
+	U_R \\
+	a
+\end{array}
+,
+\begin{array}{l}
+	D_L \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a \\
+	D_L
+\end{array} 
+,
+\begin{array}{l}
+	D_R \\
+	\#
+\end{array}
+\rightarrow
+\begin{array}{l}
+	a \\
+	D_R
+\end{array}
+\right\rangle
+,\ \ \ \ \ \ \ \ 
+\]
+\[\ \ \ \ \ \ \ \ \ \ 
+\left
+\left\langle 
+	U_L \rightarrow a,
+	U_R \rightarrow a,
+	D_L \rightarrow a,
+	D_R \rightarrow a
+\right\rangle
+\right\} \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+\]
+\newline
+
+}
+
+\frame{\frametitle{Beispiel zur Erkennung eines H (3)}
+Ableitungssequenz:
+\[
+	S \Rightarrow_G 
+\begin{array}{l}
+	L\ R\\
+\end{array}
+\Rightarrow_G 
+\begin{array}{l}
+L\ a\ a\ R \\
+\end{array}
+\Rightarrow_G
+\begin{array}{l}
+U_L\ \ \ \ \ \ \ \ \ U_R \\
+\ \ \ a\ a\ a\ a\ \  \\
+D_L\ \ \ \ \ \ \ \ \ D_R
+\end{array}
+\Rightarrow_G
+\begin{array}{l}
+U_L\ \ \ \ \ \ \ \ \ U_R \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+\ \ \ a\ a\ a\ a\ \  \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+D_L\ \ \ \ \ \ \ \ \ D_R\end{array}
+\Rightarrow_G
+\]
+\[
+\begin{array}{l}
+U_L\ \ \ \ \ \ \ \ \ U_R \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+\ \ \ a\ a\ a\ a\ \  \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+D_L\ \ \ \ \ \ \ \ \ D_R
+\end{array}
+\Rightarrow_G
+\begin{array}{l}
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+\ \ \ a\ a\ a\ a\ \  \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+a\ \ \ \ \ \ \ \ \ \ \ a \\
+\end{array}
+\]
+}
+
+
 \end{document}
