@@ -790,8 +790,23 @@ sodass dieser einer n-dimensionalen Array-Grammatik mit prescribed Teams $G$ mit
 \]
 }
 
-\frame{\frametitle{Beispiel eines Automaten} 
+\frame{\frametitle{Funktionsweise}
+Der Automat $M$ arbeitet auf einem gegebenen Array aus $V_T^{*n}$ nun wie folgt:\newline
+$M$ arbeitet auf Objekten von $\{(a,a),(a,X) \ | \ a \in V_T,X \in V_N \cup \{\#\}\}^{*n}$, wo die erste Komponente das gegebene Array beinhaltet und die zweite Komponente das bis jetzt durch $G$ generierte Array.
+\newline
+\newline
+Der aktuelle Zustand des Automaten is durch die Menge der Non-Terminale $Y$ aus den $(a,Y)$ Paaren des aktuellen Arrays gegeben.
+\pause
+\begin{alertblock}{Definition der durch den Automaten $M$ akzeptierten Array-Sprache}
 
+\begin{eqnarray*}
+L(M) = \{A \ | \ A \in V_T^{*n},\{(v,(A(v),\#)) \ | \ v \in shape(A)\} \Longrightarrow_M^* \\ \{(v,(A(v),A(v))) \ | \ v \in shape(A)\}\}
+\end{eqnarray*}
+\end{alertblock}
+
+}
+
+\frame{\frametitle{Beispiel eines Automaten} 
 {\scriptsize
 \[
 \begin{array}{l}
@@ -883,6 +898,28 @@ sodass dieser einer n-dimensionalen Array-Grammatik mit prescribed Teams $G$ mit
 (a, a)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (a, a) \\
 \end{array}\]
 }
+}
+
+\subsection{}
+\frame{\frametitle{Conclusions}
+\begin{itemize}
+	\item Regulated Array-Grammatiken mit finite Index ist geeignete Methode für syntaktisches Pattern Recognition
+	\item Mögliche Erweiterung zur Erkennung von 3-dimensionalen Objekten \newline
+\end{itemize}
+
+
+
+\pause
+
+
+\Large
+\begin{center}
+Danke für die Aufmerksamkeit!
+\\
+Fragen?
+\end{center}
+
+
 }
 
 \end{document}
