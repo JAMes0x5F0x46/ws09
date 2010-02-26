@@ -746,7 +746,6 @@ hinzugef\"ugt werden.
 }
 
 \frame{\frametitle{Theorie und Realit\"at (2)} 
-
 \begin{itemize}
 	\item Entscheidung anhand des Abweichungsfehlers zu idealen Buchstaben
 	\item Effizienz
@@ -759,5 +758,35 @@ hinzugef\"ugt werden.
 \end{itemize}
 }
 
+\subsection{k-head finite array automata}
+\frame{\frametitle{Anforderungen}
+\begin{itemize}
+	\item Automat um Sprachen aus kontextfreien Array-Grammatiken mit endlicher Index Restriktion zu charakterisieren
+	\item Array-Grammatiken verarbeiten nicht nur Symbol- sondern auch Positionsinformationen $\Rightarrow$ Ein-Weg Automat nicht möglich
+	\item selbe Information darf nur einmal gelesen werden\newline
+\end{itemize}
+\pause
 
+Ein Ableitungsschritt für ein selektiertes Team ist nur möglich, wenn
+\begin{itemize}
+	\item Alle Non-Terminale im aktuellen Array werden parallel abgeleitet.
+	\item Der $shape$ des aktuellen Arrays muss nach der Ableitung Teil des $shape$ des originalen Arrays sein. (nicht bei \#-kontextfreien Array-Produktionen)
+	\item Jede Position eines Terminalsymbol im aktuellen Array muss mit der Position des originalen Arrays übereinstimmen.
+\end{itemize}
+}
+
+\frame{\frametitle{Definition}
+Ein n-dimensionaler k-head finite Array-Automat vom Typ $X$ ($X \in \{n$-\#-$cf, n$-$cf, n$-$scf, n$-$cf_1, n$-$scf_1 \ | \ n \geq 1 \}$) ist folgendermaßen definiert
+
+\[ (n,V_N,V_T,\#,(P,R,F),\{v_0,S\}),
+\]
+sodass dieser einer n-dimensionalen Array-Grammatik mit prescribed Teams $G$ mit endlichem Index $k$ entspricht, mit
+\begin{itemize}
+	\item jedes Team in $R$ hat maximal $k$ Array-Produktionen des Typs $X$
+	%\item $G$ liegt in Normalform vor
+	\item für jede Array-Produktion $p \in P$, ist $p$ von der Form	
+\end{itemize}
+\[ p = (W,\{(\Omega_n,A)\} \cup \{(v,\#) \ | \ v \in W \backslash \{\Omega_n\}\}, \{(v,X_v) \ | \ v \in W\})
+\]
+}
 \end{document}
