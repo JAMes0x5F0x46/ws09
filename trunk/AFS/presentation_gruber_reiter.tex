@@ -18,15 +18,15 @@
 \author{C. Gruber, J. Reiter}
 \institute{TU Wien}
 %\date{\today} 
-\date{3.M\"arz, 2010}
+\date{30.April, 2010}
 
 \frame{\titlepage} 
 
 \frame{\frametitle{Table of contents}\tableofcontents} 
 
 
-\section{Preliminaries} 
-\subsection{n-dimensional array}
+\section{Basics} 
+\subsection*{n-dimensional array}
 \frame{\frametitle{n-dimensional array} 
 Ein n-dimensionales Array $A$  \"uber ein Alphabet $V$ (Menge aller non-terminal und terminal Symbole) ist eine Funktion 
 
@@ -35,17 +35,20 @@ A : Z^n \rightarrow V \cup \{\#\} & n \in N = \{1,2,...\}
 \end{eqnarray*}
 
 wobei 
-\[ shape(A) = \{ v \in Z^n | A(v) \not = \# \}
+\[ shape(A) = \{ v \in Z^n \ | \ A(v) \not = \# \}
 \]
 endlich ist und $\# \not \in  V$ als \textit{background} oder \textit{blank Symbol} bezeichnet wird. Das Array $A$ kann nun so definiert werden
 \[ A = \{ (v,A(v)) \ | \ v \in shape(A) \}.
 \]
+Der Vektor $(0,...,0) \in Z^n$ wird als $\Omega_n$ bezeichent.
 }
 
 \frame{\frametitle{n-dimensional array production and grammar} 
-Eine n-dimensionale Array Produktion $p$ \"uber dem Alphabet $V$ ist ein Tripel $(W,A_1,A_2)$ wobei $W \subseteq Z^n$ eine endliche Menge von Koordinaten ist und $A_1$ und $A_2$ Abbildungen von $W$ auf $V \cup \{\#\}$ sind.
-\newline
-\newline
+Eine n-dimensionale Array Produktion $p$ \"uber dem Alphabet $V$ ist ein Tripel $(W,A_1,A_2)$ wobei $W \subseteq Z^n$ eine endliche Menge von Koordinaten ist und $A_1$ und $A_2$ Abbildungen von $W$ auf $V \cup \{\#\}$ sind.\newline
+$p$ kann als $\Lambda$-frei bezeichnet werden, falls $shape(A_2) \not = 0$ ist.
+\[ shape(A_i) = \{v \in W \ | \ A_i(v) \not = \# \}, \ 1 \leq i \leq 2
+\]
+%\newline
 Eine n-dimensionale Array Grammatik kann nun als Sechstupel 
 \[ G = (n,V_N,V_T,\#,P,\{(v_0,S)\})
 \]
@@ -58,6 +61,9 @@ Eine Matrixgrammatik $G_M$ ist ein 4-Tupel
 
 \[ G_M = (V_N,V_T,(M,F),S),
 \]
+$M$ ist eine endliche Menge von Matrizen, $M = \{ m_i \ | \ 1 \leq i \leq n \}$. Die Matrizen $m_i$ sind Sequenzen von der Form 
+\[m_i = (m_{i,1},...,m_{i,n_i}), \ n_i \geq 1, \ 1 \leq i \leq n.
+\] 
 $F$ kann auch als Fehlermenge bezeichnet werden. Ist $F= \emptyset$, dann kann $G_M$ als Matrixgrammatik ohne appearence checking bezeichnet werden.
 }
 
@@ -67,9 +73,10 @@ Eine graph-controlled Grammatik $G_P$ ist ein 4-Tupel
 \[ G_M = (V_N,V_T,(R,L_{in},L_{fin}),S),
 \]
 $R$ ist eine endliche Menge von Regeln $r$ der Form 
-\[ (l(r) : p(l(r)), \sigma (l(r)), \varphi (l(r))).
+\[ (l(r) : p(l(r)), \sigma (l(r)), \varphi (l(r))), \ l(r) \in Lab(G_P).
 \]
-Falls alle Felder $\varphi (l(r))$ leer sind f\"{u}r alle $r \in R$, dann kann $G_P$ als graph-controlled Grammatik ohne appearence checking bezeichnet werden.
+Falls $\varphi (l(r))$ leer ist f\"{u}r alle $r \in R$, dann kann $G_P$ als graph-controlled Grammatik ohne appearence checking bezeichnet werden. \newline
+Falls $\forall r \in R \ \varphi(l(r)) = \sigma(l(r))$, dann kann $G_P$ als graph-controlled Grammatik mit unconditional transfer bezeichnet werden.
 
 \pause
 
@@ -80,7 +87,7 @@ Matrix- und graph-controlled Grammatiken k\"onnen in Arraygrammatiken direkt \"{
 
 \frame{\frametitle{bounded derivations} 
 \begin{alertblock}{Index einer Ableitung}
-Der Index einer Ableitung $D$ eines Terminalobjekts $w$ in einer Grammatik $G$ ist mit der maximalen Anzahl von non-terminal Symbolen, die in einem Zwischenableitungsschritt vorkommen, definiert und wird mit $ind_{G,D}(w)$ bezeichnet.
+Der Index einer Ableitung $D$ eines Terminalobjekts $w$ (String oder Array) in einer Grammatik $G$ ist mit der maximalen Anzahl von non-terminal Symbolen, die in einem Zwischenableitungsschritt vorkommen, definiert und wird mit $ind_{G,D}(w)$ bezeichnet.
 \end{alertblock}
 
 \pause
@@ -93,7 +100,7 @@ Entsprechend gibt es nun die Definition f\"{u}r die Grammatik
 \begin{eqnarray*}
 ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y \in \{min,max\}
 \end{eqnarray*}
-Bei einer endlichen Index Restriktion nur Objekte $w$, die von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ f\"{u}r $Y \in \{min,max\}$.
+Bei einer endlichen Index Restriktion nur Objekte $w$ von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ f\"{u}r $Y \in \{min,max\}$.
 }
 
 \frame{\frametitle{grammar with prescribed teams}
