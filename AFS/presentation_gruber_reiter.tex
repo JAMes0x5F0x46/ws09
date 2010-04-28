@@ -55,7 +55,7 @@ Eine n-dimensionale Array Grammatik kann nun als Sechstupel
 definiert werden. $\{(v_0,S)\}$ wird als Startarray (Axiom), $v_0$ als Startvektor und $S$ als das Startsymbol bezeichnet.
 }
 
-\section{Control mechanisms} 
+\section{Kontrollmechanismen} 
 \frame{\frametitle{matrix grammar} 
 Eine Matrixgrammatik $G_M$ ist ein 4-Tupel
 
@@ -100,7 +100,7 @@ Entsprechend gibt es nun die Definition f\"{u}r die Grammatik
 \begin{eqnarray*}
 ind_{Y}(G) = sup \{ind_{G,Y}(w)\ | \ w \ \mathrm{is \ generated \ by} \ G \} & Y \in \{min,max\}
 \end{eqnarray*}
-Bei einer endlichen Index Restriktion nur Objekte $w$ von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ f\"{u}r $Y \in \{min,max\}$.
+Andere Art von endlicher Index Restriktion nur Objekte $w$ beachtet, die von einer Grammatik $G$ mit einer Ableitung $ind_{G,Y}(w) \leq k$ f\"{u}r $Y \in \{min,max\}$ erzeugt werden.
 }
 
 \frame{\frametitle{grammar with prescribed teams}
@@ -108,9 +108,11 @@ Eine Grammatik mit prescribed teams $G_t$ ist ein 4-Tupel
 
 \[ G_t = (V_N,V_T,(P,R,F),S),
 \]
-$G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking \"{u}bersprungen werden k\"onnen. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.
+$G = (V_N,V_T,P,S)$ ist eine kontextfreie Grammatik, $R$ ist eine endliche Menge von Teams aus $P$ und $F$ ist die Menge von Produktionen, die bei dem appearence checking \"{u}bersprungen werden k\"onnen. Ist $F= \emptyset$, dann kann $G_t$ als Grammatik mit prescribed teams ohne appearence checking bezeichnet werden.\newline
+\newline
+Wiederum beschr\"{a}nken wir die Anzahl von non-terminal Symbolen, die in einem Zwischenableitungsschritt vorkommen d\"{u}rfen, indem nur Teams angewendet werden d\"{u}rfen, die alle non-terminale im Zwischenschritt betreffen $\Rightarrow$ durch max. Anzahl an kontextfreien Produktionen in einem Team beschr\"{a}nkt.\newline
+$L^{\left\lceil k \right\rceil} (G)$ bezeichnet nun die Sprache, die durch die Grammatik $G$ mit endlicher Index Restriktion von $k$ erzeugt wird. 
 }
-
 \frame{\frametitle{Beispiel f\"{u}r eine Grammatik mit prescribed teams (1)}
 \textbf{2-dimensionale Array-Grammatik mit prescibed teams:}
 
@@ -357,17 +359,24 @@ a\ a\ a\
 
 }
 
-\section{The finite index restriction} 
+\section{Endliche Index Restriktion} 
 \frame{\frametitle{Gefolgerte Resultate} 
+$PT_{ac}^{\left\lceil k \right\rceil}(cf)$ bezeichnet die Sprachfamilie, die von String-Grammatiken mit prescribed teams aus kontextfreien Produktionen mit endlicher Index Restriktion erzeugt werden.\newline
+\newline
+$PT_{ac}^{\left\lceil k \right\rceil}(X)$ bezeichnet die Familie aller Arraysprachen, die von Array-Grammatiken mit prescribed teams  aus Array-Produktionen des Types $X$, mit $X \in \{n$-$\#$-$cf, n$-$cf, n$-$scf \ | \ n \geq 1 \}$ erzeugt werden.
+\newline
+
+\pause
+
 \begin{alertblock}{Theorem 1}
 F\"{u}r jedes $k \in \{fin\} \cup \{j \ | \ j\geq 1 \}$, gilt
 \[PT^{\left\lceil k \right\rceil}(cf) = PT_{ac}^{\left\lceil k \right\rceil}(cf) = Z^{Y, \left\lceil k \right\rceil}(cf) = Z^{min, \cap\left\lceil k \right\rceil}(cf)
 \]
 f\"{u}r alle $Z \in \{M,M_{ac},P,P_{ut},P_{ac}\}$ und $Y \in \{min,max\}$.
 \end{alertblock}
+}
 
-\pause
-
+\frame{\frametitle{Gefolgerte Resultate (2)}
 \begin{alertblock}{Theorem 2}
 F\"{u}r $X \in \{n-\#-cf, n-cf \ | \ n \geq 1\}$, gilt
 
@@ -378,9 +387,9 @@ F\"{u}r $X \in \{n-\#-cf, n-cf \ | \ n \geq 1\}$, gilt
 
 f\"{u}r alle $Z \in \{M,P\}$ und $Y \in \{min,max\}$.
 \end{alertblock}
-}
 
-\frame{\frametitle{Gefolgerte Resultate (2)}
+\pause
+
 \begin{alertblock}{Theorem 3}
 	F\"{u}r alle $k\in \left\{ fin\right\} \cup \left\{ j | j \geq 1 \right\}$ gilt
 \begin{enumerate}
@@ -390,15 +399,17 @@ f\"{u}r alle $Z \in \{M,P\}$ und $Y \in \{min,max\}$.
 F\"{u}r alle $X\in \left\{ n-scf,n-scf_1 | n \geq 1\right\},\ Z\in \left\{ M,P\right\},\ und\ Y\in \left\{ min,max\right\}$.
 \end{alertblock}
 
+}
+
+\frame{\frametitle{Gefolgerte Resultate (3) - 1-dimensionaler Fall}
 \begin{alertblock}{Theorem 4}
 	F\"{u}r alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}$ gilt
 \[PT^{\left\lceil  1\right\rceil} (X) = PT_{ac}^{\left\lceil  1\right\rceil} (X) = Z^{Y,\left\lceil 1 \right\rceil} (X) = Z^{min,\cap \left\lceil 1 \right\rceil} (X) = L(1-reg)\]
 
 F\"{u}r alle $Z\in \left\{ M,M_{ac},P,P_{ut},P_{ac}\right\}\ und\ Y\in \left\{ min,max\right\}$.
 \end{alertblock}
-}
 
-\frame{\frametitle{Gefolgerte Resultate (3)}
+\pause
 
 \begin{alertblock}{Theorem 5}
 	F\"{u}r alle $X\in \left\{ 1-cf_1, 1-scf_1\right\}\ und\ alle\ k\geq 2$ gilt
